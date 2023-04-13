@@ -169,10 +169,11 @@ if (isset($_SESSION['user'])) {
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                   <a class="dropdown-item" href="#">CallCenter</a>
-                  <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="#">Pregrabadas</a>
-                  <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="#">Telefonos Para Grabar</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#">Sincronización</a>
+                  <a class="dropdown-item" href="#">Bono</a>
                 </div>
               </li>
               <li class="nav-item dropdown">
@@ -181,9 +182,7 @@ if (isset($_SESSION['user'])) {
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                   <a class="dropdown-item" href="#">Estatus</a>
-                  <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="#">Adeudo</a>
-                  <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="#">Telefonos</a>
                 </div>
               </li>
