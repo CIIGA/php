@@ -10,7 +10,7 @@
         <br><br><br><br><br><br><br><br>
     </ul>
     <form class="form-inline my-2 my-lg-0">
-        <img src="../../img/logoBottonKPI.png" width="220" height="100" alt="">
-        <img src="../../img/logoBotton.png" width="240" height="100" alt="">
+        <img src="../img/logoBottonKPI.png" width="220" height="100" alt="">
+        <img src="../img/logoBotton.png" width="240" height="100" alt="">
     </form>
 </nav>
