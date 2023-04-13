@@ -45,6 +45,25 @@ if(isset($_POST['update'])){
     echo '<meta http-equiv="refresh" content="0,url=addplz.php">';
 }
 //****************************FIN ACTUALIAR DATOS DE USUARIO***************************************************    
+//****************************ACTUALIZAR ESTADO PLAZA******************************************************
+if(isset($_GET['idpl'])){
+    $idplaza=$_GET['idpl'];
+    $estado=$_GET['estado'];
+    if($estado==1){
+        $estado=0;
+    }else{
+        $estado=1;
+    }
+    
+    
+    $updateestado="update plaza set estado='$estado'
+    where id_plaza='$idplaza'";
+    sqlsrv_query($cnx,$updateestado) or die ('No se ejecuto la consulta update datosart');
+    
+    echo '<script> alert("Registro actulizado correctamente.")</script>'; 
+    echo '<meta http-equiv="refresh" content="0,url=addplz.php">';
+}
+//****************************FIN ACTUALIAR DATOS DE USUARIO***************************************************    
 ?>
 <!DOCTYPE html>
 <html>
@@ -53,7 +72,7 @@ if(isset($_POST['update'])){
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Plazas | KPIs</title>
-<link rel="icon" href="../../icono/icon.png">
+<link rel="icon" href="../icono/icon.png">
 <!-- Bootstrap -->
 <link rel="stylesheet" href="../css/bootstrap.css">
 <link href="../fontawesome/css/all.css" rel="stylesheet">
@@ -136,7 +155,8 @@ if(isset($_POST['update'])){
 <table class="table table-sm table-hover">
   <thead>
     <tr align="center">
-      <th scope="col"></th>
+      <th scope="col">Estado</th>
+      <th scope="col">Actualizar</th>
       <th scope="col">Plaza</th>
       <th scope="col">Sincronización</th>
       <th scope="col">Opciones</th>
@@ -145,12 +165,22 @@ if(isset($_POST['update'])){
   <tbody>
     <?php do{ ?>  
     <tr>
-      <td style="text-align:center;"><span class="badge badge-pill badge-success"><i class="fas fa-check"></i></span></td>    
+    <?php if($plaza['estado']==1){?>
+        <td style="text-align:center;"><span class="badge badge-pill badge-success"><i class="fas fa-check"></i></span></td> 
+    <?php }else{?>
+        <td style="text-align:center;"><span class="badge badge-pill badge-danger"><i class="fas fa-times-circle"></i></span></td> 
+    <?php }?>
+      
+        
+      
+      <td style="text-align:center;"><a href="addplz.php?idpl=<?php echo $plaza['id_plaza'] ?>&estado=<?php echo $plaza['estado']?>" class="btn btn-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Actualizar estado"><i class="fas fa-sync"></i> Cambiar</a></td>  
+      
       <td><?php echo utf8_encode($plaza['nombreplaza']) ?></td>
       <td style="text-align:center;"><a href="store.php?idpl=<?php echo $plaza['id_plaza'] ?>" class="btn btn-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Sincronización"><i class="fas fa-sync"></i> Sync</a></td>
       <td style="text-align:center;">
           
     <a href="urlMap.php?plz=<?php echo $plaza['id_plaza'] ?>" class="btn btn-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Agregar URL de mapa"><i class="fas fa-chart-line"></i> KPIs</a>
+
     <a href="Reporte_CallCenter/reporte.php?plz=<?php echo $plaza['id_plaza'] ?>" class="btn btn-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Reportes de plaza">
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-bar-graph" viewBox="0 0 16 16">
     <path d="M4.5 12a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-1zm3 0a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1zm3 0a.5.5 0 0 1-.5-.5v-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-.5.5h-1z"/>
