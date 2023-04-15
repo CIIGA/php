@@ -1,36 +1,62 @@
 <?php
 session_start();
 if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
-    require "db/conexion.php";
+    require 'modules/callCenter.php';
     $id_plaza = $_GET['plz'];
-    $pl = "SELECT p.data as base, pl.nombreplaza as plaza FROM plaza as pl INNER JOIN proveniente as p ON pl.id_proveniente=p.id_proveniente where pl.id_plaza='$id_plaza'";
-    $plz = sqlsrv_query($cnx, $pl);
-    $plaza = sqlsrv_fetch_array($plz);
+    $plaza = plaza($id_plaza);
     if (isset($_POST['base']) and isset($_POST['fecha_inicial']) and isset($_POST['fecha_final']) and isset($_POST['sector'])) {
         $sector = $_POST['sector'];
         $base = $_POST['base'];
         $fechaI = $_POST['fecha_inicial'];
         $fechaF = $_POST['fecha_final'];
-        if($sector==1){
-            $store='sp_RGCallCenter';
-        }
-        if($sector==2){
-            $store='sp_ReportePregrabadas';
-        }
-        echo $fechaI;
-    // $serverName = "51.222.44.135";
-    // $connectionInfo = array( 'Database'=>$base, 'UID'=>'sa', 'PWD'=>'vrSxHH3TdC');
-    // $cnn = sqlsrv_connect($serverName, $connectionInfo);
-    // date_default_timezone_set('America/Mexico_City');
-    // $procedure = "exec '$store' ('$fechaI', '$fechaF')";
-    // $exec = sqlsrv_query($cnn, $procedure);
-    // $result = sqlsrv_fetch_array($exec);
-    //     do{
-    //         echo $result[''];
-    //     }
-    //     while($result = sqlsrv_fetch_array($exec));
+        $BD = $plaza['base'];
+        $exec = sp_RGCallCenter(
+            $sector,
+            $base,
+            $fechaI,
+            $fechaF,
+            $BD);
+            if($exec){
+                while ($result = sqlsrv_fetch_array($exec)) {
+                    echo utf8_encode($result['Observaciones']);
+                    echo utf8_encode($result['FechaPromesaPago']->format('d/m/Y'));
+                    echo utf8_encode($result['PersonaAtendio']);
+                    echo utf8_encode($result['TareaAnterior']);
+                    echo utf8_encode($result['TareaActual']);
+                    echo utf8_encode($result['Fecha']->format('d/m/Y'));
+                    echo utf8_encode($result['Cuenta']);
+                    echo utf8_encode($result['Clave']);
+                    echo utf8_encode($result['CallCenter']);
+                    echo utf8_encode($result['Clasificacion']);
+                    echo utf8_encode($result['Telefono']);
+                    echo utf8_encode($result['TelRadio']);
+                    echo utf8_encode($result['TelRadio']);
+                    echo utf8_encode($result['TelefonoUsuario']);
+                    echo utf8_encode($result['CelularUsuario']);
+                    echo utf8_encode($result['TelRadioUsuario']);
+                    echo utf8_encode($result['TelefonoUsuario']);
+                    echo utf8_encode($result['CelularUsuario']);
+                    echo utf8_encode($result['TelRadioUsuario']);
+                    echo utf8_encode($result['Usuario']);
+                    echo utf8_encode($result['Direccion']);
+                    echo utf8_encode($result['Colonia']);
+                    echo utf8_encode($result['Distrito']);
+                    echo utf8_encode($result['Clave Catastral']);
+                    echo utf8_encode($result['Serie Medidor']);
+                    echo utf8_encode($result['Tipo Servicio']);
+                    echo utf8_encode($result['Giro']);
+                    echo utf8_encode($result['Razon Social']);
+                    echo utf8_encode($result['Deuda Total']);
+                    echo utf8_encode($result['Abogado']);
+                    echo utf8_encode($result['Gestor']);
+                }
+            }
+            else{
+               echo $exec;
+            }
+
     }
-?>
+    ?>
     <!DOCTYPE html>
     <html>
 
@@ -46,7 +72,7 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
         <link href="../Reporte_CallCenter/css/index.css" rel="stylesheet">
         <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-        <?php require "include/nav.php"; ?>
+        <?php require "include/nav.php";?>
     </head>
 
     <body>
@@ -109,12 +135,12 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
                 </div>
             </div>
             <?php
-            echo $id_plaza;
-            echo "<br/>";
-            echo $plaza['base'];
-            echo "<br/>";
-            echo $plaza['plaza'];
-            ?>
+echo $id_plaza;
+    echo "<br/>";
+    echo $plaza['base'];
+    echo "<br/>";
+    echo $plaza['plaza'];
+    ?>
         </div>
     </body>
 <?php
