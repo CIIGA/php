@@ -12,6 +12,11 @@ if (isset($_SESSION['user'])) {
   $mapNL = sqlsrv_query($cnx, $maNL);
   $mapaNL = sqlsrv_fetch_array($mapNL);
 
+  $sql_estado = "select estado from plaza
+  where id_plaza='$plz'";
+  $estado_cnx = sqlsrv_query($cnx, $sql_estado);
+  $estado = sqlsrv_fetch_array($estado_cnx);
+
   if (isset($_GET['mp'])) {
     $idkpi = $_GET['mp'];
     $ma = "SELECT * FROM plaza
@@ -160,9 +165,11 @@ if (isset($_SESSION['user'])) {
 
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-              <li class="nav-item">
-                <a class="nav-link" href="#">Aqui va Diego</a>
-              </li>
+              <?php if($estado['estado']==1){ ?>
+                <li class="nav-item">
+                  <a class="nav-link" href="./semaforo_vencidas/vencidas.php?id_plaza=<?php echo $plz ?>">Semaforo de vencidas</a>
+                </li>
+              <?php }?>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Reportes
@@ -208,7 +215,7 @@ if (isset($_SESSION['user'])) {
 } else {
   header('location:../../login.php');
 }
-//require "include/footer.php"; 
+// require "include/footer.php"; 
 ?>
 
   </html>

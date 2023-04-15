@@ -1,0 +1,47 @@
+body {
+  background-image: url(../../../img/back.jpg);
+  background-repeat: repeat;
+  background-size: 100%;
+  background-attachment: fixed;
+  overflow-x: hidden; /* ocultar scrolBar horizontal*/
+}
+body {
+  font-family: sans-serif;
+  font-style: normal;
+  font-weight: bold;
+
+  width: 100%;
+  height: 100%;
+  margin-top: -1%;
+  padding-top: 0px;
+}
+.jumbotron {
+  margin-top: 0%;
+  margin-bottom: 0%;
+  padding-top: 3%;
+  padding-bottom: 2%;
+}
+.padding {
+  padding-right: 35%;
+  padding-left: 35%;
+}
+.center{
+    position: relative;
+    left: 40%;
+}
+.btn-blue{
+    margin: 2%;
+}
+.btn-green{
+    margin: 2%;
+}
+.tarjet{
+    width: 18rem !important;
+}
+th{
+  font-size: 10px;
+}
+.th-title{
+  font-size: 16px;
+
+}
