@@ -4,6 +4,7 @@ session_start();
 if (isset($_SESSION['user'])) {
   require "include/lib.php";
   require "../../acnxerdm/cnx.php";
+  require "include/conexion_d.php";
   $plz = $_GET['plz'];
 
   $maNL = "select * from subregistro
@@ -26,6 +27,36 @@ if (isset($_SESSION['user'])) {
     $map = sqlsrv_query($cnx, $ma);
     $mapa = sqlsrv_fetch_array($map);
   }
+  //semaforo de vencidas
+  //validamos si se recibe el id plaza
+  if (isset($_GET['id_plaza'])) {
+  // lo guardamos en una variable
+    $id_plaza = $_GET['id_plaza'];
+    $sql_datos="SELECT plaza.nombreplaza,proveniente.data,proveniente.id_plaza_servicioWeb FROM plaza
+    inner join proveniente on plaza.id_proveniente=proveniente.id_proveniente
+    where plaza.id_plaza='$id_plaza'";
+    $cnx_datos = sqlsrv_query($cnx, $sql_datos);
+    $datos = sqlsrv_fetch_array($cnx_datos);
+    //obtengo el nombre de la base de datos
+    $nombredb=$datos['data'];
+    //obtengo las fechas
+    $ini=date('Y-m-d');
+    $fin=date('Y-m-d');
+
+    //en una variable mando a llamar la conexion y le paso el nombre de la base de datos como parametro
+    $cnxa=conexion($nombredb);
+    // ejecuto mi store con la conexion que le corresponde
+    $store="execute [dbo].[sp_cuenta_vencida_detalle_actual] '$ini','$fin',1";
+    $st=sqlsrv_query($cnxa,$store) or die ('Execute Stored Procedure Failed... Query store.php');
+    $resultSt=sqlsrv_fetch_array($st);
+    if($resultSt['resultado']!=1){
+        echo '<script> alert("ERROR.")</script>';
+        echo '<meta http-equiv="refresh" content="0,url=map.php?plz='.$plz.'">';
+    }
+    else{
+      header('location:vencidas.php?id_plaza_servicioWeb='.$datos['id_plaza_servicioWeb']);
+    }
+}
 ?>
   <html lang="en">
 
@@ -40,6 +71,15 @@ if (isset($_SESSION['user'])) {
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="../js/peticionAjax.js"></script>
+    <link rel="stylesheet" href="../../css/bootstrap.css">
+    <link href="../../fontawesome/css/all.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-material-ui/material-ui.css"
+        id="theme-styles">
+    
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-material-ui/material-ui.css" id="theme-styles">
+   
     <style>
       body {
         background-image: url(../img/back.jpg);
@@ -167,7 +207,10 @@ if (isset($_SESSION['user'])) {
             <ul class="navbar-nav mr-auto">
               <?php if($estado['estado']==1){ ?>
                 <li class="nav-item">
-                  <a class="nav-link" href="./semaforo_vencidas/vencidas.php?id_plaza=<?php echo $plz ?>">Semaforo de vencidas</a>
+                <form method="GET" onsubmit="javascript:loadInfo();" autocomplete="off">
+                  <a class="nav-link  toDownload" href="map.php?id_plaza=<?php echo $plz ?>&plz=<?php echo $plz ?>"><i class="fa fa-download"></i>Semaforo de vencidas</a>
+                 
+                  </form>
                 </li>
               <?php }?>
               <li class="nav-item dropdown">
@@ -210,6 +253,56 @@ if (isset($_SESSION['user'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
     <script src="../js/scripts.js"></script>
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.fileDownload/1.4.2/jquery.fileDownload.min.js"></script>
+    <script>
+        var loadInfo = function () {
+            Swal.fire({
+                title: 'Obteniendo Datos',
+                html: 'Espere un momento porfavor...',
+                timer: 0,
+                timerProgressBar: true,
+                allowEscapeKey: false,
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                },
+                willClose: () => {
+                    return false;
+                }
+                }).then((result) => {}
+            );
+        }
+        $('.toDownload').on('click', function () {
+            toDownload($(this).attr('href'));
+            return false;
+        });
+
+        var toDownload = function (url) {
+            $.fileDownload(url, {
+                successCallback: function (url) {
+                    Swal.fire('Archivo Descargado', '', 'success' );
+                },
+                failCallback: function () {
+                    Swal.fire('No se pudo descargar el archivo', '', 'error' );
+                },
+                prepareCallback: function () {
+                    Swal.fire({
+                        title: 'Generando Archivo Excel',
+                        html: 'Espere un momento porfavor.',
+                        timer: 0,
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        },
+                        willClose: () => {
+                            clearInterval(timerInterval)
+                        }
+                    }).then((result) => { })
+                }
+            });
+        }
+    </script>
   </body>
 <?php
 } else {
