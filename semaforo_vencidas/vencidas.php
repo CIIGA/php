@@ -24,8 +24,9 @@ if ((isset($_SESSION['user']))) {
     $resultSt=sqlsrv_fetch_array($st);
 
     
-    
-    
+     //valido si se ejecuto el primer store
+    //    si el resultado es diferente de 1 manda una alerta
+    if($resultSt['resultado']!=0){
 ?>
     <!DOCTYPE html>
     <html>
@@ -43,14 +44,13 @@ if ((isset($_SESSION['user']))) {
         <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-        <?php require "include/nav.php"; ?>
+        
     </hxead>
 
     <body>
        <?php  
-       //valido si se ejecuto el primer store
-    //    si el resultado es diferente de 1 manda una alerta
-       if($resultSt['resultado']!=1){
+      
+       
         echo "<script>
             Swal.fire({
               icon: 'error',
@@ -65,8 +65,10 @@ if ((isset($_SESSION['user']))) {
             
              window.location= history.back()
     </script>"; 
+    ?> </html><?php
     // en caso contrario me manda al modulo
     } else{
+        
         //ejecuto mi otro store pasandole el id plaza
     $nombredb2='kpimplementta';
     $id_plaza_servicioWeb=$datos['id_plaza_servicioWeb'];
@@ -77,110 +79,15 @@ if ((isset($_SESSION['user']))) {
     $store2="execute [dbo].[sp_vencidaskpis] '$id_plaza_servicioWeb'";
     $st2=sqlsrv_query($cnxa2,$store2) or die ('Execute Stored Procedure Failed... Query store.php');
     $resultSt2=sqlsrv_fetch_array($st2);
+ 
+    }
     
-        ?>
 
-        <div class="p-4">
-        <div class="row">
-            <div class="col-sm-12">
-            <h5  style="text-shadow: 0px 0px 2px #717171;"><?php echo 'Plaza: ' . $datos['nombreplaza'] ?></h5>
-            </div>
-        </div>
-        <hr>
-        <div class="card">
-            <div class="card-body">
-                
-                
-                    <div class="row">
-                        
-                        <div class="col-sm-5 mt-2">
-                            
-                            <a target="_blank" class="btn btn-info btn-sm toDownload" href="#"><i class="fa fa-download"></i> Descargar Excel</a>
-                            <!-- <a target="_blank" class="btn btn-info btn-sm toDownload" href="./excel.php?search=<?=$search?>&pagina=<?=$pagina?>"><i class="fa fa-download"></i> Descargar Pagina</a> -->
-                            <!-- <a target="_blank" class="btn btn-warning btn-sm toDownload" href="./exceltodos.php"><i class="fa fa-download"></i> Descargar Todo</a> -->
-                            <!-- <a class="btn btn-dark btn-sm" data-toggle="modal" data-target="#modal-upload-file-reporte" href="#"><i class="fa fa-upload"></i> Subir Datos</a> -->
-                        </div>
-                    </div>
-                <hr>
-                <div class="table-responsive">
-                    <table class="table table-hover table-bordered" style="font-size: 11px;">
-                        <thead>
-                            <tr>
-                                <th class="text-center th-title" colspan="18">SEMAFORO DE VENCIDAS</th>
-                            </tr>
-                            <tr>
-                                <th class="p-1">NO. EXPEDIENTE</th>
-                                <th class="p-1">CUENTA PREDIAL</th>
-                                <th class="p-1">FECHA DE RESOLUCI&Oacute;N</th>
-                                <th class="p-1">FECHA DE NOTIFICACI&Oacute;N DE RESOLUCI&Oacute;N </th>
-                                <th class="p-1">ELABOR&Oacute;</th>
-                                <th class="p-1">FECHA DE ELABORACI&Oacute;N</th>
-                                <th class="p-1">NO. DE FOLIO</th>
-                                <th class="p-1">FECHA FOLIO</th>
-                                <th class="p-1">MONTO</th>
-                                <th class="p-1">QUIEN FIRMA Y SELLA</th>
-                                <th class="p-1">FECHA DE ENVIO CON GUSTAVO</th>
-                                <th class="p-1">FECHA DE INGRESO CON TESORER&Iacute;A O DIR. INGRESOS</th>
-                                <th class="p-1">FECHA DE REGRESO CON SELLO Y FIRMA</th>
-                                <th class="p-1">FECHA DE ASIGNACI&Oacute;N</th>
-                                <th class="p-1">NOTIFICADOR A QUIEN SE LE ASIGN&Oacute;</th>
-                                <th class="p-1">FECHA DE NOTIFICACI&Oacute;N</th>
-                                <th class="p-1">FECHA DE TIMBRADO</th>
-                                <th class="p-1">ETAPA EN QUE SE ENCUENTRA</th>
-                                <th class="p-1">ESTATUS FINAL</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            
-                            <?php do { ?>
-        
-    
-                            <tr>
-                                <td class="p-1"></td>
-                                <td class="p-1"></td>
-                                <td class="p-1"></td>
-                                <td class="p-1"></td>
-                                <td class="p-1"></td>
-                                <td class="p-1"></td>
-                                <td class="p-1"></td>
-                                <td class="p-1"></td>
-                                
-                    
-                                <td class="p-1"></td>
-                                
-                                
-                                <td class="p-1"></td>
-                                <td class="p-1"></td>
-                                <td class="p-1"></td>
-                                <td class="p-1"></td>
-                                <td class="p-1"></td>
-                                <td class="p-1"></td>
-
-                                <td class="p-1"></td>
-                                
-                                <td class="p-1"></td>
-                                
-                                <td class="p-1"></td>
-                                <td class="p-1"></td>
-                            </tr>
-                        <?php } while ($resultSt2=sqlsrv_fetch_array($st2));?>
-                        </tbody>
-                        <tfoot>
-                        
-                        </tfoot>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    <?php }?>
-    </body>
-<?php
 } else {
     header('location:../../login.php');
 }
-require "include/footer.php";
+
 ?>
 
-    </html>
+   
 
