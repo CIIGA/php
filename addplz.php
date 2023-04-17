@@ -44,25 +44,25 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
         echo '<script> alert("Registro actulizado correctamente.")</script>';
         echo '<meta http-equiv="refresh" content="0,url=addplz.php">';
     }
-    //****************************FIN ACTUALIAR DATOS DE USUARIO***************************************************    
-    //****************************ACTUALIZAR ESTADO PLAZA******************************************************
-    // if (isset($_GET['idpl'])) {
-    //     $idplaza = $_GET['idpl'];
-    //     $estado = $_GET['estado'];
-    //     if ($estado == 1) {
-    //         $estado = 0;
-    //     } else {
-    //         $estado = 1;
-    //     }
+    // ****************************FIN ACTUALIAR DATOS DE USUARIO***************************************************    
+    // ****************************ACTUALIZAR ESTADO PLAZA******************************************************
+    if (isset($_GET['idpl'])) {
+        $idplaza = $_GET['idpl'];
+        $estado = $_GET['estado'];
+        if ($estado == 1) {
+            $estado = 0;
+        } else {
+            $estado = 1;
+        }
 
 
-    //     $updateestado = "update plaza set estado='$estado'
-    // where id_plaza='$idplaza'";
-    //     sqlsrv_query($cnx, $updateestado) or die('No se ejecuto la consulta update datosart');
+        $updateestado = "update plaza set estado='$estado'
+    where id_plaza='$idplaza'";
+        sqlsrv_query($cnx, $updateestado) or die('No se ejecuto la consulta update datosart');
 
-    //     echo '<script> alert(Estado actulizado correctamente.")</script>';
-    //     echo '<meta http-equiv="refresh" content="0,url=addplz.php">';
-    // }
+        echo '<script> alert(Estado actulizado correctamente.")</script>';
+        echo '<meta http-equiv="refresh" content="0,url=addplz.php">';
+    }
     //****************************FIN ACTUALIAR DATOS DE USUARIO***************************************************    
 ?>
     <!DOCTYPE html>
@@ -170,13 +170,12 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
                     </thead>
                     <tbody>
                         <?php do { ?>
-                            <tr>
-                                
+                            <tr> 
+                            <?php if ($plaza['estado'] == 1) { ?>
                                     <td style="text-align:center;"><span class="badge badge-pill badge-success"><i class="fas fa-check"></i></span></td>
-                                
-
-
-
+                                <?php } else { ?>
+                                    <td style="text-align:center;"><span class="badge badge-pill badge-danger"><i class="fas fa-times-circle"></i></span></td>
+                                <?php } ?>
                                 <td style="text-align:center;"><a href="addplz.php?idpl=<?php echo $plaza['id_plaza'] ?>&estado=<?php echo $plaza['estado'] ?>" class="btn btn-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Actualizar estado"><i class="fas fa-sync"></i> Cambiar</a></td>
 
                                 <td><?php echo utf8_encode($plaza['nombreplaza']) ?></td>

@@ -154,6 +154,29 @@ if (isset($_SESSION['user'])) {
               </div>
             </div>
           <?php } while ($mapaNL = sqlsrv_fetch_array($mapNL)); ?>
+          
+          
+          <div id="accordion">
+            <div class="card">
+              <div class="card-header" id="headingTwo">
+                <h5 class="mb-0">
+                  <button class="btn collapsed" data-toggle="collapse" data-target="#collapsev" aria-expanded="false" aria-controls="collapseTwo">
+                    <h6 style="text-shadow: 0px 0px 2px #717171;"><i class="fas fa-chevron-right"></i> Reportes</h6>
+                  </button>
+                </h5>
+              </div>
+              <?php if ($estado['estado'] == 1) { ?>
+              <div id="collapsev" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                <div class="card-body">
+                    <form method="GET" onsubmit="javascript:loadInfo();" autocomplete="off">
+                      <a target="_blank" class="btn nav-link btn-sm toDownload list-group-item list-group-item-action list-group-item-light p-3" href="map.php?id_plaza=<?php echo $plz ?>"><i class="fa fa-download"></i> Semaforo de vencidas</a>
+                    </form>
+                </div>
+              </div>
+              <?php } ?>
+            </div>
+          </div>
+          
           <!-- Menus Estaticos -->
           <!-- <div>
             <div class="card-header" id="headingTwo">
@@ -194,13 +217,7 @@ if (isset($_SESSION['user'])) {
 
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-              <?php if($estado['estado']==1){ ?>
-                <li class="nav-item">
-                <form method="GET" onsubmit="javascript:loadInfo();" autocomplete="off">
-                  <a target="_blank" class="btn nav-link btn-sm toDownload" href="map.php?id_plaza=<?php echo $plz ?>"><i class="fa fa-download"></i> Semaforo de vencidas</a>
-                  </form>
-                </li>
-              <?php }?>
+             
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Reportes
@@ -277,7 +294,7 @@ if (isset($_SESSION['user'])) {
         var toDownload = function (url) {
             $.fileDownload(url, {
                 successCallback: function (url) {
-                    Swal.fire('Archivo Descargado', '', 'success' );
+                    Swal.fire('Listo comenzara la descarga de su archivo', '', 'success' );
                 },
                 failCallback: function () {
                     Swal.fire('No se pudo descargar el archivo', '', 'error' );

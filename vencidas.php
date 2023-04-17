@@ -206,4 +206,4 @@ header("Pragma: no-cache");
 </html>
 
 <?php sqlsrv_close($cnxa2); 
-header('location:mensaje.php');?>
+
