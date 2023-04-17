@@ -46,23 +46,23 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
     }
     //****************************FIN ACTUALIAR DATOS DE USUARIO***************************************************    
     //****************************ACTUALIZAR ESTADO PLAZA******************************************************
-    if (isset($_GET['idpl'])) {
-        $idplaza = $_GET['idpl'];
-        $estado = $_GET['estado'];
-        if ($estado == 1) {
-            $estado = 0;
-        } else {
-            $estado = 1;
-        }
+    // if (isset($_GET['idpl'])) {
+    //     $idplaza = $_GET['idpl'];
+    //     $estado = $_GET['estado'];
+    //     if ($estado == 1) {
+    //         $estado = 0;
+    //     } else {
+    //         $estado = 1;
+    //     }
 
 
-        $updateestado = "update plaza set estado='$estado'
-    where id_plaza='$idplaza'";
-        sqlsrv_query($cnx, $updateestado) or die('No se ejecuto la consulta update datosart');
+    //     $updateestado = "update plaza set estado='$estado'
+    // where id_plaza='$idplaza'";
+    //     sqlsrv_query($cnx, $updateestado) or die('No se ejecuto la consulta update datosart');
 
-        echo '<script> alert(Estado actulizado correctamente.")</script>';
-        echo '<meta http-equiv="refresh" content="0,url=addplz.php">';
-    }
+    //     echo '<script> alert(Estado actulizado correctamente.")</script>';
+    //     echo '<meta http-equiv="refresh" content="0,url=addplz.php">';
+    // }
     //****************************FIN ACTUALIAR DATOS DE USUARIO***************************************************    
 ?>
     <!DOCTYPE html>
@@ -171,11 +171,9 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
                     <tbody>
                         <?php do { ?>
                             <tr>
-                                <?php if ($plaza['estado'] == 1) { ?>
+                                
                                     <td style="text-align:center;"><span class="badge badge-pill badge-success"><i class="fas fa-check"></i></span></td>
-                                <?php } else { ?>
-                                    <td style="text-align:center;"><span class="badge badge-pill badge-danger"><i class="fas fa-times-circle"></i></span></td>
-                                <?php } ?>
+                                
 
 
 
