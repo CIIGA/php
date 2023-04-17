@@ -197,7 +197,7 @@ if (isset($_SESSION['user'])) {
               <?php if($estado['estado']==1){ ?>
                 <li class="nav-item">
                 <form method="GET" onsubmit="javascript:loadInfo();" autocomplete="off">
-                  <a target="_blank" class="btn btn-warning btn-sm toDownload" href="map.php?id_plaza=<?php echo $plz ?>&plz=<?php echo $plz ?>"><i class="fa fa-download"></i> Semaforo de vencidas</a>
+                  <a target="_blank" class="btn nav-link btn-sm toDownload" href="map.php?id_plaza=<?php echo $plz ?>&plz=<?php echo $plz ?>"><i class="fa fa-download"></i> Semaforo de vencidas</a>
                   </form>
                 </li>
               <?php }?>
