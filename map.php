@@ -51,7 +51,7 @@ if (isset($_SESSION['user'])) {
     $resultSt=sqlsrv_fetch_array($st);
     if($resultSt['resultado']!=1){
         echo '<script> alert("ERROR.")</script>';
-        echo '<meta http-equiv="refresh" content="0,url=map.php?plz='.$plz.'">';
+        echo '<meta http-equiv="refresh" content="0,url=map.php?plz='.$id_plaza.'">';
     }
     else{
       header('location:vencidas.php?id_plaza_servicioWeb='.$datos['id_plaza_servicioWeb'].'&nombre_plz='.$datos['nombreplaza']);
@@ -197,7 +197,7 @@ if (isset($_SESSION['user'])) {
               <?php if($estado['estado']==1){ ?>
                 <li class="nav-item">
                 <form method="GET" onsubmit="javascript:loadInfo();" autocomplete="off">
-                  <a target="_blank" class="btn nav-link btn-sm toDownload" href="map.php?id_plaza=<?php echo $plz ?>&plz=<?php echo $plz ?>"><i class="fa fa-download"></i> Semaforo de vencidas</a>
+                  <a target="_blank" class="btn nav-link btn-sm toDownload" href="map.php?id_plaza=<?php echo $plz ?>"><i class="fa fa-download"></i> Semaforo de vencidas</a>
                   </form>
                 </li>
               <?php }?>
