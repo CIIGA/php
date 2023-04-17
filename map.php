@@ -51,7 +51,7 @@ if (isset($_SESSION['user'])) {
     $resultSt=sqlsrv_fetch_array($st);
     if($resultSt['resultado']!=1){
         echo '<script> alert("ERROR.")</script>';
-        echo '<meta http-equiv="refresh" content="0,url=map.php?plz='.$plz.'">';
+        echo '<meta http-equiv="refresh" content="0,url=map.php?plz='.$id_plaza.'">';
     }
     else{
       header('location:vencidas.php?id_plaza_servicioWeb='.$datos['id_plaza_servicioWeb'].'&nombre_plz='.$datos['nombreplaza']);
@@ -154,6 +154,29 @@ if (isset($_SESSION['user'])) {
               </div>
             </div>
           <?php } while ($mapaNL = sqlsrv_fetch_array($mapNL)); ?>
+          
+          
+          <div id="accordion">
+            <div class="card">
+              <div class="card-header" id="headingTwo">
+                <h5 class="mb-0">
+                  <button class="btn collapsed" data-toggle="collapse" data-target="#collapsev" aria-expanded="false" aria-controls="collapseTwo">
+                    <h6 style="text-shadow: 0px 0px 2px #717171;"><i class="fas fa-chevron-right"></i> Reportes</h6>
+                  </button>
+                </h5>
+              </div>
+              <?php if ($estado['estado'] == 1) { ?>
+              <div id="collapsev" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                <div class="card-body">
+                    <form method="GET" onsubmit="javascript:loadInfo();" autocomplete="off">
+                      <a target="_blank" class="btn nav-link btn-sm toDownload list-group-item list-group-item-action list-group-item-light p-3" href="map.php?id_plaza=<?php echo $plz ?>"><i class="fa fa-download"></i> Semaforo de vencidas</a>
+                    </form>
+                </div>
+              </div>
+              <?php } ?>
+            </div>
+          </div>
+          
           <!-- Menus Estaticos -->
           <!-- <div>
             <div class="card-header" id="headingTwo">
@@ -187,52 +210,14 @@ if (isset($_SESSION['user'])) {
         <div class="btn-whatsapp">
           <button class="btn btn-link" id="sidebarToggle"><i class="fas fa-bars"></i></button>
         </div>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <!-- <ul class="navbar-nav mr-auto">
-              <?php if($estado['estado']==1){ ?>
-                <li class="nav-item">
-                <form method="GET" onsubmit="javascript:loadInfo();" autocomplete="off">
-                  <a target="_blank" class="btn nav-link btn-sm toDownload" href="map.php?id_plaza=<?php echo $plz ?>&plz=<?php echo $plz ?>"><i class="fa fa-download"></i> Semaforo de vencidas</a>
-                  </form>
-                </li>
-              <?php }?>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Reportes
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="#">CallCenter</a>
-                  <a class="dropdown-item" href="#">Pregrabadas</a>
-                  <a class="dropdown-item" href="#">Telefonos Para Grabar</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">Sincronización</a>
-                  <a class="dropdown-item" href="#">Bono</a>
-                </div>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Padron
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="#">Estatus</a>
-                  <a class="dropdown-item" href="#">Adeudo</a>
-                  <a class="dropdown-item" href="#">Telefonos</a>
-                </div>
-              </li>
-            </ul> -->
-            <?php
-                if (isset($_GET['error'])) {
-                    $alert = ($_GET['error'] == 1) ? 'alert-danger' : 'alert-success';
-                    $msg = $_GET['msg']; ?>
-                    <div class="alert <?= $alert ?>"><strong><?=$msg?></strong></div>
-                <?php } ?>
-          </div>
-        </nav>
+       
+          <?php
+              if (isset($_GET['error'])) {
+                  $alert = ($_GET['error'] == 1) ? 'alert-danger' : 'alert-success';
+                  $msg = $_GET['msg']; ?>
+                  <div class="alert <?= $alert ?>"><strong><?=$msg?></strong></div>
+              <?php } ?>
+          
         <!-- Page content-->
         <?php if (isset($_GET['mp'])) { ?>
           <div class="embed-responsive embed-responsive-16by9">
@@ -247,9 +232,9 @@ if (isset($_SESSION['user'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
     <script src="../js/scripts.js"></script>
-    <script src="../js/jquery-3.4.1.min.js"></script>
+   
     <script src="../js/popper.min.js"></script>
-    <script src="../js/bootstrap.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.fileDownload/1.4.2/jquery.fileDownload.min.js"></script>
     <script>
         var loadInfo = function () {
@@ -277,7 +262,7 @@ if (isset($_SESSION['user'])) {
         var toDownload = function (url) {
             $.fileDownload(url, {
                 successCallback: function (url) {
-                    Swal.fire('Archivo Descargado', '', 'success' );
+                    Swal.fire('Listo comenzara la descarga de su archivo', '', 'success' );
                 },
                 failCallback: function () {
                     Swal.fire('No se pudo descargar el archivo', '', 'error' );

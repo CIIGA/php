@@ -204,4 +204,6 @@ header("Pragma: no-cache");
 </body>
 
 </html>
-<?php sqlsrv_close($cnxa2); ?>
+
+<?php sqlsrv_close($cnxa2); 
+
