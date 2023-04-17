@@ -193,7 +193,7 @@ if (isset($_SESSION['user'])) {
           </button>
 
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
+            <!-- <ul class="navbar-nav mr-auto">
               <?php if($estado['estado']==1){ ?>
                 <li class="nav-item">
                 <form method="GET" onsubmit="javascript:loadInfo();" autocomplete="off">
@@ -224,7 +224,7 @@ if (isset($_SESSION['user'])) {
                   <a class="dropdown-item" href="#">Telefonos</a>
                 </div>
               </li>
-            </ul>
+            </ul> -->
             <?php
                 if (isset($_GET['error'])) {
                     $alert = ($_GET['error'] == 1) ? 'alert-danger' : 'alert-success';

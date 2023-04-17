@@ -4,23 +4,6 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
     require 'modules/callCenter.php';
     $id_plaza = $_GET['plz'];
     $plaza = plaza($id_plaza);
-    if (isset($_POST['base']) and isset($_POST['fecha_inicial']) and isset($_POST['fecha_final']) and isset($_POST['sector'])) {
-        $sector = $_POST['sector'];
-        $base = $_POST['base'];
-        $fechaI = $_POST['fecha_inicial'];
-        $fechaF = $_POST['fecha_final'];
-        $BD = $plaza['base'];
-        if ($sector == 1) {
-            $store = 'sp_RGCallCenter';
-        } else if ($sector == 2) {
-            $store = 'sp_ReportePregrabadas';
-        }
-        $cnx = conexion($BD);
-        $procedure = "exec " . $store . " '$fechaI', '$fechaF'";
-        $exec = sqlsrv_query($cnx, $procedure);
-        $result = sqlsrv_fetch_array($exec);
-
-    }
     ?>
     <!DOCTYPE html>
     <html>
@@ -38,6 +21,16 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
         <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <?php require "include/nav.php";?>
+        <style>
+        .text-xs{
+        font-size: 10px !important;
+        }
+        .content{
+         margin-left:-80px;
+         margin-right:-80px;
+         overflow-x: auto;
+        }
+        </style>
     </head>
 
     <body>
@@ -94,131 +87,25 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
                     <div class="card tarjet">
                         <div class="card-body ">
                             <h5 class="card-title text-center">Registros</h5>
+                           
                             <p class="card-text text-center bg-white">0</p>
                         </div>
                     </div>
                 </div>
             </div>
-<div>
-    <?php if ($result) {?>
-<table class='table'>
-  <thead class='thead-dark'>
-    <tr>
-      <th scope='col'>Observaciones</th>
-      <th scope='col'>FechaPromesaPago</th>
-      <th scope='col'>PersonaAtendio</th>
-      <th scope='col'>TareaAnterior</th>
-      <th scope='col'>TareaActual</th>
-      <th scope='col'>Fecha</th>
-      <th scope='col'>Cuenta</th>
-      <th scope='col'>Clave</th>
-      <th scope='col'>CallCenter</th>
-      <th scope='col'>Clasificacion</th>
-      <th scope='col'>Telefono</th>
-      <th scope='col'>TelRadio</th>
-      <th scope='col'>TelRadio</th>
-      <th scope='col'>TelefonoUsuario</th>
-      <th scope='col'>CelularUsuario</th>
-      <th scope='col'>TelRadioUsuario</th>
-      <th scope='col'>TelefonoUsuario</th>
-      <th scope='col'>CelularUsuario</th>
-      <th scope='col'>TelRadioUsuario</th>
-      <th scope='col'>Usuario</th>
-      <th scope='col'>Direccion</th>
-      <th scope='col'>Colonia</th>
-      <th scope='col'>Distrito</th>
-      <th scope='col'>Clave Catastral</th>
-      <th scope='col'>Serie Medidor</th>
-      <th scope='col'>Tipo Servicio</th>
-      <th scope='col'>Giro</th>
-      <th scope='col'>Razon Social</th>
-      <th scope='col'>Deuda Total</th>
-      <th scope='col'>Abogado</th>
-      <th scope='col'>Gestor</th>
-    </tr>
-  </thead>
-  <tbody>
-    <?php while ($result = sqlsrv_fetch_array($exec)) {?>
-    <tr>
-            <td><?php echo utf8_encode($result['Observaciones']); ?></td>
-            <td><?php echo utf8_encode($result['FechaPromesaPago']->format('d/m/Y')); ?></td>
-            <td><?php echo utf8_encode($result['PersonaAtendio']); ?></td>
-            <td><?php echo utf8_encode($result['TareaAnterior']); ?></td>
-            <td><?php echo utf8_encode($result['TareaActual']); ?></td>
-            <td><?php echo utf8_encode($result['Fecha']->format('d/m/Y')); ?></td>
-            <td><?php echo utf8_encode($result['Cuenta']); ?></td>
-            <td><?php echo utf8_encode($result['Clave']); ?></td>
-            <td><?php echo utf8_encode($result['CallCenter']); ?></td>
-            <td><?php echo utf8_encode($result['Clasificacion']); ?></td>
-            <td><?php echo utf8_encode($result['Telefono']); ?></td>
-            <td><?php echo utf8_encode($result['TelRadio']); ?></td>
-            <td><?php echo utf8_encode($result['TelRadio']); ?></td>
-            <td><?php echo utf8_encode($result['TelefonoUsuario']); ?></td>
-            <td><?php echo utf8_encode($result['CelularUsuario']); ?></td>
-            <td><?php echo utf8_encode($result['TelRadioUsuario']); ?></td>
-            <td><?php echo utf8_encode($result['TelefonoUsuario']); ?></td>
-            <td><?php echo utf8_encode($result['CelularUsuario']); ?></td>
-            <td><?php echo utf8_encode($result['TelRadioUsuario']); ?></td>
-            <td><?php echo utf8_encode($result['Usuario']); ?></td>
-            <td><?php echo utf8_encode($result['Direccion']); ?></td>
-            <td><?php echo utf8_encode($result['Colonia']); ?></td>
-            <td><?php echo utf8_encode($result['Distrito']); ?></td>
-            <td><?php echo utf8_encode($result['Clave Catastral']); ?></td>
-            <td><?php echo utf8_encode($result['Serie Medidor']); ?></td>
-            <td><?php echo utf8_encode($result['Tipo Servicio']); ?></td>
-            <td><?php echo utf8_encode($result['Giro']); ?></td>
-            <td><?php echo utf8_encode($result['Razon Social']); ?></td>
-            <td><?php echo utf8_encode($result['Deuda Total']); ?></td>
-            <td><?php echo utf8_encode($result['Abogado']); ?></td>
-            <td><?php echo utf8_encode($result['Gestor']); ?></td>
-    </tr>
-    <?php }?>
-  </tbody>
-</table>
-</div>
-            <?php }
-    // if ($result) {
-    //     while ($result = sqlsrv_fetch_array($exec)) {
-
-    //         echo utf8_encode($result['Observaciones']);
-    //         echo utf8_encode($result['FechaPromesaPago']->format('d/m/Y'));
-    //         echo utf8_encode($result['PersonaAtendio']);
-    //         echo utf8_encode($result['TareaAnterior']);
-    //         echo utf8_encode($result['TareaActual']);
-    //         echo utf8_encode($result['Fecha']->format('d/m/Y'));
-    //         echo utf8_encode($result['Cuenta']);
-    //         echo utf8_encode($result['Clave']);
-    //         echo utf8_encode($result['CallCenter']);
-    //         echo utf8_encode($result['Clasificacion']);
-    //         echo utf8_encode($result['Telefono']);
-    //         echo utf8_encode($result['TelRadio']);
-    //         echo utf8_encode($result['TelRadio']);
-    //         echo utf8_encode($result['TelefonoUsuario']);
-    //         echo utf8_encode($result['CelularUsuario']);
-    //         echo utf8_encode($result['TelRadioUsuario']);
-    //         echo utf8_encode($result['TelefonoUsuario']);
-    //         echo utf8_encode($result['CelularUsuario']);
-    //         echo utf8_encode($result['TelRadioUsuario']);
-    //         echo utf8_encode($result['Usuario']);
-    //         echo utf8_encode($result['Direccion']);
-    //         echo utf8_encode($result['Colonia']);
-    //         echo utf8_encode($result['Distrito']);
-    //         echo utf8_encode($result['Clave Catastral']);
-    //         echo utf8_encode($result['Serie Medidor']);
-    //         echo utf8_encode($result['Tipo Servicio']);
-    //         echo utf8_encode($result['Giro']);
-    //         echo utf8_encode($result['Razon Social']);
-    //         echo utf8_encode($result['Deuda Total']);
-    //         echo utf8_encode($result['Abogado']);
-    //         echo utf8_encode($result['Gestor']);
-    //     }
-    // }
-    // echo $id_plaza;
-    // echo "<br/>";
-    // echo $plaza['base'];
-    // echo "<br/>";
-    // echo $plaza['plaza'];
-    ?>
+        <div class="content">
+            <?php 
+            if (isset($_POST['base']) and isset($_POST['fecha_inicial']) and isset($_POST['fecha_final']) and isset($_POST['sector'])) {
+                $sector = $_POST['sector'];
+                $fechaI = $_POST['fecha_inicial'];
+                $fechaF = $_POST['fecha_final'];
+                $BD = $plaza['base'];
+                sp_RGCallCenter(
+                $fechaI,
+                $fechaF,
+                $BD);
+            }
+            ?>
         </div>
     </body>
 <?php
