@@ -60,7 +60,7 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
     where id_plaza='$idplaza'";
         sqlsrv_query($cnx, $updateestado) or die('No se ejecuto la consulta update datosart');
 
-        echo '<script> alert("Registro actulizado correctamente.")</script>';
+        echo '<script> alert(Estado actulizado correctamente.")</script>';
         echo '<meta http-equiv="refresh" content="0,url=addplz.php">';
     }
     //****************************FIN ACTUALIAR DATOS DE USUARIO***************************************************    
