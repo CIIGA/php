@@ -47,14 +47,14 @@ if (isset($_SESSION['user'])) {
     $cnxa=conexion($nombredb);
     // ejecuto mi store con la conexion que le corresponde
     $store="execute [dbo].[sp_cuenta_vencida_detalle_actual] '$ini','$fin',1";
-    $st=sqlsrv_query($cnxa,$store) or die ('Execute Stored Procedure Failed... Query store.php');
+    $st=sqlsrv_query($cnxa,$store) or die ('Execute Stored Procedure Failed... Query map.php [sp_cuenta_vencida_detalle_actual]');
     $resultSt=sqlsrv_fetch_array($st);
     if($resultSt['resultado']!=1){
         echo '<script> alert("ERROR.")</script>';
         echo '<meta http-equiv="refresh" content="0,url=map.php?plz='.$plz.'">';
     }
     else{
-      header('location:vencidas.php?id_plaza_servicioWeb='.$datos['id_plaza_servicioWeb']);
+      header('location:vencidas.php?id_plaza_servicioWeb='.$datos['id_plaza_servicioWeb'].'&nombre_plz='.$datos['nombreplaza']);
     }
 }
 ?>
@@ -71,8 +71,8 @@ if (isset($_SESSION['user'])) {
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="../js/peticionAjax.js"></script>
-    <link rel="stylesheet" href="../../css/bootstrap.css">
-    <link href="../../fontawesome/css/all.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link href="../fontawesome/css/all.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-material-ui/material-ui.css"
@@ -124,17 +124,6 @@ if (isset($_SESSION['user'])) {
         <div class="sidebar-heading border-bottom bg-light"><a href="acceso.php"><img src="../img/logoKPI.png" height="80" alt=""></a></div><br>
         <h5 style="text-shadow: 0px 0px 2px #717171;text-align:center;"><?php echo 'Plaza: ' . utf8_encode($mapaNL['nombreplaza']) ?></h5>
         <div class="list-group list-group-flush">
-
-
-
-
-
-
-
-
-
-
-
           <?php do { ?>
             <div id="accordion">
               <div class="card">
@@ -208,8 +197,7 @@ if (isset($_SESSION['user'])) {
               <?php if($estado['estado']==1){ ?>
                 <li class="nav-item">
                 <form method="GET" onsubmit="javascript:loadInfo();" autocomplete="off">
-                  <a class="nav-link  toDownload" href="map.php?id_plaza=<?php echo $plz ?>&plz=<?php echo $plz ?>"><i class="fa fa-download"></i>Semaforo de vencidas</a>
-                 
+                  <a target="_blank" class="btn btn-warning btn-sm toDownload" href="map.php?id_plaza=<?php echo $plz ?>&plz=<?php echo $plz ?>"><i class="fa fa-download"></i> Semaforo de vencidas</a>
                   </form>
                 </li>
               <?php }?>
@@ -237,6 +225,12 @@ if (isset($_SESSION['user'])) {
                 </div>
               </li>
             </ul>
+            <?php
+                if (isset($_GET['error'])) {
+                    $alert = ($_GET['error'] == 1) ? 'alert-danger' : 'alert-success';
+                    $msg = $_GET['msg']; ?>
+                    <div class="alert <?= $alert ?>"><strong><?=$msg?></strong></div>
+                <?php } ?>
           </div>
         </nav>
         <!-- Page content-->
@@ -253,7 +247,9 @@ if (isset($_SESSION['user'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
     <script src="../js/scripts.js"></script>
-  
+    <script src="../js/jquery-3.4.1.min.js"></script>
+    <script src="../js/popper.min.js"></script>
+    <script src="../js/bootstrap.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.fileDownload/1.4.2/jquery.fileDownload.min.js"></script>
     <script>
         var loadInfo = function () {
