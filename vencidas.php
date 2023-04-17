@@ -35,6 +35,8 @@ header("Pragma: no-cache");
    border: 1px solid #707070;
    border-spacing: 0;
 }
+
+/* color al titulo de las columnas */
 .bg_th{
     background-color: #B8B8B8 !important;
     text-align: center !important;
