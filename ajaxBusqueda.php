@@ -1,9 +1,9 @@
 <?php
-if(isset($_POST['alumnos'])) {
+if(isset($_GET['alumnos'])) {
 require "conect.php";
     
-    $buscara=$_POST['alumnos'];
-    $plazaa=$_POST['num2'];
+    $buscara=$_GET['alumnos'];
+    $plazaa=$_GET['num2'];
     $ura="SELECT top 4 * FROM implementta
     where Propietario LIKE '%$buscara%'";
     $urla=sqlsrv_query($cnx,$ura);

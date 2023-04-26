@@ -17,8 +17,8 @@ require "../../acnxerdm/cnx.php";
     $acceso=sqlsrv_fetch_array($acces);  
     
 //*********************************** INICIO INSERT PLZ *******************************************************
-if(isset($_POST['add'])){
-    $idplz=$_POST['plz'];
+if(isset($_GET['add'])){
+    $idplz=$_GET['plz'];
     $idusuario=$_GET['usr'];
     
     $val="select id_plaza from acceso where id_plaza='$idplz' AND id_usuarioNUevo='$idusuario'";
@@ -96,7 +96,7 @@ if($valida){
     
 <?php } else{ ?>   
 <div class="jumbotron">
-    <form action="" method="post">
+    <form action="" method="GET">
         <?php   
           $pl="SELECT * FROM plaza";
             $pla=sqlsrv_query($cnx,$pl);

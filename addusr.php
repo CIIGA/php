@@ -8,11 +8,11 @@ require "../../acnxerdm/cnx.php";
     $plz=sqlsrv_query($cnx,$pl);
     $plaza=sqlsrv_fetch_array($plz);
 //*********************************** INICIO INSERT USR *******************************************************
-if(isset($_POST['save'])){
-    $usuario=$_POST['usuario'];
-    $correo=$_POST['correo'];
-    $clave=$_POST['clave'];
-    $idplzUsr=$_POST['plaza'];
+if(isset($_GET['save'])){
+    $usuario=$_GET['usuario'];
+    $correo=$_GET['correo'];
+    $clave=$_GET['clave'];
+    $idplzUsr=$_GET['plaza'];
     $estado=2;
     
     $val="select * from usuarionuevo
@@ -85,7 +85,7 @@ if($valida){
 <?php require "include/nav.php"; ?>
 </head>
 <body>
-<form action="" method="post">
+<form action="" method="GET">
 <div class="container">
     <h1 style="text-shadow: 1px 1px 2px #717171;">Plataforma de KPIs</h1>
     <h4 style="text-shadow: 1px 1px 2px #717171;"><i class="fas fa-user-plus"></i> Agregar Nuevo Usuario</h4>

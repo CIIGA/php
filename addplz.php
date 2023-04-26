@@ -11,10 +11,10 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
     $prov = sqlsrv_query($cnx, $pro);
     $prove = sqlsrv_fetch_array($prov);
     //*********************************** INICIO INSERT PLZ *******************************************************
-    if (isset($_POST['save'])) {
-        $nombre = $_POST['nombre'];
-        $img = $_POST['image'];
-        $prov = $_POST['proven'];
+    if (isset($_GET['save'])) {
+        $nombre = $_GET['nombre'];
+        $img = $_GET['image'];
+        $prov = $_GET['proven'];
 
         $val = "select * from plaza
     where nombreplaza='$nombre'";
@@ -32,11 +32,11 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
     }
     //************************ FIN INSERT PLZ ******************************************************************
     //****************************ACTUALIZAR DATOS DE USUARIO******************************************************
-    if (isset($_POST['update'])) {
-        $idplaza = $_POST['idplz'];
-        $name = $_POST['nombreplz'];
-        $imagen = $_POST['imagen'];
-        $prov = $_POST['prov'];
+    if (isset($_GET['update'])) {
+        $idplaza = $_GET['idplz'];
+        $name = $_GET['nombreplz'];
+        $imagen = $_GET['imagen'];
+        $prov = $_GET['prov'];
 
         $datos = "update plaza set id_proveniente='$prov', nombreplaza='$name', img='$imagen'
     where id_plaza='$idplaza'";
@@ -119,7 +119,7 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
         <div class="container">
             <h1 style="text-shadow: 1px 1px 2px #717171;">Plataforma de KPIs</h1>
             <h4 style="text-shadow: 1px 1px 2px #717171;"><i class="far fa-building"></i> Agregar nueva plaza</h4>
-            <form action="" method="post">
+            <form action="" method="GET">
                 <div class="jumbotron">
                     <div class="form-group" style="text-align:center;">
                         <label for="exampleInputEmail1">Nombre de la plaza: *</label>
@@ -200,7 +200,7 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
                             </tr>
                     </tbody>
                     <!-- *********************************MODAL PARA ACTUALIZAR UDATOS *************************************************** -->
-                    <form action="" method="post">
+                    <form action="" method="GET">
                         <div class="modal fade" id="datos<?php echo $plaza['id_plaza'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content">

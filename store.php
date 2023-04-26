@@ -23,9 +23,9 @@ require "conect.php";
     $prove=sqlsrv_fetch_array($prov);
     
 //*********************************** INICIO INSERT SYNC *******************************************************
-if(isset($_POST['save'])){
-    $nombre=$_POST['nombre'];
-    $stored=$_POST['stored'];
+if(isset($_GET['save'])){
+    $nombre=$_GET['nombre'];
+    $stored=$_GET['stored'];
     $plzid=$_GET['idpl'];
     
     $val="select * from sync
@@ -44,10 +44,10 @@ if($valida){
 }
 //************************ FIN INSERT SYNC ******************************************************************    
 //****************************ACTUALIZAR DATOS DE USUARIO******************************************************
-if(isset($_POST['update'])){
-    $idsync=$_POST['idsync'];
-    $nombreSync=$_POST['nombre'];
-    $stor=$_POST['stored'];
+if(isset($_GET['update'])){
+    $idsync=$_GET['idsync'];
+    $nombreSync=$_GET['nombre'];
+    $stor=$_GET['stored'];
     $plzid=$_GET['idpl'];
     
     $udtStr="update sync set nombreSync='$nombreSync', stored='$stor'
@@ -149,7 +149,7 @@ if(isset($_GET['execute'])){
 </div>    
 <?php if(isset($proveniente)){ ?>
 <div class="container">    
-<form action="" method="post">
+<form action="" method="GET">
 <div class="jumbotron">   
     
 <div class="form-row">
@@ -209,7 +209,7 @@ if(isset($_GET['execute'])){
     </tr>
   </tbody>
 <!-- *********************************MODAL PARA ACTUALIZAR UDATOS *************************************************** -->
-<form action="" method="post">
+<form action="" method="GET">
 <div class="modal fade" id="datos<?php echo $sync['id_sync'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">

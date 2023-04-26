@@ -17,12 +17,12 @@ require "../../acnxerdm/cnx.php";
     $plaza=sqlsrv_fetch_array($plz);
     
 //****************************ACTUALIZAR DATOS DE USUARIO******************************************************
-if(isset($_POST['update'])){
-    $id_usuarioNuevo=$_POST['id_usuarioNuevo'];
-    $usuario=$_POST['usuario'];
-    $correo=$_POST['correo'];
-    $clave=$_POST['clave'];
-    $idplzUsr=$_POST['plaza'];
+if(isset($_GET['update'])){
+    $id_usuarioNuevo=$_GET['id_usuarioNuevo'];
+    $usuario=$_GET['usuario'];
+    $correo=$_GET['correo'];
+    $clave=$_GET['clave'];
+    $idplzUsr=$_GET['plaza'];
     
  	    $datos="update usuarionuevo set id_plazaUsr='$idplzUsr',usuario='$usuario',puesto='$correo' where id_usuarioNuevo='$id_usuarioNuevo'";
 		sqlsrv_query($cnx,$datos) or die ('No se ejecuto la consulta update datosart');
@@ -80,7 +80,7 @@ if(isset($_POST['update'])){
 <?php require "include/nav.php"; ?>
 </head>
 <body>
-<form action="" method="post">    
+<form action="" method="GET">    
 <div class="container">
     <h1 style="text-shadow: 1px 1px 2px #717171;">Plataforma de KPIs</h1>
     <h4 style="text-shadow: 1px 1px 2px #717171;"><i class="fas fa-user-edit"></i> Actualizar datos de usuario</h4>

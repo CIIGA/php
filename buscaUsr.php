@@ -1,9 +1,9 @@
 <?php
 require "../../acnxerdm/cnx.php";
 ?>
-<?php if(isset($_POST['alumnos'])) {
+<?php if(isset($_GET['alumnos'])) {
     
-    $busqueda=$_POST['alumnos'];
+    $busqueda=$_GET['alumnos'];
     $usa="SELECT top 10 * FROM usuarionuevo
     inner join usuario on usuario.id_usuarioNuevo=usuarionuevo.id_usuarioNuevo
     left join plaza on plaza.id_plaza=usuarionuevo.id_plazaUsr

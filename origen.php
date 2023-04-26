@@ -12,9 +12,9 @@ require "../../acnxerdm/cnx.php";
     $datBase=sqlsrv_fetch_array($base);
     
 //*********************************** INICIO INSERT PLZ *******************************************************
-if(isset($_POST['save'])){
-    $nombre=$_POST['nombreOrigen'];
-    $base=$_POST['base'];
+if(isset($_GET['save'])){
+    $nombre=$_GET['nombreOrigen'];
+    $base=$_GET['base'];
     $val="select * from proveniente
     where nombreProveniente='$nombre' or data='$base'";
     $vali=sqlsrv_query($cnx,$val);
@@ -31,10 +31,10 @@ if($valida){
 }
 //************************ FIN INSERT PLZ ******************************************************************
 //****************************ACTUALIZAR DATOS DE USUARIO******************************************************
-if(isset($_POST['update'])){
-    $idprov=$_POST['idprov'];
-    $name=$_POST['nombre'];
-    $data=$_POST['datos'];
+if(isset($_GET['update'])){
+    $idprov=$_GET['idprov'];
+    $name=$_GET['nombre'];
+    $data=$_GET['datos'];
     
     $datos="update proveniente set nombreProveniente='$name',data='$data'
     where id_proveniente='$idprov'";
@@ -95,7 +95,7 @@ if(isset($_POST['update'])){
     <div class="alert alert-info" role="alert">
       <i class="fas fa-code"></i> Para asegurar el correcto funcionamiento de la plataforma, confirme datos con el área de sistemas.
     </div>
-<form action="" method="post">
+<form action="" method="GET">
 <div class="jumbotron">
     
     <div class="form-row">
@@ -159,7 +159,7 @@ if(isset($_POST['update'])){
     </tr>
   </tbody>
 <!-- *********************************MODAL PARA ACTUALIZAR UDATOS *************************************************** -->
-<form action="" method="post">
+<form action="" method="GET">
 <div class="modal fade" id="datos<?php echo $plaza['id_proveniente'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">

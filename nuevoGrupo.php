@@ -14,9 +14,9 @@ require "../../acnxerdm/cnx.php";
     $plza=sqlsrv_query($cnx,$pla);
     $plazaa=sqlsrv_fetch_array($plza);
 //*********************************** INICIO INSERT PLZ *******************************************************
-if(isset($_POST['save'])){
+if(isset($_GET['save'])){
     $idplaza=$_GET['plz'];
-    $nombre=$_POST['nombre'];
+    $nombre=$_GET['nombre'];
     $val="select * from subregistro
     where nombreSub='$nombre' and id_plaza='$idplaza'";
     $vali=sqlsrv_query($cnx,$val);
@@ -33,9 +33,9 @@ if($valida){
 }
 //************************ FIN INSERT PLZ ******************************************************************
 //****************************ACTUALIZAR DATOS DE USUARIO******************************************************
-if(isset($_POST['update'])){
-    $idreg=$_POST['reg'];
-    $nameSub=$_POST['nombreSub'];
+if(isset($_GET['update'])){
+    $idreg=$_GET['reg'];
+    $nameSub=$_GET['nombreSub'];
     
     $datos="update subregistro set nombreSub='$nameSub'
     where id_subregistro='$idreg'";
@@ -94,7 +94,7 @@ if(isset($_POST['update'])){
     <h1 style="text-shadow: 1px 1px 2px #717171;">Plataforma de KPIs</h1>
     <h4 style="text-shadow: 1px 1px 2px #717171;"><i class="fas fa-object-ungroup"></i> Agregar nuevo subgrupo de KPIs</h4>
     <h4 style="text-shadow: 1px 1px 2px #717171;">Plaza <?php echo utf8_encode($plazaa['nombreplaza']) ?></h4>
-<form action="" method="post">
+<form action="" method="GET">
 <div class="jumbotron">
     <div class="form-group" style="text-align:center;">
     <label for="exampleInputEmail1">Nombre del subgrupo: *</label>
@@ -134,7 +134,7 @@ if(isset($_POST['update'])){
     </tr>
   </tbody>
 <!-- *********************************MODAL PARA ACTUALIZAR UDATOS *************************************************** -->
-<form action="" method="post">
+<form action="" method="GET">
 <div class="modal fade" id="datos<?php echo $plaza['id_subregistro'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">

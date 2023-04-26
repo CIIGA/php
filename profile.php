@@ -32,23 +32,23 @@ require "conect.php";
     $ult=sqlsrv_query($cnxkpi,$ul);
     $ultima=sqlsrv_fetch_array($ult);
     
-if(isset($_POST['update'])){
-$cuenta=$_POST['cuenta'];
-$propietario=$_POST['propietario'];
-$clave=$_POST['clave'];
-$calle=$_POST['calle'];
-$numext=$_POST['numext'];
-$numint=$_POST['numint'];
-$colonia=$_POST['colonia'];
-$cp=$_POST['cp'];
-$seriemedidor=$_POST['seriemedidor'];
-$deudatotal=$_POST['deudatotal'];
-$rango=$_POST['rango'];
-$fechaultimopago=$_POST['fechaultimopago'];
-$fechaasignacion=$_POST['fechaasignacion'];
-$fechavencimiento=$_POST['fechavencimiento'];
-$fechaactualizacion=$_POST['fechaactualizacion'];
-$totalpagado=$_POST['totalpagado'];
+if(isset($_GET['update'])){
+$cuenta=$_GET['cuenta'];
+$propietario=$_GET['propietario'];
+$clave=$_GET['clave'];
+$calle=$_GET['calle'];
+$numext=$_GET['numext'];
+$numint=$_GET['numint'];
+$colonia=$_GET['colonia'];
+$cp=$_GET['cp'];
+$seriemedidor=$_GET['seriemedidor'];
+$deudatotal=$_GET['deudatotal'];
+$rango=$_GET['rango'];
+$fechaultimopago=$_GET['fechaultimopago'];
+$fechaasignacion=$_GET['fechaasignacion'];
+$fechavencimiento=$_GET['fechavencimiento'];
+$fechaactualizacion=$_GET['fechaactualizacion'];
+$totalpagado=$_GET['totalpagado'];
     
 $datos="update implementta set
  Clave='$clave',Propietario='$propietario',Calle='$calle',NumExt='$numext',NumInt='$numint',Colonia='$colonia',CP='$cp',SerieMedidor='$seriemedidor',DeudaTotal='$deudatotal',Rango='$rango',TotalPagado='$totalpagado' where Cuenta='$cuenta'";
@@ -142,7 +142,7 @@ echo '<meta http-equiv="refresh" content="0,url=profile.php?ncnt='.$cuenta.'&plz
 <!-- Page content-->
 <div class="container-fluid">
     <br>
-<form action="" method="post">    
+<form action="" method="GET">    
 <div class="container" style="padding-left:0%;padding-right:0%;">
     <h2 style="text-shadow: 1px 1px 2px #717171;">Plataforma Fidi</h2>
     <h5 style="text-shadow: 1px 1px 2px #717171;"><i class="fas fa-users"></i> Perfil del ciudadano</h5>   
@@ -193,8 +193,8 @@ echo '<meta http-equiv="refresh" content="0,url=profile.php?ncnt='.$cuenta.'&plz
         </div>
         <div class="col-md-6">
           <div class="md-form form-group">
-            <label for="exampleInputEmail1">Codigo Postal: *</label>
-    <input type="text" class="form-control" name="cp" placeholder="Codigo Postal" value="<?php echo $usuario['CP'] ?>">
+            <label for="exampleInputEmail1">Codigo GETal: *</label>
+    <input type="text" class="form-control" name="cp" placeholder="Codigo GETal" value="<?php echo $usuario['CP'] ?>">
           </div>
         </div>
       </div>

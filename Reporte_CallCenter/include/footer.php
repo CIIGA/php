@@ -1,4 +1,4 @@
-<nav class="navbar sticky-bottom navbar-expand-lg navbar-dark" style="background-color: #111111;">
+<nav class="navbar sticky-bottom navbar-expand-lg navbar-dark" style="background-color: #111111;  min-height: 5vh;">
     <span class="navbar-text" style="font-size:12px;font-weigth:bold;color:#e3e3e3;">
         Sistema de KPIs Estrategas de Mexico<br>
         Centro de Inteligencia Informática y Geografía Aplicada<br>

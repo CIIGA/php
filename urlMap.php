@@ -14,10 +14,10 @@ require "../../acnxerdm/cnx.php";
     $map=sqlsrv_query($cnx,$mp);
     $mapa=sqlsrv_fetch_array($map);
 //*********************************** INICIO INSERT PLZ *******************************************************
-if(isset($_POST['save'])){
-    $nombre=$_POST['nombre'];
-    $url=$_POST['url'];
-    $subGroup=$_POST['sub'];
+if(isset($_GET['save'])){
+    $nombre=$_GET['nombre'];
+    $url=$_GET['url'];
+    $subGroup=$_GET['sub'];
     
     $val="select * from kpi
     inner join subregistro on subregistro.id_subregistro=kpi.id_subregistro
@@ -84,7 +84,7 @@ if($valida){
 <div class="container">
     <h1 style="text-shadow: 1px 1px 2px #717171;">Plataforma de KPIs</h1>
     <h4 style="text-shadow: 1px 1px 2px #717171;"><i class="fas fa-map-marked-alt"></i> Agregar kpi a la plaza <?php echo utf8_encode($plaza['nombreplaza']) ?></h4>
-<form action="" method="post">
+<form action="" method="GET">
     <div class="jumbotron">
     <div class="form-group" style="text-align:center;">
     <label for="exampleInputEmail1">Nombre de KPI: *</label>

@@ -12,12 +12,12 @@ require "../../acnxerdm/cnx.php";
     $usera=sqlsrv_fetch_array($usea);
     
 //****************************ACTUALIZAR DATOS DE USUARIO******************************************************
-if(isset($_POST['update'])){
+if(isset($_GET['update'])){
     $id_usuarioNuevo=$usera['id_usuarioNuevo'];
-    $usr=$_POST['usr'];
-    $actual=$_POST['actual'];
-    $nueva=$_POST['nueva'];
-    $confirmar=$_POST['confirmar'];
+    $usr=$_GET['usr'];
+    $actual=$_GET['actual'];
+    $nueva=$_GET['nueva'];
+    $confirmar=$_GET['confirmar'];
         $login = "SELECT * FROM usuarionuevo 
         inner join usuario on usuarionuevo.id_usuarioNuevo=usuario.id_usuarioNuevo
         WHERE usuarionuevo.usuario = '$usr' and usuario.clave='$actual'";
@@ -85,7 +85,7 @@ if(isset($_POST['update'])){
 <?php require "include/nav.php"; ?>
 </head>
 <body>
-<form action="" method="post">    
+<form action="" method="GET">    
 <div class="container">
     <h1 style="text-shadow: 1px 1px 2px #717171;">Plataforma de KPIs</h1>
     <h3 style="text-shadow: 1px 1px 2px #717171;"><i class="fas fa-user-edit"></i> Actualizar perfil de usuario</h3>

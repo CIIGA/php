@@ -1,6 +1,6 @@
 <?php
 require "../../acnxerdm/cnx.php";
-    $idusr=$_POST['alumnos'];
+    $idusr=$_GET['alumnos'];
     
 $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyz#$%?ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 $shuffle=substr(str_shuffle($permitted_chars), 4, 4);
