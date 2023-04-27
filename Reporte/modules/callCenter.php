@@ -1,4 +1,5 @@
 <?php
+
 function plaza($id_plaza)
 {
     //se consulta la plaza desde la base de datos
@@ -174,7 +175,7 @@ function sp_RGCallCenter(
         if ($pagina > 1) {
             $page = $pagina - 1;
             echo '<li class="page-item ">';
-            echo "<a href='reporte.php?plz=$id_plaza&base=$BD&sector=$sector&fecha_inicial=$fechaI&fecha_final=$fechaF&page=$page'
+            echo "<a href='reporte.php?plz=$id_plaza&base=$BD&sector=$sector&fecha_inicial=$fechaI&fecha_final=$fechaF&page=$page&tabla='
             class='page-link' aria-label='Previous'> <span aria-hidden='true'>&laquo;</span> </a>";
             echo '</li>';
         }
@@ -197,11 +198,11 @@ function sp_RGCallCenter(
                 //posicionado si no, muestra la lista activa
                 if ($x != $pagina) {
                     echo '<li class="page-item">';
-                    echo "<a href='reporte.php?plz=$id_plaza&base=$BD&sector=$sector&fecha_inicial=$fechaI&fecha_final=$fechaF&page=$x' class='page-link'>$x</a>";
+                    echo "<a href='reporte.php?plz=$id_plaza&base=$BD&sector=$sector&fecha_inicial=$fechaI&fecha_final=$fechaF&page=$x&tabla=' class='page-link'>$x</a>";
                     echo '</li>';
                 } else {
                     echo '<li class="page-item active" aria-current="page">';
-                    echo "<a href='reporte.php?plz=$id_plaza&base=$BD&sector=$sector&fecha_inicial=$fechaI&fecha_final=$fechaF&page=$x' class='page-link'>$x</a>";
+                    echo "<a href='reporte.php?plz=$id_plaza&base=$BD&sector=$sector&fecha_inicial=$fechaI&fecha_final=$fechaF&page=$x&tabla=' class='page-link'>$x</a>";
                     echo '</li>';
                 }
                 //Se increment x
@@ -212,11 +213,11 @@ function sp_RGCallCenter(
             for ($x = 1; $x <= $cantidadPaginas; $x++) {
                 if ($x != $pagina) {
                     echo '<li class="page-item">';
-                    echo "<a href='reporte.php?plz=$id_plaza&base=$BD&sector=$sector&fecha_inicial=$fechaI&fecha_final=$fechaF&page=$x' class='page-link'>$x</a>";
+                    echo "<a href='reporte.php?plz=$id_plaza&base=$BD&sector=$sector&fecha_inicial=$fechaI&fecha_final=$fechaF&page=$x&tabla=' class='page-link'>$x</a>";
                     echo '</li>';
                 } else {
                     echo '<li class="page-item active" aria-current="page">';
-                    echo "<a href='reporte.php?plz=$id_plaza&base=$BD&sector=$sector&fecha_inicial=$fechaI&fecha_final=$fechaF&page=$x' class='page-link'>$x</a>";
+                    echo "<a href='reporte.php?plz=$id_plaza&base=$BD&sector=$sector&fecha_inicial=$fechaI&fecha_final=$fechaF&page=$x&tabla=' class='page-link'>$x</a>";
                     echo '</li>';
                 }
             }
@@ -225,7 +226,7 @@ function sp_RGCallCenter(
         if ($resultFin < $count) {
             $page = $pagina + 1;
             echo '<li class="page-item ">';
-            echo " <a href='reporte.php?plz=$id_plaza&base=$BD&sector=$sector&fecha_inicial=$fechaI&fecha_final=$fechaF&page=$page' class='page-link'
+            echo " <a href='reporte.php?plz=$id_plaza&base=$BD&sector=$sector&fecha_inicial=$fechaI&fecha_final=$fechaF&page=$page&tabla=' class='page-link'
             aria-label='Next'> <span aria-hidden='true'>&raquo;</span> </a>";
             echo '</li>';
         }
@@ -247,97 +248,4 @@ function conexion($BD)
         die(print_r(sqlsrv_errors(), true));
     }
 }
-function excel($id_plaza,
-    $sector,
-    $fechaI,
-    $fechaF,
-    $BD) {
-    $cnx = conexion($BD);
-    $procedure = "exec sp_RGCallCenter'$fechaI', '$fechaF'";
-    $exec = sqlsrv_query($cnx, $procedure);
-    $result=sqlsrv_has_rows($exec);
-    header('Set-Cookie: fileDownload=true; path=/');
-    header('Cache-Control: max-age=60, must-revalidate');
-    header("Pragma: public");
-    header("Expires: 0");
-    header("Content-type: application/x-msdownload");
-    header("Content-Disposition: attachment; filename=callcenter.xls");
-    header("Pragma: no-cache");
-    //se genera la tabla
-    if ($result) {
-        echo "<table class='table'>
-        <thead class='thead-dark'>
-            <tr>
-            <th class='text-xs'>Observaciones</th>
-            <th class='text-xs'>FechaPromesaPago</th>
-            <th class='text-xs'>PersonaAtendio</th>
-            <th class='text-xs'>TareaAnterior</th>
-            <th class='text-xs'>TareaActual</th>
-            <th class='text-xs'>Fecha</th>
-            <th class='text-xs'>Cuenta</th>
-            <th class='text-xs'>Clave</th>
-            <th class='text-xs'>CallCenter</th>
-            <th class='text-xs'>Clasificacion</th>
-            <th class='text-xs'>Telefono</th>
-            <th class='text-xs'>TelRadio</th>
-            <th class='text-xs'>TelRadio</th>
-            <th class='text-xs'>TelefonoUsuario</th>
-            <th class='text-xs'>CelularUsuario</th>
-            <th class='text-xs'>TelRadioUsuario</th>
-            <th class='text-xs'>TelefonoUsuario</th>
-            <th class='text-xs'>CelularUsuario</th>
-            <th class='text-xs'>TelRadioUsuario</th>
-            <th class='text-xs'>Usuario</th>
-            <th class='text-xs'>Direccion</th>
-            <th class='text-xs'>Colonia</th>
-            <th class='text-xs'>Distrito</th>
-            <th class='text-xs'>Clave Catastral</th>
-            <th class='text-xs'>Serie Medidor</th>
-            <th class='text-xs'>Tipo Servicio</th>
-            <th class='text-xs'>Giro</th>
-            <th class='text-xs'>Razon Social</th>
-            <th class='text-xs'>Deuda Total</th>
-            <th class='text-xs'>Abogado</th>
-            <th class='text-xs'>Gestor</th>
-            </tr>
-        </thead>
-        <tbody>";
-        while ($result = sqlsrv_fetch_array($exec)) {
-            echo "<tr>
-            <td class='text-xs'>" . utf8_encode($result['Observaciones']) . "</td>
-            <td class='text-xs'>" . utf8_encode($result['FechaPromesaPago']->format('d/m/Y')) . "</td>
-            <td class='text-xs'>" . utf8_encode($result['PersonaAtendio']) . "</td>
-            <td class='text-xs'>" . utf8_encode($result['TareaAnterior']) . "</td>
-            <td class='text-xs'>" . utf8_encode($result['TareaActual']) . "</td>
-            <td class='text-xs'>" . utf8_encode($result['Fecha']->format('d/m/Y')) . "</td>
-            <td class='text-xs'>" . utf8_encode($result['Cuenta']) . "</td>
-            <td class='text-xs'>" . utf8_encode($result['Clave']) . "</td>
-            <td class='text-xs'>" . utf8_encode($result['CallCenter']) . "</td>
-            <td class='text-xs'>" . utf8_encode($result['Clasificacion']) . "</td>
-            <td class='text-xs'>" . utf8_encode($result['Telefono']) . "</td>
-            <td class='text-xs'>" . utf8_encode($result['TelRadio']) . "</td>
-            <td class='text-xs'>" . utf8_encode($result['TelRadio']) . "</td>
-            <td class='text-xs'>" . utf8_encode($result['TelefonoUsuario']) . "</td>
-            <td class='text-xs'>" . utf8_encode($result['CelularUsuario']) . "</td>
-            <td class='text-xs'>" . utf8_encode($result['TelRadioUsuario']) . "</td>
-            <td class='text-xs'>" . utf8_encode($result['TelefonoUsuario']) . "</td>
-            <td class='text-xs'>" . utf8_encode($result['CelularUsuario']) . "</td>
-            <td class='text-xs'>" . utf8_encode($result['TelRadioUsuario']) . "</td>
-            <td class='text-xs'>" . utf8_encode($result['Usuario']) . "</td>
-            <td class='text-xs'>" . utf8_encode($result['Direccion']) . "</td>
-            <td class='text-xs'>" . utf8_encode($result['Colonia']) . "</td>
-            <td class='text-xs'>" . utf8_encode($result['Distrito']) . "</td>
-            <td class='text-xs'>" . utf8_encode($result['Clave Catastral']) . "</td>
-            <td class='text-xs'>" . utf8_encode($result['Serie Medidor']) . "</td>
-            <td class='text-xs'>" . utf8_encode($result['Tipo Servicio']) . "</td>
-            <td class='text-xs'>" . utf8_encode($result['Giro']) . "</td>
-            <td class='text-xs'>" . utf8_encode($result['Razon Social']) . "</td>
-            <td class='text-xs'>" . utf8_encode($result['Deuda Total']) . "</td>
-            <td class='text-xs'>" . utf8_encode($result['Abogado']) . "</td>
-            <td class='text-xs'>" . utf8_encode($result['Gestor']) . "</td>
-            </tr>";
-        }
-        echo " </tbody>
-        </table>";
-    }
-}
+

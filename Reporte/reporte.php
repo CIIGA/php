@@ -6,10 +6,7 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
     //Se extrae la plaza 
     $id_plaza = $_GET['plz'];
     $plaza = plaza($id_plaza);
-
-    
-
-    ?>
+?>
     <!DOCTYPE html>
     <html>
 
@@ -27,16 +24,17 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-        <?php require "include/nav.php";?>
+        <?php require "include/nav.php"; ?>
         <style>
-        .text-xs{
-        font-size: 10px !important;
-        }
-        .content{
-         margin-left:10px;
-         margin-right:10px;
-         overflow-x: auto;
-        }
+            .text-xs {
+                font-size: 10px !important;
+            }
+
+            .content {
+                margin-left: 10px;
+                margin-right: 10px;
+                overflow-x: auto;
+            }
         </style>
     </head>
 
@@ -102,63 +100,57 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
                             //Si recibe los datos por el metodo get manda al archivo de callcenter el conteo total de los que hay
                             if (isset($_GET['base']) and isset($_GET['fecha_inicial']) and isset($_GET['fecha_final']) and isset($_GET['sector'])) {
                                 $BD = $plaza['base'];
-                                echo ' <p class="card-text text-center bg-white">'.count_spCallCenter($BD).'</p>';
+                                echo ' <p class="card-text text-center bg-white">' . count_spCallCenter($BD) . '</p>';
                             }
                             ?>
-                           </p>
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
-    </div>
+        </div>
         <div class="content">
             <?php
-            
-if (isset($_GET['base']) and isset($_GET['fecha_inicial']) and isset($_GET['fecha_final']) and isset($_GET['sector'] ) and isset($_GET['tabla'])) {
-    //Se  extrae los datos enviados por la url
-        $sector = $_GET['sector'];
-        $fechaI = $_GET['fecha_inicial'];
-        $fechaF = $_GET['fecha_final'];
-        $BD = $plaza['base'];
-        //Se condiciona si se recib la pagina 
-        if(isset($_GET['page']) and is_numeric($_GET['page']) == 1){
-            $pagina = intval($_GET['page']);
-        }
-        //Si no recibe declaramos que el valor por defecto es 1
-        else{
-            $pagina = 1; 
-        }
-        //Se manda a llamar la funcion de callcenter
-        sp_RGCallCenter(
-            $id_plaza,
-            $sector,
-            $fechaI,
-            $fechaF,
-            $BD,
-            $pagina);
-    }
-            
-if (isset($_GET['base']) and isset($_GET['fecha_inicial']) and isset($_GET['fecha_final']) and isset($_GET['sector'] ) and isset($_GET['excel'])) {
-    //Se  extrae los datos enviados por la url
-        $sector = $_GET['sector'];
-        $base = $_GET['base'];
-        $fechaI = $_GET['fecha_inicial'];
-        $fechaF = $_GET['fecha_final'];
-        $BD = $plaza['base'];
-        
-        // header('Location: excel/callcenter.php?sector='.$sector.'&base='.$base.'&fechaI='.$fechaI.'&fechaF='.$fechaF.'&id_plaza='.$id_plaza);
-        // echo "<meta http-equiv='refresh' content='/excel/callcenter.php'>";
-        // ?plz=$id_plaza&base=$base&plaza=$plaza&fecha_inicial=$fechaI&fecha_final=$fechaF
 
-        //  //Se manda a llamar la funcion de callcenter
-        //  excel(
-        //     $id_plaza,
-        //     $sector,
-        //     $fechaI,
-        //     $fechaF,
-        //     $BD);
-}
-    ?>
+            if (isset($_GET['base']) and isset($_GET['fecha_inicial']) and isset($_GET['fecha_final']) and isset($_GET['sector']) and isset($_GET['tabla'])) {
+                //Se  extrae los datos enviados por la url
+                $sector = $_GET['sector'];
+                $fechaI = $_GET['fecha_inicial'];
+                $fechaF = $_GET['fecha_final'];
+                $BD = $plaza['base'];
+                //Se condiciona si se recib la pagina 
+                if (isset($_GET['page']) and is_numeric($_GET['page']) == 1) {
+                    $pagina = intval($_GET['page']);
+                }
+                //Si no recibe declaramos que el valor por defecto es 1
+                else {
+                    $pagina = 1;
+                }
+                //Se manda a llamar la funcion de callcenter
+                sp_RGCallCenter(
+                    $id_plaza,
+                    $sector,
+                    $fechaI,
+                    $fechaF,
+                    $BD,
+                    $pagina
+                );
+            }
+
+            if (isset($_GET['base']) and isset($_GET['fecha_inicial']) and isset($_GET['fecha_final']) and isset($_GET['sector']) and isset($_GET['excel'])) {
+                //Se  extrae los datos enviados por la url
+                $sector = $_GET['sector'];
+                $base = $_GET['base'];
+                $fechaI = $_GET['fecha_inicial'];
+                $fechaF = $_GET['fecha_final'];
+                $BD = $plaza['base'];
+                try {
+                    echo "<script type='text/javascript'>window.open('excel/callcenter.php?plz=$id_plaza&base=$BD&fecha_inicial=$fechaI&fecha_final=$fechaF')</script>";
+                } catch (Exception $e) {
+                    echo '';
+                }
+            }
+            ?>
         </div>
     </body>
 <?php
