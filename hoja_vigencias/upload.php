@@ -29,23 +29,24 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             }
         }
         
-        if($query != "") {
-            $query = substr($query, 0, strlen($query) - 2);
-            $query .= ";";
+        // if($query != "") {
+        //     $query = substr($query, 0, strlen($query) - 2);
+        //     $query .= ";";
 
-            $serverName = "implementta.mx";
-            $connectionInfo = array('Database' => 'kpimplementta', 'UID' => 'sa', 'PWD' => 'vrSxHH3TdC');
-            $cnx = sqlsrv_connect($serverName, $connectionInfo);
-            date_default_timezone_set('America/Mexico_City');
+        //     $serverName = "implementta.mx";
+        //     $connectionInfo = array('Database' => 'kpimplementta', 'UID' => 'sa', 'PWD' => 'vrSxHH3TdC');
+        //     $cnx = sqlsrv_connect($serverName, $connectionInfo);
+        //     date_default_timezone_set('America/Mexico_City');
 
-            sqlsrv_query($cnx, "TRUNCATE TABLE prueba_vigencias;");
-            sqlsrv_query($cnx, $query) or die(print_r(sqlsrv_errors()));
-            sqlsrv_close($cnx);
+        //     sqlsrv_query($cnx, "TRUNCATE TABLE prueba_vigencias;");
+        //     sqlsrv_query($cnx, $query) or die(print_r(sqlsrv_errors()));
+        //     sqlsrv_close($cnx);
 
-            header('Location: ../map.php?error=0&msg=Datos Guardados & plz='.$plz);
-        } else {
-            header('Location: ../map.php?error=1&msg=No hay datos en el archivo & plz='.$plz);
-        }
+        //     header('Location: ../map.php?error=0&msg=Datos Guardados & plz='.$plz);
+        // } else {
+        //     header('Location: ../map.php?error=1&msg=No hay datos en el archivo & plz='.$plz);
+        // }
+        echo $query;
     } else {
         header('Location: ../map.php?error=1&msg=El archivo no es correcto & plz='.$plz);
     }
