@@ -9,6 +9,20 @@ function plaza($id_plaza)
     $plaza = sqlsrv_fetch_array($plz);
     return $plaza;
 }
+//Funcion para generar conexiones dinamicas
+function conexion($BD)
+{
+    $serverName = "51.222.44.135";
+    $connectionInfo = array('Database' => $BD, 'UID' => 'sa', 'PWD' => 'vrSxHH3TdC');
+    $cnx = sqlsrv_connect($serverName, $connectionInfo);
+    date_default_timezone_set('America/Mexico_City');
+    if ($cnx) {
+        return $cnx;
+    } else {
+        echo "error de conexion";
+        die(print_r(sqlsrv_errors(), true));
+    }
+}
 //La funcion hace el conteo del total de datos que hay en la plaza
 function count_spCallCenter($BD)
 {
@@ -36,14 +50,15 @@ function count_spCallCenter($BD)
     //Se retorna el total
     return $result['total'];
 }
-//la funcion genera la tabla de los datos
+//La funcion genera la tabla de los datos paginados
 function sp_RGCallCenter(
     $id_plaza,
     $sector,
     $fechaI,
     $fechaF,
     $BD,
-    $pagina) {
+    $pagina
+) {
     //Se declara los datos por pagina que habra
     $datosPorPagina = 20;
     $inicioPaginacion = ($pagina - 1) * $datosPorPagina;
@@ -234,18 +249,224 @@ function sp_RGCallCenter(
         echo "</nav>";
     }
 }
-//Funcion para generar conexiones dinamicas
-function conexion($BD)
+
+function storeCallCenter($BD, $fechaI, $fechaF)
 {
-    $serverName = "51.222.44.135";
-    $connectionInfo = array('Database' => $BD, 'UID' => 'sa', 'PWD' => 'vrSxHH3TdC');
-    $cnx = sqlsrv_connect($serverName, $connectionInfo);
-    date_default_timezone_set('America/Mexico_City');
-    if ($cnx) {
-        return $cnx;
+    $cnx = conexion($BD);
+    $procedure = "exec sp_RGCallCenter'$fechaI', '$fechaF'";
+    $exec = sqlsrv_query($cnx, $procedure);
+    $hasRows = sqlsrv_has_rows($exec);
+
+    echo "<table class='table table-hover table-bordered' style='font-size: 11px;'>
+        <thead>
+            <tr>
+                <th class='bg_th'>Observaciones</th>
+                <th class='bg_th'>FechaPromesaPago</th>
+                <th class='bg_th'>PersonaAtendio</th>
+                <th class='bg_th'>TareaAnterior</th>
+                <th class='bg_th'>TareaActual</th>
+                <th class='bg_th'>Fecha</th>
+                <th class='bg_th'>Cuenta</th>
+                <th class='bg_th'>Clave</th>
+                <th class='bg_th'>CallCenter</th>
+                <th class='bg_th'>Clasificacion</th>
+                <th class='bg_th'>Telefono</th>
+                <th class='bg_th'>TelRadio</th>
+                <th class='bg_th'>TelRadio</th>
+                <th class='bg_th'>TelefonoUsuario</th>
+                <th class='bg_th'>CelularUsuario</th>
+                <th class='bg_th'>TelRadioUsuario</th>
+                <th class='bg_th'>TelefonoUsuario</th>
+                <th class='bg_th'>CelularUsuario</th>
+                <th class='bg_th'>TelRadioUsuario</th>
+                <th class='bg_th'>Usuario</th>
+                <th class='bg_th'>Direccion</th>
+                <th class='bg_th'>Colonia</th>
+                <th class='bg_th'>Distrito</th>
+                <th class='bg_th'>Clave Catastral</th>
+                <th class='bg_th'>Serie Medidor</th>
+                <th class='bg_th'>Tipo Servicio</th>
+                <th class='bg_th'>Giro</th>
+                <th class='bg_th'>Razon Social</th>
+                <th class='bg_th'>Deuda Total</th>
+                <th class='bg_th'>Abogado</th>
+                <th class='bg_th'>Gestor</th>
+            </tr>
+        </thead>
+        <tbody>";
+    if ($hasRows) {
+        while ($result = sqlsrv_fetch_array($exec, SQLSRV_FETCH_ASSOC)) {
+            // Buscamos en SolicitarFolio 
+            echo "<tr>
+                        <td class='text-xs'>" . utf8_encode($result['Observaciones']) . "</td>
+                        <td class='text-xs'>" . utf8_encode($result['FechaPromesaPago']->format('d/m/Y')) . "</td>
+                        <td class='text-xs'>" . utf8_encode($result['PersonaAtendio']) . "</td>
+                        <td class='text-xs'>" . utf8_encode($result['TareaAnterior']) . "</td>
+                        <td class='text-xs'>" . utf8_encode($result['TareaActual']) . "</td>
+                        <td class='text-xs'>" . utf8_encode($result['Fecha']->format('d/m/Y')) . "</td>
+                        <td class='text-xs'>" . utf8_encode($result['Cuenta']) . "</td>
+                        <td class='text-xs'>" . utf8_encode($result['Clave']) . "</td>
+                        <td class='text-xs'>" . utf8_encode($result['CallCenter']) . "</td>
+                        <td class='text-xs'>" . utf8_encode($result['Clasificacion']) . "</td>
+                        <td class='text-xs'>" . utf8_encode($result['Telefono']) . "</td>
+                        <td class='text-xs'>" . utf8_encode($result['TelRadio']) . "</td>
+                        <td class='text-xs'>" . utf8_encode($result['TelRadio']) . "</td>
+                        <td class='text-xs'>" . utf8_encode($result['TelefonoUsuario']) . "</td>
+                        <td class='text-xs'>" . utf8_encode($result['CelularUsuario']) . "</td>
+                        <td class='text-xs'>" . utf8_encode($result['TelRadioUsuario']) . "</td>
+                        <td class='text-xs'>" . utf8_encode($result['TelefonoUsuario']) . "</td>
+                        <td class='text-xs'>" . utf8_encode($result['CelularUsuario']) . "</td>
+                        <td class='text-xs'>" . utf8_encode($result['TelRadioUsuario']) . "</td>
+                        <td class='text-xs'>" . utf8_encode($result['Usuario']) . "</td>
+                        <td class='text-xs'>" . utf8_encode($result['Direccion']) . "</td>
+                        <td class='text-xs'>" . utf8_encode($result['Colonia']) . "</td>
+                        <td class='text-xs'>" . utf8_encode($result['Distrito']) . "</td>
+                        <td class='text-xs'>" . utf8_encode($result['Clave Catastral']) . "</td>
+                        <td class='text-xs'>" . utf8_encode($result['Serie Medidor']) . "</td>
+                        <td class='text-xs'>" . utf8_encode($result['Tipo Servicio']) . "</td>
+                        <td class='text-xs'>" . utf8_encode($result['Giro']) . "</td>
+                        <td class='text-xs'>" . utf8_encode($result['Razon Social']) . "</td>
+                        <td class='text-xs'>" . utf8_encode($result['Deuda Total']) . "</td>
+                        <td class='text-xs'>" . utf8_encode($result['Abogado']) . "</td>
+                        <td class='text-xs'>" . utf8_encode($result['Gestor']) . "</td>
+                    </tr>";
+        }
     } else {
-        echo "error de conexion";
-        die(print_r(sqlsrv_errors(), true));
+        echo "<tr>
+                    <td>No hay informacion</td>
+                </tr>";
     }
+    echo "
+        </tbody>
+    </table>";
 }
 
+//La funcion genera la tabla de los datos paginados
+function sp_RGCallCenterEXcelPaginado(
+    $fechaI,
+    $fechaF,
+    $BD,
+    $pagina
+) {
+    //Se declara los datos por pagina que habra
+    $datosPorPagina = 20;
+    $inicioPaginacion = ($pagina - 1) * $datosPorPagina;
+    if ($pagina == 1) {
+        $resultInicio = 1;
+        $resultFin = $datosPorPagina;
+    } else {
+        $resultInicio = ($datosPorPagina * ($pagina - 1)) + 1;
+        $resultFin = ($resultInicio + $datosPorPagina - 1);
+    }
+    $cnx = conexion($BD);
+    $sql = "select  rcc.Observaciones, rcc.FechaPromesaPago,
+        rcc.PersonaAtendio,
+           c.DescripcionTarea as TareaAnterior, cat.descripcionTarea as TareaActual, rcc.FechaCaptura as Fecha, rcc.Cuenta,i.Clave, u.Nombre as CallCenter,col.Descripcion as Clasificacion,
+           cc.TelefonoLocal as Telefono, cc.TelefonoCelular as Celular, cc.TelefonoRadio as TelRadio,
+           cc.TelefonoRadio as TelRadio,
+           cc.TelefonoLocalUsuario as TelefonoUsuario, cc.TelefonoCelularUsuario as CelularUsuario,cc.TelefonoRadioUsuario as TelRadioUsuario,
+           cc.TelefonoLocalUsuario as TelefonoUsuario, cc.TelefonoCelularUsuario as CelularUsuario,cc.TelefonoRadioUsuario as TelRadioUsuario,
+           i.Propietario as Usuario, isnull(i.Calle, '') + ' ' + isnull(i.NumExt, '') + ' ' + isnull(i.NumInt, '') as Direccion,
+           isnull(i.Colonia, '') as Colonia, isnull(i.Poblacion, '') as Distrito,
+           isnull(i.Clave, '') as 'Clave Catastral', isnull(i.SerieMedidor, '') as 'Serie Medidor',
+           isnull(i.TipoServicio, '') as 'Tipo Servicio', isnull(i.Giro, '') as Giro,
+           isnull(i.RazonSocial, '') as 'Razon Social', i.DeudaTotal as 'Deuda Total', a.Nombre as 'Abogado', g.Nombre as 'Gestor'
+           ---into temp1
+           from (
+           select Cuenta,IdTarea,convert(varchar(max),Observaciones) as Observaciones,IdAspUser,FechaPromesaPago,FechaCaptura, IdObservacionesLlamadas,PersonaAtendio,IdMensaje, [NumConvenio/Recibo]
+           from [dbo].[RegistroCallCenter]
+           where convert(date,FechaCaptura) between '$fechaI' and '$fechaF' AND (IdTarea <> 73 and IdTarea <> 72 AND IdTarea <> 85)
+           group by Cuenta,IdTarea,convert(varchar(max),Observaciones) ,IdAspUser,FechaPromesaPago,FechaCaptura , IdObservacionesLlamadas,PersonaAtendio,IdMensaje, [NumConvenio/Recibo]
+           ) rcc
+           inner join [dbo].[AspNetUsers] u on rcc.IdAspUser = u.Id
+           inner join [dbo].[ContactosCuenta] cc on rcc.Cuenta = cc.Cuenta
+           inner join [dbo].[implementta] i on rcc.Cuenta = i.Cuenta
+           inner join [dbo].[CatalogoObservacionesLlamadas] col on rcc.IdObservacionesLlamadas = col.IdObservacionesLlamadas
+           inner JOIN CatalogoTareas c ON rcc.IdTarea = c.IdTarea
+           inner join AsignacionCallCenter acc on rcc.cuenta = acc.cuenta
+           inner join CatalogoTareas cat on acc.idTarea = cat.IdTarea
+           left join [dbo].[AsignacionAbogado] aa on rcc.cuenta = aa.cuenta
+           left join [dbo].[AspNetUsers] a on aa.IdAspUser = a.Id
+           left join [dbo].[AsignacionGestor] gg on  rcc.cuenta=gg.cuenta
+           left join [dbo].[AspNetUsers] g on gg.IdAspUser = g.Id
+           order by rcc.fechaCaptura OFFSET $inicioPaginacion ROWS FETCH next $datosPorPagina ROWS ONLY;";
+    $exec = sqlsrv_query($cnx, $sql);
+    $result = sqlsrv_fetch_array($exec);
+    //se genera la tabla
+    if ($result) {
+        echo "<table class='table table-hover table-bordered' style='font-size: 11px;'>
+        <thead>
+            <tr>
+            <th class='bg_th'>Observaciones</th>
+            <th class='bg_th'>FechaPromesaPago</th>
+            <th class='bg_th'>PersonaAtendio</th>
+            <th class='bg_th'>TareaAnterior</th>
+            <th class='bg_th'>TareaActual</th>
+            <th class='bg_th'>Fecha</th>
+            <th class='bg_th'>Cuenta</th>
+            <th class='bg_th'>Clave</th>
+            <th class='bg_th'>CallCenter</th>
+            <th class='bg_th'>Clasificacion</th>
+            <th class='bg_th'>Telefono</th>
+            <th class='bg_th'>TelRadio</th>
+            <th class='bg_th'>TelRadio</th>
+            <th class='bg_th'>TelefonoUsuario</th>
+            <th class='bg_th'>CelularUsuario</th>
+            <th class='bg_th'>TelRadioUsuario</th>
+            <th class='bg_th'>TelefonoUsuario</th>
+            <th class='bg_th'>CelularUsuario</th>
+            <th class='bg_th'>TelRadioUsuario</th>
+            <th class='bg_th'>Usuario</th>
+            <th class='bg_th'>Direccion</th>
+            <th class='bg_th'>Colonia</th>
+            <th class='bg_th'>Distrito</th>
+            <th class='bg_th'>Clave Catastral</th>
+            <th class='bg_th'>Serie Medidor</th>
+            <th class='bg_th'>Tipo Servicio</th>
+            <th class='bg_th'>Giro</th>
+            <th class='bg_th'>Razon Social</th>
+            <th class='bg_th'>Deuda Total</th>
+            <th class='bg_th'>Abogado</th>
+            <th class='bg_th'>Gestor</th>
+            </tr>
+        </thead>
+        <tbody>";
+        while ($result = sqlsrv_fetch_array($exec)) {
+            echo "<tr>
+            <td class='text-xs'>" . utf8_encode($result['Observaciones']) . "</td>
+            <td class='text-xs'>" . utf8_encode($result['FechaPromesaPago']->format('d/m/Y')) . "</td>
+            <td class='text-xs'>" . utf8_encode($result['PersonaAtendio']) . "</td>
+            <td class='text-xs'>" . utf8_encode($result['TareaAnterior']) . "</td>
+            <td class='text-xs'>" . utf8_encode($result['TareaActual']) . "</td>
+            <td class='text-xs'>" . utf8_encode($result['Fecha']->format('d/m/Y')) . "</td>
+            <td class='text-xs'>" . utf8_encode($result['Cuenta']) . "</td>
+            <td class='text-xs'>" . utf8_encode($result['Clave']) . "</td>
+            <td class='text-xs'>" . utf8_encode($result['CallCenter']) . "</td>
+            <td class='text-xs'>" . utf8_encode($result['Clasificacion']) . "</td>
+            <td class='text-xs'>" . utf8_encode($result['Telefono']) . "</td>
+            <td class='text-xs'>" . utf8_encode($result['TelRadio']) . "</td>
+            <td class='text-xs'>" . utf8_encode($result['TelRadio']) . "</td>
+            <td class='text-xs'>" . utf8_encode($result['TelefonoUsuario']) . "</td>
+            <td class='text-xs'>" . utf8_encode($result['CelularUsuario']) . "</td>
+            <td class='text-xs'>" . utf8_encode($result['TelRadioUsuario']) . "</td>
+            <td class='text-xs'>" . utf8_encode($result['TelefonoUsuario']) . "</td>
+            <td class='text-xs'>" . utf8_encode($result['CelularUsuario']) . "</td>
+            <td class='text-xs'>" . utf8_encode($result['TelRadioUsuario']) . "</td>
+            <td class='text-xs'>" . utf8_encode($result['Usuario']) . "</td>
+            <td class='text-xs'>" . utf8_encode($result['Direccion']) . "</td>
+            <td class='text-xs'>" . utf8_encode($result['Colonia']) . "</td>
+            <td class='text-xs'>" . utf8_encode($result['Distrito']) . "</td>
+            <td class='text-xs'>" . utf8_encode($result['Clave Catastral']) . "</td>
+            <td class='text-xs'>" . utf8_encode($result['Serie Medidor']) . "</td>
+            <td class='text-xs'>" . utf8_encode($result['Tipo Servicio']) . "</td>
+            <td class='text-xs'>" . utf8_encode($result['Giro']) . "</td>
+            <td class='text-xs'>" . utf8_encode($result['Razon Social']) . "</td>
+            <td class='text-xs'>" . utf8_encode($result['Deuda Total']) . "</td>
+            <td class='text-xs'>" . utf8_encode($result['Abogado']) . "</td>
+            <td class='text-xs'>" . utf8_encode($result['Gestor']) . "</td>
+            </tr>";
+        }
+        echo " </tbody>
+        </table>";
+    }
+}
