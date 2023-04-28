@@ -170,8 +170,8 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
                     </thead>
                     <tbody>
                         <?php do { ?>
-                            <tr> 
-                            <?php if ($plaza['estado'] == 1) { ?>
+                            <tr>
+                                <?php if ($plaza['estado'] == 1) { ?>
                                     <td style="text-align:center;"><span class="badge badge-pill badge-success"><i class="fas fa-check"></i></span></td>
                                 <?php } else { ?>
                                     <td style="text-align:center;"><span class="badge badge-pill badge-danger"><i class="fas fa-times-circle"></i></span></td>
@@ -180,16 +180,19 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
 
                                 <td><?php echo utf8_encode($plaza['nombreplaza']) ?></td>
                                 <td style="text-align:center;"><a href="store.php?idpl=<?php echo $plaza['id_plaza'] ?>" class="btn btn-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Sincronización"><i class="fas fa-sync"></i> Sync</a></td>
-                                <td style="text-align:center;">
+                                <td style="text-align:right;">
 
+                                    <!-- Boton de reportes -->
+                                    <?php if ($plaza['estado'] == 1) { ?>
+                                        <a href="Reporte/reporte.php?plz=<?php echo $plaza['id_plaza'] ?>" class="btn btn-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Reportes de plaza">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-bar-graph" viewBox="0 0 16 16">
+                                                <path d="M4.5 12a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-1zm3 0a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1zm3 0a.5.5 0 0 1-.5-.5v-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-.5.5h-1z" />
+                                                <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z" />
+                                            </svg>
+                                        </a>
+                                    <?php } ?>
+                                    <!-- Fin boton de reportes -->
                                     <a href="urlMap.php?plz=<?php echo $plaza['id_plaza'] ?>" class="btn btn-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Agregar URL de mapa"><i class="fas fa-chart-line"></i> KPIs</a>
-
-                                    <a href="Reporte/reporte.php?plz=<?php echo $plaza['id_plaza'] ?>" class="btn btn-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Reportes de plaza">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-bar-graph" viewBox="0 0 16 16">
-                                            <path d="M4.5 12a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-1zm3 0a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1zm3 0a.5.5 0 0 1-.5-.5v-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-.5.5h-1z" />
-                                            <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z" />
-                                        </svg>
-                                    </a>
 
                                     <a href="nuevoGrupo.php?plz=<?php echo $plaza['id_plaza'] ?>" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Subgrupos de KPIs"><i class="fas fa-layer-group"></i></a>
 

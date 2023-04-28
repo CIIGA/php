@@ -329,7 +329,7 @@ function storePregrabadas($BD, $fechaI, $fechaF)
         }
     } else {
         echo "<tr>
-                        <td>No hay informacion</td>
+                        <td>No hay información</td>
                     </tr>";
     }
     echo "
@@ -482,6 +482,8 @@ function sp_ReportePregrabadasExcelPaginado(
         }
         echo " </tbody>
         </table>";
+    }else{
+        echo "<h4 class='text-center mt-2'>No hay información</h4>";
     }
 }
 

@@ -250,6 +250,8 @@ function sp_RGCallCenter(
         }
         echo '</ul>';
         echo "</nav>";
+    }else{
+        echo "<h4 class='text-center mt-2'>No hay información</h4>";
     }
 }
 
@@ -471,5 +473,8 @@ function sp_RGCallCenterEXcelPaginado(
         }
         echo " </tbody>
         </table>";
+    }
+    else{
+        echo "<h4 class='text-center mt-2'>No hay información</h4>";
     }
 }
