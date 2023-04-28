@@ -237,7 +237,7 @@ if (isset($_SESSION['user'])) {
       <!-- modal subir hoja de vigencias tijuana -->
       <div id="modal-upload-file-reporte" class="modal" tabindex="-1" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">
-          <form action="./hoja_vigencias/upload.php" method="POST" autocomplete="off" enctype="multipart/form-data">
+          <form action="./hoja_vigencias/upload.php" method="POST" onsubmit="javascript:loadInfo_vigencias();" autocomplete="off" enctype="multipart/form-data">
             <div class="modal-content">
               <div class="modal-header">
                 <h5>Plantilla Hoja de Vigencias</h5>
@@ -310,6 +310,23 @@ if (isset($_SESSION['user'])) {
             }).then((result) => {})
           }
         });
+      }
+      // alert carga vigencias
+      var loadInfo_vigencias = function() {
+        Swal.fire({
+          title: 'Insertando Datos',
+          html: 'Esto pueda tardar algunos minutos',
+          timer: 0,
+          timerProgressBar: true,
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+          willClose: () => {
+            return false;
+          }
+        }).then((result) => {});
       }
     </script>
   </body>
