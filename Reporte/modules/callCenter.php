@@ -2,12 +2,14 @@
 
 function plaza($id_plaza)
 {
-    //se consulta la plaza desde la base de datos
-    require "db/conexion.php";
+    $serverName = "51.222.44.135";
+    $connectionInfo = array('Database' => 'kpis', 'UID' => 'sa', 'PWD' => 'vrSxHH3TdC');
+    $cnx = sqlsrv_connect($serverName, $connectionInfo);
+    date_default_timezone_set('America/Mexico_City');
     $pl = "SELECT p.data as base, pl.nombreplaza as plaza FROM plaza as pl INNER JOIN proveniente as p ON pl.id_proveniente=p.id_proveniente where pl.id_plaza='$id_plaza'";
     $plz = sqlsrv_query($cnx, $pl);
-    $plaza = sqlsrv_fetch_array($plz);
-    return $plaza;
+    $result = sqlsrv_fetch_array($plz);
+    return $result;
 }
 //Funcion para generar conexiones dinamicas
 function conexion($BD)
@@ -23,15 +25,16 @@ function conexion($BD)
         die(print_r(sqlsrv_errors(), true));
     }
 }
+
 //La funcion hace el conteo del total de datos que hay en la plaza
-function count_spCallCenter($BD)
+function count_spCallCenter($BD,$fechaI,$fechaF)
 {
     $cnx = conexion($BD);
     $sql = "select  count(*) as total
     from (
     select Cuenta,IdTarea,convert(varchar(max),Observaciones) as Observaciones,IdAspUser,FechaPromesaPago,FechaCaptura, IdObservacionesLlamadas,PersonaAtendio,IdMensaje, [NumConvenio/Recibo]
     from [dbo].[RegistroCallCenter]
-    where convert(date,FechaCaptura) between '2023-04-01' and '2023-04-17' AND (IdTarea <> 73 and IdTarea <> 72 AND IdTarea <> 85)
+    where convert(date,FechaCaptura) between '$fechaI' and '$fechaF' AND (IdTarea <> 73 and IdTarea <> 72 AND IdTarea <> 85)
     group by Cuenta,IdTarea,convert(varchar(max),Observaciones) ,IdAspUser,FechaPromesaPago,FechaCaptura , IdObservacionesLlamadas,PersonaAtendio,IdMensaje, [NumConvenio/Recibo]
     ) rcc
     inner join [dbo].[AspNetUsers] u on rcc.IdAspUser = u.Id
@@ -180,7 +183,7 @@ function sp_RGCallCenter(
         echo " </tbody>
         </table>";
         //Llamamos al total de registros para la paginacion
-        $count = count_spCallCenter($BD);
+        $count = count_spCallCenter($BD,$fechaI,$fechaF);
         //Se muestra el total de resultados que hay por pagina
         echo "<div> Resultados del $resultInicio al $resultFin </div>";
         //Inicio de la paginacion

@@ -3,6 +3,7 @@ session_start();
 if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
     //Se llama al modulo de callcenter
     require 'modules/callCenter.php';
+    require 'modules/pregrabadas.php';
     //Se extrae la plaza 
     $id_plaza = $_GET['plz'];
     $plaza = plaza($id_plaza);
@@ -90,9 +91,10 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
                                     </svg>
                                     Descargar Todo
                                 </button>
-                                <?php 
-                                if (isset($_GET['base']) and isset($_GET['fecha_inicial']) and isset($_GET['fecha_final']) and isset($_GET['sector'])) {
-                                     //Se  extrae los datos enviados por la url
+                                <?php
+                                //Muestra el boton para generar excel en base a paginacion
+                                if (isset($_GET['base']) and isset($_GET['fecha_inicial']) and isset($_GET['fecha_final']) and isset($_GET['sector']) and isset($_GET['tabla'])) {
+                                    //Se  extrae los datos enviados por la url
                                     $sector = $_GET['sector'];
                                     $fechaI = $_GET['fecha_inicial'];
                                     $fechaF = $_GET['fecha_final'];
@@ -105,15 +107,26 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
                                     else {
                                         $pagina = 1;
                                     }
-                                    echo "<button type='button' class='btn btn-warning' name='excel' onclick='paginado($id_plaza,`$BD`,`$fechaI`,`$fechaF`,$pagina)'>
-                                    <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-box-arrow-down' viewBox='0 0 16 16'>
-                                        <path fill-rule='evenodd' d='M3.5 10a.5.5 0 0 1-.5-.5v-8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 0 0 1h2A1.5 1.5 0 0 0 14 9.5v-8A1.5 1.5 0 0 0 12.5 0h-9A1.5 1.5 0 0 0 2 1.5v8A1.5 1.5 0 0 0 3.5 11h2a.5.5 0 0 0 0-1h-2z' />
-                                        <path fill-rule='evenodd' d='M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708l3 3z' />
-                                    </svg>
-                                    Descargar Pagina
-                                    </button>";
+                                    //Boton para generar excel 
+                                    if ($sector == 1) {
+                                        echo "<button type='button' class='btn btn-warning' name='excel' onclick='paginado($id_plaza,`$BD`,`$fechaI`,`$fechaF`,$pagina)'>
+                                        <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-box-arrow-down' viewBox='0 0 16 16'>
+                                            <path fill-rule='evenodd' d='M3.5 10a.5.5 0 0 1-.5-.5v-8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 0 0 1h2A1.5 1.5 0 0 0 14 9.5v-8A1.5 1.5 0 0 0 12.5 0h-9A1.5 1.5 0 0 0 2 1.5v8A1.5 1.5 0 0 0 3.5 11h2a.5.5 0 0 0 0-1h-2z' />
+                                            <path fill-rule='evenodd' d='M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708l3 3z' />
+                                        </svg>
+                                        Descargar Pagina
+                                        </button>";
+                                    } else if ($sector == 2) {
+                                        echo "<button type='button' class='btn btn-warning' name='excel' onclick='paginadoPregrabadas($id_plaza,`$BD`,`$fechaI`,`$fechaF`,$pagina)'>
+                                        <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-box-arrow-down' viewBox='0 0 16 16'>
+                                            <path fill-rule='evenodd' d='M3.5 10a.5.5 0 0 1-.5-.5v-8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 0 0 1h2A1.5 1.5 0 0 0 14 9.5v-8A1.5 1.5 0 0 0 12.5 0h-9A1.5 1.5 0 0 0 2 1.5v8A1.5 1.5 0 0 0 3.5 11h2a.5.5 0 0 0 0-1h-2z' />
+                                            <path fill-rule='evenodd' d='M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708l3 3z' />
+                                        </svg>
+                                        Descargar Pagina
+                                        </button>";
+                                    }
                                 }
-                                    
+
                                 ?>
                             </div>
                         </div>
@@ -127,7 +140,14 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
                             //Si recibe los datos por el metodo get manda al archivo de callcenter el conteo total de los que hay
                             if (isset($_GET['base']) and isset($_GET['fecha_inicial']) and isset($_GET['fecha_final']) and isset($_GET['sector'])) {
                                 $BD = $plaza['base'];
-                                echo ' <p class="card-text text-center bg-white">' . count_spCallCenter($BD) . '</p>';
+                                $fechaI = $_GET['fecha_inicial'];
+                                $fechaF = $_GET['fecha_final'];
+                                $sector = $_GET['sector'];
+                                if ($sector == 1) {
+                                    echo ' <p class="card-text text-center bg-white">' . count_spCallCenter($BD, $fechaI, $fechaF) . '</p>';
+                                } else if ($sector == 2) {
+                                    echo ' <p class="card-text text-center bg-white">' . count_spReportePregrabadas($BD, $fechaI, $fechaF) . '</p>';
+                                }
                             }
                             ?>
                             </p>
@@ -138,7 +158,7 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
         </div>
         <div class="content">
             <?php
-
+            //Consulta general de informacion del boton buscar
             if (isset($_GET['base']) and isset($_GET['fecha_inicial']) and isset($_GET['fecha_final']) and isset($_GET['sector']) and isset($_GET['tabla'])) {
                 //Se  extrae los datos enviados por la url
                 $sector = $_GET['sector'];
@@ -153,17 +173,28 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
                 else {
                     $pagina = 1;
                 }
-                //Se manda a llamar la funcion de callcenter
-                sp_RGCallCenter(
-                    $id_plaza,
-                    $sector,
-                    $fechaI,
-                    $fechaF,
-                    $BD,
-                    $pagina
-                );
+                if ($sector == 1) {
+                    //Se manda a llamar la funcion de callcenter
+                    sp_RGCallCenter(
+                        $id_plaza,
+                        $sector,
+                        $fechaI,
+                        $fechaF,
+                        $BD,
+                        $pagina
+                    );
+                } else if ($sector == 2) {
+                    sp_ReportePregrabadas(
+                        $id_plaza,
+                        $sector,
+                        $fechaI,
+                        $fechaF,
+                        $BD,
+                        $pagina
+                    );
+                }
             }
-
+            //Se genera el excel del total de los registros
             if (isset($_GET['base']) and isset($_GET['fecha_inicial']) and isset($_GET['fecha_final']) and isset($_GET['sector']) and isset($_GET['excel'])) {
                 //Se  extrae los datos enviados por la url
                 $sector = $_GET['sector'];
@@ -172,7 +203,12 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
                 $fechaF = $_GET['fecha_final'];
                 $BD = $plaza['base'];
                 try {
-                    echo "<script type='text/javascript'>window.open('excel/callcenter.php?plz=$id_plaza&base=$BD&fecha_inicial=$fechaI&fecha_final=$fechaF')</script>";
+                    if ($sector == 1) {
+                        echo "<script type='text/javascript'>window.open('excel/callcenter.php?plz=$id_plaza&base=$BD&fecha_inicial=$fechaI&fecha_final=$fechaF')</script>";
+                    } else if ($sector == 2) {
+                        // echo 'hola mundo';
+                        echo "<script type='text/javascript'>window.open('excel/pregrabadas.php?plz=$id_plaza&base=$BD&fecha_inicial=$fechaI&fecha_final=$fechaF')</script>";
+                    }
                 } catch (Exception $e) {
                     echo '';
                 }
@@ -183,7 +219,7 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
     <script src="../Reporte/js/paginado.js"></script>
 <?php
 } else {
-    header('location:../../login.php');
+    header('location: ../../../logout.php');
 }
 require "include/footer.php";
 ?>
