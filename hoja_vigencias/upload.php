@@ -25,6 +25,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 $bloques = ceil($count / 1000);
                 carga($data_array, $cnx, 0, 1000, $bloques, $sobrante, $plz);
             }
+            else{
+                carga($data_array, $cnx, 0, $count, 1, 0, $plz);
+            }
         } else {
             header('Location: ../map.php?error=1&msg=El Archivo No tiene Datos & plz=' . $plz);
         }
