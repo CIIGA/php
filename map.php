@@ -30,33 +30,32 @@ if (isset($_SESSION['user'])) {
   //semaforo de vencidas
   //validamos si se recibe el id plaza
   if (isset($_GET['id_plaza'])) {
-  // lo guardamos en una variable
+    // lo guardamos en una variable
     $id_plaza = $_GET['id_plaza'];
-    $sql_datos="SELECT plaza.nombreplaza,proveniente.data,proveniente.id_plaza_servicioWeb FROM plaza
+    $sql_datos = "SELECT plaza.nombreplaza,proveniente.data,proveniente.id_plaza_servicioWeb FROM plaza
     inner join proveniente on plaza.id_proveniente=proveniente.id_proveniente
     where plaza.id_plaza='$id_plaza'";
     $cnx_datos = sqlsrv_query($cnx, $sql_datos);
     $datos = sqlsrv_fetch_array($cnx_datos);
     //obtengo el nombre de la base de datos
-    $nombredb=$datos['data'];
+    $nombredb = $datos['data'];
     //obtengo las fechas
-    $ini=date('Y-m-d');
-    $fin=date('Y-m-d');
+    $ini = date('Y-m-d');
+    $fin = date('Y-m-d');
 
     //en una variable mando a llamar la conexion y le paso el nombre de la base de datos como parametro
-    $cnxa=conexion($nombredb);
+    $cnxa = conexion($nombredb);
     // ejecuto mi store con la conexion que le corresponde
-    $store="execute [dbo].[sp_cuenta_vencida_detalle_actual] '$ini','$fin',1";
-    $st=sqlsrv_query($cnxa,$store) or die ('Execute Stored Procedure Failed... Query map.php [sp_cuenta_vencida_detalle_actual]');
-    $resultSt=sqlsrv_fetch_array($st);
-    if($resultSt['resultado']!=1){
-        echo '<script> alert("ERROR.")</script>';
-        echo '<meta http-equiv="refresh" content="0,url=map.php?plz='.$id_plaza.'">';
+    $store = "execute [dbo].[sp_cuenta_vencida_detalle_actual] '$ini','$fin',1";
+    $st = sqlsrv_query($cnxa, $store) or die('Execute Stored Procedure Failed... Query map.php [sp_cuenta_vencida_detalle_actual]');
+    $resultSt = sqlsrv_fetch_array($st);
+    if ($resultSt['resultado'] != 1) {
+      echo '<script> alert("ERROR.")</script>';
+      echo '<meta http-equiv="refresh" content="0,url=map.php?plz=' . $id_plaza . '">';
+    } else {
+      header('location:vencidas.php?id_plaza_servicioWeb=' . $datos['id_plaza_servicioWeb'] . '&nombre_plz=' . $datos['nombreplaza']);
     }
-    else{
-      header('location:vencidas.php?id_plaza_servicioWeb='.$datos['id_plaza_servicioWeb'].'&nombre_plz='.$datos['nombreplaza']);
-    }
-}
+  }
 ?>
   <html lang="en">
 
@@ -75,11 +74,10 @@ if (isset($_SESSION['user'])) {
     <link href="../fontawesome/css/all.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-material-ui/material-ui.css"
-        id="theme-styles">
-    
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-material-ui/material-ui.css" id="theme-styles">
-   
+
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-material-ui/material-ui.css" id="theme-styles">
+
     <style>
       body {
         background-image: url(../img/back.jpg);
@@ -154,8 +152,8 @@ if (isset($_SESSION['user'])) {
               </div>
             </div>
           <?php } while ($mapaNL = sqlsrv_fetch_array($mapNL)); ?>
-          
-          
+
+
           <div id="accordion">
             <div class="card">
               <div class="card-header" id="headingTwo">
@@ -165,18 +163,27 @@ if (isset($_SESSION['user'])) {
                   </button>
                 </h5>
               </div>
-              <?php if ($estado['estado'] == 1) { ?>
               <div id="collapsev" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                <div class="card-body">
+                <!-- si la plaza esta activa mostrara semaforo de vencidas -->
+                <?php if ($estado['estado'] == 1) { ?>
+                  <div class="card-body">
                     <form method="GET" onsubmit="javascript:loadInfo();" autocomplete="off">
-                      <a target="_blank" class="btn nav-link btn-sm toDownload list-group-item list-group-item-action list-group-item-light p-3" href="map.php?id_plaza=<?php echo $plz ?>"><i class="fa fa-download"></i> Semaforo de vencidas</a>
+                      <a target="_blank" class="btn nav-link btn-sm toDownload list-group-item list-group-item-action list-group-item-light p-1" href="map.php?id_plaza=<?php echo $plz ?>"><i class="fa fa-download"></i> Semaforo de vencidas</a>
                     </form>
-                </div>
+                  </div>
+                <?php } ?>
+                <!-- si la plaza es tiajuana agua podra subir hoja de vigencias -->
+                <?php if ($plz == 31) { ?>
+                  <div class="card-body">
+                    <form method="GET" onsubmit="javascript:loadInfo();" autocomplete="off">
+                      <a target="_blank" class="btn nav-link btn-sm list-group-item list-group-item-action list-group-item-light p-1" data-toggle="modal" data-target="#modal-upload-file-reporte" href="#"><i class="fa fa-upload"></i> Cargar Vigencias</a>
+                    </form>
+                  </div>
+                <?php } ?>
               </div>
-              <?php } ?>
             </div>
           </div>
-          
+
           <!-- Menus Estaticos -->
           <!-- <div>
             <div class="card-header" id="headingTwo">
@@ -210,14 +217,14 @@ if (isset($_SESSION['user'])) {
         <div class="btn-whatsapp">
           <button class="btn btn-link" id="sidebarToggle"><i class="fas fa-bars"></i></button>
         </div>
-       
-          <?php
-              if (isset($_GET['error'])) {
-                  $alert = ($_GET['error'] == 1) ? 'alert-danger' : 'alert-success';
-                  $msg = $_GET['msg']; ?>
-                  <div class="alert <?= $alert ?>"><strong><?=$msg?></strong></div>
-              <?php } ?>
-          
+        <!-- mensaje de error an casio de que manden un error -->
+        <?php
+        if (isset($_GET['error'])) {
+          $alert = ($_GET['error'] == 1) ? 'alert-danger' : 'alert-success';
+          $msg = $_GET['msg']; ?>
+          <div class="alert <?= $alert ?>"><strong><?= $msg ?></strong></div>
+        <?php } ?>
+
         <!-- Page content-->
         <?php if (isset($_GET['mp'])) { ?>
           <div class="embed-responsive embed-responsive-16by9">
@@ -227,62 +234,100 @@ if (isset($_SESSION['user'])) {
           <div class="alert alert-dark" role="alert"><i class="fas fa-chevron-left"></i> Seleccione una opción de KPI</div>
         <?php } ?>
       </div>
+      <!-- modal subir hoja de vigencias tijuana -->
+      <div id="modal-upload-file-reporte" class="modal" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+          <form action="./hoja_vigencias/upload.php" method="POST" onsubmit="javascript:loadInfo_vigencias();" autocomplete="off" enctype="multipart/form-data">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5>Plantilla Hoja de Vigencias</h5>
+              </div>
+              <div class="modal-body">
+                <label for="file_upload">Selecciona archivo</label>
+                <input type="file" name="file_upload" id="file_upload" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" required>
+                <input type="hidden" name="plz" value="<?php echo $plz ?>">
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary btn-sm">Subir Archivo</button>
+                <a href="hoja_vigencias/plantilla_vigencias.xlsx" download="" class="btn btn-info btn-sm"><i class="fa fa-download"></i> Descargar Plantilla</a>
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
     <script src="../js/scripts.js"></script>
-   
+
     <script src="../js/popper.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.fileDownload/1.4.2/jquery.fileDownload.min.js"></script>
     <script>
-        var loadInfo = function () {
-            Swal.fire({
-                title: 'Obteniendo Datos',
-                html: 'Espere un momento porfavor...',
-                timer: 0,
-                timerProgressBar: true,
-                allowEscapeKey: false,
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                },
-                willClose: () => {
-                    return false;
-                }
-                }).then((result) => {}
-            );
-        }
-        $('.toDownload').on('click', function () {
-            toDownload($(this).attr('href'));
+      var loadInfo = function() {
+        Swal.fire({
+          title: 'Obteniendo Datos',
+          html: 'Espere un momento porfavor...',
+          timer: 0,
+          timerProgressBar: true,
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+          willClose: () => {
             return false;
-        });
+          }
+        }).then((result) => {});
+      }
+      $('.toDownload').on('click', function() {
+        toDownload($(this).attr('href'));
+        return false;
+      });
 
-        var toDownload = function (url) {
-            $.fileDownload(url, {
-                successCallback: function (url) {
-                    Swal.fire('Listo comenzara la descarga de su archivo', '', 'success' );
-                },
-                failCallback: function () {
-                    Swal.fire('No se pudo descargar el archivo', '', 'error' );
-                },
-                prepareCallback: function () {
-                    Swal.fire({
-                        title: 'Generando Archivo Excel',
-                        html: 'Espere un momento porfavor.',
-                        timer: 0,
-                        allowOutsideClick: false,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        },
-                        willClose: () => {
-                            clearInterval(timerInterval)
-                        }
-                    }).then((result) => { })
-                }
-            });
-        }
+      var toDownload = function(url) {
+        $.fileDownload(url, {
+          successCallback: function(url) {
+            Swal.fire('Listo comenzara la descarga de su archivo', '', 'success');
+          },
+          failCallback: function() {
+            Swal.fire('No se pudo descargar el archivo', '', 'error');
+          },
+          prepareCallback: function() {
+            Swal.fire({
+              title: 'Generando Archivo Excel',
+              html: 'Espere un momento porfavor.',
+              timer: 0,
+              allowOutsideClick: false,
+              didOpen: () => {
+                Swal.showLoading();
+              },
+              willClose: () => {
+                clearInterval(timerInterval)
+              }
+            }).then((result) => {})
+          }
+        });
+      }
+      // alert carga vigencias
+      var loadInfo_vigencias = function() {
+        Swal.fire({
+          title: 'Insertando Datos',
+          html: 'Esto pueda tardar algunos minutos',
+          timer: 0,
+          timerProgressBar: true,
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+          willClose: () => {
+            return false;
+          }
+        }).then((result) => {});
+      }
     </script>
   </body>
 <?php
