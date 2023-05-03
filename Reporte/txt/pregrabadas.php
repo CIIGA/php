@@ -1,4 +1,5 @@
 <?php
+ini_set('max_execution_time', 0);
 require '../modules/pregrabadas.php';
 //Se condiciona si se reciben como paarametro lo siguiente
 if ((isset($_GET['base'])) && (isset($_GET['fecha_inicial'])) && (isset($_GET['fecha_final']))) {
