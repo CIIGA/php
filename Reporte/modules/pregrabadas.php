@@ -245,8 +245,8 @@ function storePregrabadas($BD, $fechaI, $fechaF)
     $cnx = conexionPregrabadas($BD);
     $procedure = "exec sp_ReportePregrabadas '$fechaI', '$fechaF'";
     $exec = sqlsrv_query($cnx, $procedure);
-    $hasRows = sqlsrv_has_rows($exec);
-    if ($hasRows) {
+    $result = sqlsrv_fetch_array($exec);
+    if ($result) {
         echo "<table class='table table-hover table-bordered' style='font-size: 11px;'>
         <thead>
             <tr>

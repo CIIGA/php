@@ -41,6 +41,11 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
                 width: 180px;
                 position: absolute;
             }
+            .btn-txt{
+                left: 470px; 
+                width: 150px;
+                position: absolute;
+            }
         </style>
     </head>
 
@@ -122,6 +127,7 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
                                         </svg>
                                         Descargar Pagina
                                         </button>";
+                                       
                                     } else if ($sector == 2) {
                                         echo "<button type='button' class='btn btn-warning btn-excel-paginate' name='excel' onclick='paginadoPregrabadas($id_plaza,`$BD`,`$fechaI`,`$fechaF`,$pagina)'>
                                         <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-box-arrow-down' viewBox='0 0 16 16'>
@@ -129,6 +135,13 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
                                             <path fill-rule='evenodd' d='M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708l3 3z' />
                                         </svg>
                                         Descargar Pagina
+                                        </button>";
+                                        echo "<button type='button' class='btn btn-info btn-txt' name='excel' onclick='txtPregrabadas($id_plaza,`$BD`,`$fechaI`,`$fechaF`,$pagina)'>
+                                        <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-box-arrow-down' viewBox='0 0 16 16'>
+                                            <path fill-rule='evenodd' d='M3.5 10a.5.5 0 0 1-.5-.5v-8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 0 0 1h2A1.5 1.5 0 0 0 14 9.5v-8A1.5 1.5 0 0 0 12.5 0h-9A1.5 1.5 0 0 0 2 1.5v8A1.5 1.5 0 0 0 3.5 11h2a.5.5 0 0 0 0-1h-2z' />
+                                            <path fill-rule='evenodd' d='M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708l3 3z' />
+                                        </svg>
+                                        Descargar txt
                                         </button>";
                                     }
                                 }
@@ -222,6 +235,7 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
         </div>
     </body>
     <script src="../Reporte/js/paginado.js"></script>
+    <script src="../Reporte/js/txt.js"></script>
 <?php
 } else {
     header('location: ../logout.php');
