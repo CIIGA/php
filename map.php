@@ -238,8 +238,8 @@ if (isset($_SESSION['user'])) {
         if (isset($_GET['vigencias'])) { ?>
           <script>
             Swal.fire(
-              'Datos Cargados correctamente',
-              'puede dercargar reporte de vencidas',
+              'Datos Cargados Correctamente',
+              'Ya puede descargar el semaforo de vencidas actualizado',
               'success'
             )
           </script>
