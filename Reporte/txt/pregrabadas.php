@@ -8,7 +8,7 @@ if ((isset($_GET['base'])) && (isset($_GET['fecha_inicial'])) && (isset($_GET['f
     $fechaI = $_GET['fecha_inicial'];
     $fechaF = $_GET['fecha_final'];
     //Nombre del archivo
-    $archivo = "prueba.txt";
+    $archivo = "Pregrabadas.txt";
     //Contenido del archivo
     $cnx = conexionPregrabadas($BD);
     $procedure = "exec sp_ReportePregrabadas '$fechaI', '$fechaF'";
@@ -17,7 +17,7 @@ if ((isset($_GET['base'])) && (isset($_GET['fecha_inicial'])) && (isset($_GET['f
  
     $contenido = "";
     if ($result) {
-        $contenido =$contenido."lead_id entry_date modify_date status user vendor_lead_code source_id list_id gmt_offset_now called_since_last_reset phone_code phone_number title first_name middle_initial last_name address1 address2 address3 city state province postal_code country_code gender date_of_birth alt_phone email security_phrase comments called_count last_local_call_time rank owner entry_list_id";
+        $contenido =$contenido."lead_id entry_date modify_date status user vendor_lead_code source_id list_id gmt_offset_now called_since_last_reset phone_code phone_number title first_name middle_initial last_name address1 address2 address3 city state province postal_code country_code gender date_of_birth alt_phone email security_phrase comments called_count last_local_call_time rank owner entry_list_id \r\n";
         while ($result = sqlsrv_fetch_array($exec)) {
             $contenido =$contenido.
                     utf8_encode($result['lead_id']) .
@@ -54,7 +54,7 @@ if ((isset($_GET['base'])) && (isset($_GET['fecha_inicial'])) && (isset($_GET['f
                ",". utf8_encode($result['last_local_call_time']->format('d/m/Y')) .
                ",". utf8_encode($result['rank']) .
                ",". utf8_encode($result['owner']) .
-               ",". utf8_encode($result['entry_list_id'])."\n";
+               ",". utf8_encode($result['entry_list_id'])."\r\n";
         }
     }
     //Generamos el archivo y decimos que se va a escribir
