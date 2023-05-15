@@ -233,6 +233,17 @@ if (isset($_SESSION['user'])) {
         <?php } else { ?>
           <div class="alert alert-dark" role="alert"><i class="fas fa-chevron-left"></i> Seleccione una opción de KPI</div>
         <?php } ?>
+<!-- en caso de que se cargo sus vigencias correctamente mandar un sweet alert -->
+        <?php
+        if (isset($_GET['vigencias'])) { ?>
+          <script>
+            Swal.fire(
+              'Datos Cargados Correctamente',
+              'Ya puede descargar el semaforo de vencidas actualizado',
+              'success'
+            )
+          </script>
+        <?php } ?>
       </div>
       <!-- modal subir hoja de vigencias tijuana -->
       <div id="modal-upload-file-reporte" class="modal" tabindex="-1" data-backdrop="static" data-keyboard="false">

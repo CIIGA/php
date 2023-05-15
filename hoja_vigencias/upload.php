@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $data_array =  $spreadsheet->toArray();
         // print_r($data_array[1][0]);
         if (count($data_array) > 1) {
-            sqlsrv_query($cnx, "TRUNCATE TABLE prueba_vigencias;");
+            sqlsrv_query($cnx, "TRUNCATE TABLE VigenciasExcel;");
             $count = count($data_array);
             if ($count > 1000) {
                 $sobrante = $count % 1000;
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 function carga($data_array, $cnx, $i, $cantidad, $bloques, $sobrante, $plz)
 {
     $query = '';
-    $query = 'INSERT INTO prueba_vigencias (cuenta, [FECHA INICIO], [FECHA FINAL]) VALUES';
+    $query = 'INSERT INTO VigenciasExcel (cuenta, [FECHA INICIO], [FECHA FINAL]) VALUES';
     while ($i < $cantidad) {
         if (!is_string($data_array[$i][0]) && $data_array[$i][0] != "") {
 
@@ -61,7 +61,7 @@ function carga($data_array, $cnx, $i, $cantidad, $bloques, $sobrante, $plz)
                 $cantidad += $sobrante;
                 carga($data_array, $cnx, $i, $cantidad, $bloques, $sobrante, $plz);
             } elseif ($bloques == 0) {
-                header('Location: ../map.php?error=0&msg=Datos Guardados & plz=' . $plz);
+                header('Location: ../map.php?vigencias=0 & plz=' . $plz);
             } else {
                 $cantidad += 1000;
                 carga($data_array, $cnx, $i, $cantidad, $bloques, $sobrante, $plz);
