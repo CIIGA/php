@@ -4,7 +4,7 @@ if((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))){
 require "../../acnxerdm/cnx.php";
     
     $id_usuarioNuevo=$_GET['usr'];
-    
+    echo $id_usuarioNuevo;
     $us="SELECT * FROM usuarionuevo
     where id_usuarioNuevo='$id_usuarioNuevo'";
     $use=sqlsrv_query($cnx,$us);
@@ -19,7 +19,7 @@ require "../../acnxerdm/cnx.php";
 //*********************************** INICIO INSERT PLZ *******************************************************
 if(isset($_GET['add'])){
     $idplz=$_GET['plz'];
-    $idusuario=$_GET['usr'];
+    $idusuario=$_GET['id_usuario_nuevo'];
     
     $val="select id_plaza from acceso where id_plaza='$idplz' AND id_usuarioNUevo='$idusuario'";
     $vali=sqlsrv_query($cnx,$val);
@@ -28,10 +28,13 @@ if($valida){
     echo '<script>alert("El usuario ya tiene registrada esta plaza. \nVerifique registro")</script>';
     echo '<meta http-equiv="refresh" content="0,url=permisoPlz.php?usr='.$_GET['usr'].'&plz=65&crhm=950721&idus=659898895">';
 } else{
+    
+   
     $unidad="insert into acceso values ('$idusuario','$idplz')";
-		sqlsrv_query($cnx,$unidad) or die ('No se ejecuto la consulta isert nuevo colaborador');
-//        echo '<script>alert("Acceso agregado correctamente")</script>';
-        echo '<meta http-equiv="refresh" content="0,url=permisoPlz.php?usr='.$_GET['usr'].'&plz=65&crhm=950721&idus=659898895">';
+    sqlsrv_query($cnx,$unidad) or die ('No se ejecuto la consulta isert nuevo colaborador');
+    // print_r(sqlsrv_errors());
+    echo '<meta http-equiv="refresh" content="0,url=permisoPlz.php?usr='.$_GET['id_usuario_nuevo'].'&plz=65&crhm=950721&idus=659898895">';
+           echo '<script>alert("Acceso agregado correctamente")</script>';
     }
 }
 //************************ FIN INSERT PLZ ******************************************************************
@@ -110,6 +113,7 @@ if($valida){
                     <option value="<?php echo $plz['id_plaza'] ?>"><?php echo utf8_encode(ucwords(strtolower($plz['nombreplaza']))) ?></option>
             <?php } while($plz=sqlsrv_fetch_array($pla)); ?>
                 </select>
+                <input type="hidden" name="id_usuario_nuevo" value="<?php echo $id_usuarioNuevo ?>" />
         </div>
 
         <div style="text-align:right;">
