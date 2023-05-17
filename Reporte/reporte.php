@@ -6,6 +6,8 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
     require 'modules/pregrabadas.php';
     require 'modules/pagos.php';
     require 'modules/estatusPadron.php';
+    require 'modules/reporteAdeudo.php';
+    require 'modules/TelefonosPregrabadas.php';
     //Se extrae la plaza 
     $id_plaza = $_GET['plz'];
     $plaza = plaza($id_plaza);
@@ -50,6 +52,10 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
                 width: 150px;
                 position: absolute;
             }
+
+            .addRadioButton {
+                visibility: hidden;
+            }
         </style>
     </head>
 
@@ -57,9 +63,9 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
         <div class="container">
             <h2>Reporte</h2>
             <div class="row">
-                <div class="col-md-6">
-                    <!-- Se manda al mismo archivo y por el metodo get -->
-                    <form action="" method="">
+                <!-- Se manda al mismo archivo y por el metodo get -->
+                <form action="" method="" class="row">
+                    <div class="col-md-6">
                         <input type="text" class="form-control" hidden id="id_plaza" value="<?php echo $id_plaza; ?>" name="plz" hidden>
                         <input type="text" class="form-control" hidden id="plaza" value="<?php echo $plaza['base']; ?>" name="base">
                         <div class="input-group mb-3">
@@ -72,25 +78,26 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
                             <div class="input-group-prepend">
                                 <label class="input-group-text" for="inputGroupSelect01">Sector</label>
                             </div>
-                            <select class="custom-select" id="inputGroupSelect01" name="sector" required>
-                                <option selected>Selecionar Sector</option>
-                                <option value="1">CallCenter</option>
-                                <option value="2">Pregrabadas</option>
-                                <option value="3">Pagos</option>
-                                <option value="4">Estatus Padron</option>
+                            <select class="custom-select" id="sector" name="sector" required>
+                                <option value="1" <?php if (isset($_GET['sector'])&& ($_GET['sector'] == 1)) { ?> selected <?php } ?>>CallCenter</option>
+                                <option value="2" <?php if (isset($_GET['sector'])&& ($_GET['sector'] == 2)) { ?> selected <?php } ?>>Pregrabadas</option>
+                                <option value="3" <?php if (isset($_GET['sector'])&& ($_GET['sector'] == 3)) { ?> selected <?php } ?>>Pagos</option>
+                                <option value="4" <?php if (isset($_GET['sector'])&& ($_GET['sector'] == 4)) { ?> selected <?php } ?>>Estatus Padron</option>
+                                <option value="5" <?php if (isset($_GET['sector'])&& ($_GET['sector'] == 5)) { ?> selected <?php } ?>>Adeudo</option>
+                                <option value="6" <?php if (isset($_GET['sector'])&& ($_GET['sector'] == 6)) { ?> selected <?php } ?> onclick="addRadioButton()">Telefonos para Pregrabadas</option>
                             </select>
                         </div>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <label class="input-group-text" for="inputGroupSelect01">Fecha inicial</label>
                             </div>
-                            <input type="date" class="form-control" id="date" name="fecha_inicial">
+                            <input type="date" class="form-control" id="date" name="fecha_inicial" <?php if (isset($_GET['fecha_inicial'])) { ?> value="<?php echo $_GET['fecha_inicial'] ?>" <?php } ?>>
                         </div>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <label class="input-group-text" for="inputGroupSelect01">Fecha final</label>
                             </div>
-                            <input type="date" class="form-control" id="date" name="fecha_final">
+                            <input type="date" class="form-control" id="date" name="fecha_final" <?php if (isset($_GET['fecha_final'])) { ?> value="<?php echo $_GET['fecha_final'] ?>" <?php } ?>>
                         </div>
                         <div class="row">
                             <div class="col-md-5">
@@ -157,33 +164,68 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
 
                             ?>
                         </div>
-                    </form>
-                </div>
-                <div class="col-md-6">
-                    <div class="card tarjet">
-                        <div class="card-body ">
-                            <h5 class="card-title text-center">Registros</h5>
-                            <?php
-                            //Si recibe los datos por el metodo get manda al archivo de callcenter el conteo total de los que hay
-                            if (isset($_GET['base']) and isset($_GET['fecha_inicial']) and isset($_GET['fecha_final']) and isset($_GET['sector'])) {
-                                $BD = $plaza['base'];
-                                $fechaI = $_GET['fecha_inicial'];
-                                $fechaF = $_GET['fecha_final'];
-                                $sector = $_GET['sector'];
-                                if ($sector == 1) {
-                                    echo ' <p class="card-text text-center bg-white">' . count_spCallCenter($BD, $fechaI, $fechaF) . '</p>';
-                                } else if ($sector == 2) {
-                                    echo ' <p class="card-text text-center bg-white">' . count_spReportePregrabadas($BD, $fechaI, $fechaF) . '</p>';
-                                } else if ($sector == 3) {
-                                    // echo ' <p class="card-text text-center bg-white">' . count_spPagosBrutos($BD) . '</p>';
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card tarjet">
+                            <div class="card-body ">
+                                <h5 class="card-title text-center">Registros</h5>
+                                <?php
+                                //Si recibe los datos por el metodo get manda al archivo de callcenter el conteo total de los que hay
+                                if (isset($_GET['base']) and isset($_GET['fecha_inicial']) and isset($_GET['fecha_final']) and isset($_GET['sector'])) {
+                                    $BD = $plaza['base'];
+                                    $fechaI = $_GET['fecha_inicial'];
+                                    $fechaF = $_GET['fecha_final'];
+                                    $sector=$_GET['sector'];
+                                    if ($sector == 1) {
+                                        echo ' <p class="card-text text-center bg-white">' . count_spCallCenter($BD, $fechaI, $fechaF) . '</p>';
+                                    } else if ($sector == 2) {
+                                        echo ' <p class="card-text text-center bg-white">' . count_spReportePregrabadas($BD, $fechaI, $fechaF) . '</p>';
+                                    } else if ($sector == 3) {
+                                        // echo ' <p class="card-text text-center bg-white">' . count_spPagosBrutos($BD) . '</p>';
+                                    } else if ($sector == 4) {
+                                        echo ' <p class="card-text text-center bg-white">' . count_spEstatusPadron($BD) . '</p>';
+                                    } else if ($sector == 5) {
+                                        echo ' <p class="card-text text-center bg-white">' . count_spReporteAdeudo($BD) . '</p>';
+                                    }
                                 }
-                            }
-                            ?>
-                            </p>
+                                if (isset($_GET['base']) and isset($_GET['fecha_inicial']) and isset($_GET['fecha_final']) and isset($_GET['sector']) and isset($_GET['tipoTelefonosPregrabadas'])) {
+                                    $BD = $plaza['base'];
+                                    $fechaI = $_GET['fecha_inicial'];
+                                    $fechaF = $_GET['fecha_final'];
+                                    $tipo = $_GET['tipoTelefonosPregrabadas'];
+                                    if ($sector == 6) {
+                                        echo ' <p class="card-text text-center bg-white">' . count_spTelefonosPregrabadas($BD, $tipo) . '</p>';
+                                    }
+                                }
+                                ?>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="mt-2 addRadioButton" id="addRadioButton">
+                            <div class="card tarjet">
+                                <div class="card-body ">
+                                    <h5 class="card-title text-center">Opciones</h5>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="tipoTelefonosPregrabadas" id="rb1" value="0">
+                                        <label class="form-check-label" for="rb1">
+                                            Todos los telefonos validos
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="tipoTelefonosPregrabadas" id="rb2" value="1">
+                                        <label class="form-check-label" for="rb2">
+                                            Solo campaña normal del mes
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </form>
+
             </div>
+        </div>
         </div>
         <div class="content">
             <?php
@@ -221,7 +263,7 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
                         $BD,
                         $pagina
                     );
-                } else if ($sector = 3) {
+                } else if ($sector == 3) {
             ?>
                     <div class="d-flex ">
                         <div class="col-md-4 mx-5">
@@ -250,8 +292,7 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
                         </div>
                     </div>
             <?php
-                }
-                else if($sector = 4){
+                } else if ($sector == 4) {
                     sp_EstatusPadron(
                         $id_plaza,
                         $sector,
@@ -260,7 +301,43 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
                         $BD,
                         $pagina
                     );
+                } else if ($sector == 5) {
+                    sp_ReporteAdeudo(
+                        $id_plaza,
+                        $sector,
+                        $fechaI,
+                        $fechaF,
+                        $BD,
+                        $pagina
+                    );
                 }
+            }
+            //Este if es para el modulo 6 ya que se necesita un paso de parametro adicional el cual son los radioButton
+            if (isset($_GET['base']) and isset($_GET['fecha_inicial']) and isset($_GET['fecha_final']) and isset($_GET['sector']) and isset($_GET['tabla']) and isset($_GET['tipoTelefonosPregrabadas'])) {
+
+                //Se  extrae los datos enviados por la url
+                $sector = $_GET['sector'];
+                $fechaI = $_GET['fecha_inicial'];
+                $fechaF = $_GET['fecha_final'];
+                $BD = $plaza['base'];
+                $tipo = $_GET['tipoTelefonosPregrabadas'];
+                //Se condiciona si se recib la pagina 
+                if (isset($_GET['page']) and is_numeric($_GET['page']) == 1) {
+                    $pagina = intval($_GET['page']);
+                }
+                //Si no recibe declaramos que el valor por defecto es 1
+                else {
+                    $pagina = 1;
+                }
+                sp_TelefonosPregrabadas(
+                    $id_plaza,
+                    $sector,
+                    $fechaI,
+                    $fechaF,
+                    $BD,
+                    $pagina,
+                    $tipo
+                );
             }
             //Se genera el excel del total de los registros
             if (isset($_GET['base']) and isset($_GET['fecha_inicial']) and isset($_GET['fecha_final']) and isset($_GET['sector']) and isset($_GET['excel'])) {
@@ -281,11 +358,40 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
                     echo '';
                 }
             }
+
+            //Se genera el Excel  del total de los registros sin necesidad de ingresar fecha
+            if (isset($_GET['base']) and isset($_GET['sector']) and isset($_GET['excel'])) {
+                //Se  extrae los datos enviados por la url
+                $sector = $_GET['sector'];
+                $BD = $plaza['base'];
+                try {
+                    if ($sector == 4) {
+                        echo "<script type='text/javascript'>window.open('excel/estatusPadron.php?plz=$id_plaza&base=$BD')</script>";
+                    } else if ($sector == 5) {
+                        echo "<script type='text/javascript'>window.open('excel/reporteAdedudo.php?plz=$id_plaza&base=$BD')</script>";
+                    }
+                } catch (Exception $e) {
+                    echo '';
+                }
+            }
+            if (isset($_GET['base']) and isset($_GET['fecha_inicial']) and isset($_GET['fecha_final']) and isset($_GET['sector']) and isset($_GET['excel']) and isset($_GET['tipoTelefonosPregrabadas'])) {
+                //Se  extrae los datos enviados por la url
+                $sector = $_GET['sector'];
+                $fechaI = $_GET['fecha_inicial'];
+                $fechaF = $_GET['fecha_final'];
+                $BD = $plaza['base'];
+                $tipo = $_GET['tipoTelefonosPregrabadas'];
+                if ($sector == 6) {
+                    echo "<script type='text/javascript'>window.open('excel/telefonosPregrabadas.php?plz=$id_plaza&base=$BD&fecha_inicial=$fechaI&fecha_final=$fechaF&tipoTelefonosPregrabadas=$tipo')</script>";
+                }
+            }
             ?>
         </div>
     </body>
     <script src="../Reporte/js/paginado.js"></script>
     <script src="../Reporte/js/txt.js"></script>
+    <script src="../Reporte/js/excelDownload.js"></script>
+    <script src="../Reporte/js/radioButton.js"></script>
 <?php
 } else {
     header('location: ../logout.php');

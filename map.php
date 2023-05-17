@@ -153,25 +153,25 @@ if (isset($_SESSION['user'])) {
             </div>
           <?php } while ($mapaNL = sqlsrv_fetch_array($mapNL)); ?>
 
-
+          <?php if ($estado['estado'] == 1) { ?>
           <div id="accordion">
             <div class="card">
               <div class="card-header" id="headingTwo">
                 <h5 class="mb-0">
                   <button class="btn collapsed" data-toggle="collapse" data-target="#collapsev" aria-expanded="false" aria-controls="collapseTwo">
-                    <h6 style="text-shadow: 0px 0px 2px #717171;"><i class="fas fa-chevron-right"></i> Reportes</h6>
+                    <h6 style="text-shadow: 0px 0px 2px #717171;"><i class="fas fa-chevron-right"></i> Vencidas</h6>
                   </button>
                 </h5>
               </div>
               <div id="collapsev" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
                 <!-- si la plaza esta activa mostrara semaforo de vencidas -->
-                <?php if ($estado['estado'] == 1) { ?>
+                
                   <div class="card-body">
                     <form method="GET" onsubmit="javascript:loadInfo();" autocomplete="off">
                       <a target="_blank" class="btn nav-link btn-sm toDownload list-group-item list-group-item-action list-group-item-light p-1" href="map.php?id_plaza=<?php echo $plz ?>"><i class="fa fa-download"></i> Semaforo de vencidas</a>
                     </form>
                   </div>
-                <?php } ?>
+                
                 <!-- si la plaza es tiajuana agua podra subir hoja de vigencias -->
                 <?php if ($plz == 31) { ?>
                   <div class="card-body">
@@ -183,7 +183,27 @@ if (isset($_SESSION['user'])) {
               </div>
             </div>
           </div>
+          <?php } ?>
 
+          <!-- Reporte de Plazas -->
+          <?php if ($estado['estado'] == 1) { ?>
+          <div id="accordion">
+            <div class="card">
+              <div class="card-header" id="headingTwo">
+                <h5 class="mb-0">
+                  <button class="btn collapsed" data-toggle="collapse" data-target="#collapseR" aria-expanded="false" aria-controls="collapseTwo">
+                    <h6 style="text-shadow: 0px 0px 2px #717171;"><i class="fas fa-chevron-right"></i> Reportes</h6>
+                  </button>
+                </h5>
+              </div>
+              <div id="collapseR" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                  <div class="card-body">
+                      <a target="_blank" class="btn nav-link btn-sm list-group-item list-group-item-action list-group-item-light p-1" href="Reporte/reporte.php?plz=<?php echo $plz ?>"><i class="fa fa-download"></i>Reportes</a>
+                  </div>
+              </div>
+            </div>
+          </div>
+          <?php } ?>
           <!-- Menus Estaticos -->
           <!-- <div>
             <div class="card-header" id="headingTwo">

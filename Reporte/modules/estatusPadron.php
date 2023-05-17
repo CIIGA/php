@@ -16,7 +16,7 @@ function conexionEstatusPadron($BD)
 function count_spEstatusPadron($BD)
 {
     $cnx = conexionEstatusPadron($BD);
-    $sql = "count(cuenta) as total FROM EstatusPadron";
+    $sql = "select count(cuenta) as total FROM EstatusPadron";
     $exec = sqlsrv_query($cnx, $sql);
     $result = sqlsrv_fetch_array($exec);
     //Se retorna el total
@@ -52,7 +52,6 @@ function sp_EstatusPadron(
         <thead class='thead-dark'>
         <tr>
             <th class='text-xs'>cuenta</th>
-            <th class='text-xs'>Clave_Catastral</th>
             <th class='text-xs'>ult_trimestre_pago</th>
             <th class='text-xs'>propietario</th>
             <th class='text-xs'>calle</th>
@@ -65,8 +64,6 @@ function sp_EstatusPadron(
             <th class='text-xs'>caracteristica_predio</th>
             <th class='text-xs'>giro</th>
             <th class='text-xs'>serie_medidor</th>
-            <th class='text-xs'>deuda_total</th>
-            <th class='text-xs'>estatus_de_adeudo</th>
             <th class='text-xs'>fecha_actualizacion</th>
             <th class='text-xs'>fecha_corte</th>
             <th class='text-xs'>rango</th>
@@ -75,11 +72,6 @@ function sp_EstatusPadron(
             <th class='text-xs'>efectos</th>
             <th class='text-xs'>latitud</th>
             <th class='text-xs'>longitud</th>
-            <th class='text-xs'>sectr</th>
-            <th class='text-xs'>Meses_Adeudo</th>
-            <th class='text-xs'>estatus_zona</th>
-            <th class='text-xs'>ruta</th>
-            <th class='text-xs'>secuencia</th>
             <th class='text-xs'>manzana</th>
             <th class='text-xs'>lote</th>
             <th class='text-xs'>entre_calle_1</th>
@@ -125,17 +117,8 @@ function sp_EstatusPadron(
             <th class='text-xs'>reductores_asignado</th>
             <th class='text-xs'>tarea_asignada_reductores</th>
             <th class='text-xs'>gestionada_reductores</th>
-            <th class='text-xs'>ultimo_reductor_gestion</th>
             <th class='text-xs'>ultima_tarea_reductores</th>
             <th class='text-xs'>activa_reductores</th>
-            <th class='text-xs'>ultimo_carta_invitacion_gestion</th>
-            <th class='text-xs'>ultima_tarea_carta_invitacion</th>
-            <th class='text-xs'>ultimo_sepomex_gestion</th>
-            <th class='text-xs'>ultima_tarea_sepomex</th>
-            <th class='text-xs'>ultimo_pregrabada_gestion</th>
-            <th class='text-xs'>ultima_tarea_pregrabada</th>
-            <th class='text-xs'>ultimo_inspeccion_gestion</th>
-            <th class='text-xs'>ultima_tarea_inspeccion</th>
             <th class='text-xs'>sup_terreno_h</th>
             <th class='text-xs'>sup_construccion_h</th>
             <th class='text-xs'>valor_terreno_h</th>
@@ -146,21 +129,12 @@ function sp_EstatusPadron(
             <th class='text-xs'>valor_terreno_valuado</th>
             <th class='text-xs'>valor_construccion_valuado</th>
             <th class='text-xs'>valor_catastral_valuado</th>
-            <th class='text-xs'>casilla</th>
             </tr>
         </thead>
         <tbody>";
         while ($result = sqlsrv_fetch_array($exec)) {
-            $pago = utf8_encode($result['fecha_pago']->format('d/m/Y'));
             echo "<tr>
-            <td class='text-xs'>
-                <button type='button' class='btn btn-success' onclick='txtPagosBrutos(`$BD`,`$pago`)'>
-                <img src='https://img.icons8.com/fluency/24/null/download.png'/>
-                </button>
-            </td>
-            <td class='text-xs'>". utf8_encode($result['pagos']) . "</td>
             <th class='text-xs'>". utf8_encode($result['cuenta']). "</th>
-            <th class='text-xs'>". utf8_encode($result['Clave_Catastral']). "</th>
             <th class='text-xs'>". utf8_encode($result['ult_trimestre_pago']). "</th>
             <th class='text-xs'>". utf8_encode($result['propietario']). "</th>
             <th class='text-xs'>". utf8_encode($result['calle']). "</th>
@@ -173,21 +147,14 @@ function sp_EstatusPadron(
             <th class='text-xs'>". utf8_encode($result['caracteristica_predio']). "</th>
             <th class='text-xs'>". utf8_encode($result['giro']). "</th>
             <th class='text-xs'>". utf8_encode($result['serie_medidor']). "</th>
-            <th class='text-xs'>". utf8_encode($result['deuda_total']). "</th>
-            <th class='text-xs'>". utf8_encode($result['estatus_de_adeudo']). "</th>
-            <th class='text-xs'>". utf8_encode($result['fecha_actualizacion']). "</th>
-            <th class='text-xs'>". utf8_encode($result['fecha_corte']). "</th>
+            <th class='text-xs'>". utf8_encode($result['fecha_actualizacion']->format('d/m/Y')). "</th>
+            <th class='text-xs'>". utf8_encode($result['fecha_corte']->format('d/m/Y')). "</th>
             <th class='text-xs'>". utf8_encode($result['rango']). "</th>
-            <th class='text-xs'>". utf8_encode($result['fecha_ultimo_pago']). "</th>
+            <th class='text-xs'>". utf8_encode($result['fecha_ultimo_pago']->format('d/m/Y')). "</th>
             <th class='text-xs'>". utf8_encode($result['estatus']). "</th>
             <th class='text-xs'>". utf8_encode($result['efectos']). "</th>
             <th class='text-xs'>". utf8_encode($result['latitud']). "</th>
             <th class='text-xs'>". utf8_encode($result['longitud']). "</th>
-            <th class='text-xs'>". utf8_encode($result['sectr']). "</th>
-            <th class='text-xs'>". utf8_encode($result['Meses_Adeudo']). "</th>
-            <th class='text-xs'>". utf8_encode($result['estatus_zona']). "</th>
-            <th class='text-xs'>". utf8_encode($result['ruta']). "</th>
-            <th class='text-xs'>". utf8_encode($result['secuencia']). "</th>
             <th class='text-xs'>". utf8_encode($result['manzana']). "</th>
             <th class='text-xs'>". utf8_encode($result['lote']). "</th>
             <th class='text-xs'>". utf8_encode($result['entre_calle_1']). "</th>
@@ -198,30 +165,25 @@ function sp_EstatusPadron(
             <th class='text-xs'>". utf8_encode($result['num_ext_notificacion']). "</th>
             <th class='text-xs'>". utf8_encode($result['colonia_notificacion']). "</th>
             <th class='text-xs'>". utf8_encode($result['cp_notificacion']). "</th>
-            <th class='text-xs'>". utf8_encode($result['poblacion_notificacion']). "</th>
-            <th class='text-xs'>". utf8_encode($result['pagos']). "</th>
             <th class='text-xs'>". utf8_encode($result['total_pagado']). "</th>
             <th class='text-xs'>". utf8_encode($result['sepomex']). "</th>
             <th class='text-xs'>". utf8_encode($result['gestor_asignado']). "</th>
             <th class='text-xs'>". utf8_encode($result['tarea_asignada_gestor']). "</th>
             <th class='text-xs'>". utf8_encode($result['gestionada_gestor']). "</th>
-            <th class='text-xs'>". utf8_encode($result['ultimo_gestor_gestion']). "</th>
             <th class='text-xs'>". utf8_encode($result['ultima_tarea_gestor']). "</th>
             <th class='text-xs'>". utf8_encode($result['observaciones_gestor']). "</th>
-            <th class='text-xs'>". utf8_encode($result['fecha_captura_gestor']). "</th>
+            <th class='text-xs'>". utf8_encode($result['fecha_captura_gestor']->format('d/m/Y')). "</th>
             <th class='text-xs'>". utf8_encode($result['activa_gestor']). "</th>
             <th class='text-xs'>". utf8_encode($result['abogado_asignado']). "</th>
             <th class='text-xs'>". utf8_encode($result['tarea_asignada_abogado']). "</th>
             <th class='text-xs'>". utf8_encode($result['gestionada_abogado']). "</th>
-            <th class='text-xs'>". utf8_encode($result['ultimo_abogado_gestion']). "</th>
             <th class='text-xs'>". utf8_encode($result['ultima_tarea_abogado']). "</th>
             <th class='text-xs'>". utf8_encode($result['observaciones_abogado']). "</th>
-            <th class='text-xs'>". utf8_encode($result['fecha_captura_abogado']). "</th>
+            <th class='text-xs'>". utf8_encode($result['fecha_captura_abogado']->format('d/m/Y')). "</th>
             <th class='text-xs'>". utf8_encode($result['activa_abogado']). "</th>
             <th class='text-xs'>". utf8_encode($result['call_center_asignado']). "</th>
             <th class='text-xs'>". utf8_encode($result['tarea_asignada_call_center']). "</th>
             <th class='text-xs'>". utf8_encode($result['gestionada_call_center']). "</th>
-            <th class='text-xs'>". utf8_encode($result['ultimo_call_center_gestion']). "</th>
             <th class='text-xs'>". utf8_encode($result['ultima_tarea_call_center']). "</th>
             <th class='text-xs'>". utf8_encode($result['activa_call_center']). "</th>
             <th class='text-xs'>". utf8_encode($result['telefono_local']). "</th>
@@ -233,17 +195,8 @@ function sp_EstatusPadron(
             <th class='text-xs'>". utf8_encode($result['reductores_asignado']). "</th>
             <th class='text-xs'>". utf8_encode($result['tarea_asignada_reductores']). "</th>
             <th class='text-xs'>". utf8_encode($result['gestionada_reductores']). "</th>
-            <th class='text-xs'>". utf8_encode($result['ultimo_reductor_gestion']). "</th>
             <th class='text-xs'>". utf8_encode($result['ultima_tarea_reductores']). "</th>
             <th class='text-xs'>". utf8_encode($result['activa_reductores']). "</th>
-            <th class='text-xs'>". utf8_encode($result['ultimo_carta_invitacion_gestion']). "</th>
-            <th class='text-xs'>". utf8_encode($result['ultima_tarea_carta_invitacion']). "</th>
-            <th class='text-xs'>". utf8_encode($result['ultimo_sepomex_gestion']). "</th>
-            <th class='text-xs'>". utf8_encode($result['ultima_tarea_sepomex']). "</th>
-            <th class='text-xs'>". utf8_encode($result['ultimo_pregrabada_gestion']). "</th>
-            <th class='text-xs'>". utf8_encode($result['ultima_tarea_pregrabada']). "</th>
-            <th class='text-xs'>". utf8_encode($result['ultimo_inspeccion_gestion']). "</th>
-            <th class='text-xs'>". utf8_encode($result['ultima_tarea_inspeccion']). "</th>
             <th class='text-xs'>". utf8_encode($result['sup_terreno_h']). "</th>
             <th class='text-xs'>". utf8_encode($result['sup_construccion_h']). "</th>
             <th class='text-xs'>". utf8_encode($result['valor_terreno_h']). "</th>
@@ -254,7 +207,6 @@ function sp_EstatusPadron(
             <th class='text-xs'>". utf8_encode($result['valor_terreno_valuado']). "</th>
             <th class='text-xs'>". utf8_encode($result['valor_construccion_valuado']). "</th>
             <th class='text-xs'>". utf8_encode($result['valor_catastral_valuado']). "</th>
-            <th class='text-xs'>". utf8_encode($result['casilla']). "</th>
             </tr>";
         }
         echo " </tbody>
@@ -327,5 +279,222 @@ function sp_EstatusPadron(
         }
         echo '</ul>';
         echo "</nav>";
+    }
+}
+
+function sp_EstatusPadronExcel(
+    $BD
+) {
+   
+    $cnx = conexionEstatusPadron($BD);
+    $sql = "select * FROM EstatusPadron order by cuenta desc";
+    $exec = sqlsrv_query($cnx, $sql);
+    $result = sqlsrv_fetch_array($exec);
+    // print_r($exec);
+    //se genera la tabla
+    if ($result) {
+        echo "<table class='table table-responsive table-condensed'>
+        <thead class='thead-dark'>
+        <tr>
+              <th class='text-xs'>cuenta</th>
+              <th class='text-xs'>Clave_Catastral</th>
+              <th class='text-xs'>ult_trimestre_pago</th>
+              <th class='text-xs'>propietario</th>
+              <th class='text-xs'>calle</th>
+              <th class='text-xs'>num_ext</th>
+              <th class='text-xs'>num_int</th>
+              <th class='text-xs'>colonia</th>
+              <th class='text-xs'>poblacion</th>
+              <th class='text-xs'>cp</th>
+              <th class='text-xs'>tipo_servicio</th>
+              <th class='text-xs'>caracteristica_predio</th>
+              <th class='text-xs'>giro</th>
+              <th class='text-xs'>serie_medidor</th>
+              <th class='text-xs'>estatus_de_adeudo</th>
+              <th class='text-xs'>fecha_actualizacion</th>
+              <th class='text-xs'>fecha_corte</th>
+              <th class='text-xs'>rango</th>
+              <th class='text-xs'>fecha_ultimo_pago</th>
+              <th class='text-xs'>estatus</th>
+              <th class='text-xs'>efectos</th>
+              <th class='text-xs'>latitud</th>
+              <th class='text-xs'>longitud</th>
+              <th class='text-xs'>sectr</th>
+              <th class='text-xs'>Meses_Adeudo</th>
+              <th class='text-xs'>estatus_zona</th>
+              <th class='text-xs'>ruta</th>
+              <th class='text-xs'>secuencia</th>
+              <th class='text-xs'>manzana</th>
+              <th class='text-xs'>lote</th>
+              <th class='text-xs'>entre_calle_1</th>
+              <th class='text-xs'>entre_calle_2</th>
+              <th class='text-xs'>Referencia</th>
+              <th class='text-xs'>razon_social</th>
+              <th class='text-xs'>calle_notificacion</th>
+              <th class='text-xs'>num_ext_notificacion</th>
+              <th class='text-xs'>colonia_notificacion</th>
+              <th class='text-xs'>cp_notificacion</th>
+              <th class='text-xs'>poblacion_notificacion</th>
+              <th class='text-xs'>pagos</th>
+              <th class='text-xs'>total_pagado</th>
+              <th class='text-xs'>sepomex</th>
+              <th class='text-xs'>gestor_asignado</th>
+              <th class='text-xs'>tarea_asignada_gestor</th>
+              <th class='text-xs'>gestionada_gestor</th>
+              <th class='text-xs'>ultimo_gestor_gestion</th>
+              <th class='text-xs'>ultima_tarea_gestor</th>
+              <th class='text-xs'>observaciones_gestor</th>
+              <th class='text-xs'>fecha_captura_gestor</th>
+              <th class='text-xs'>activa_gestor</th>
+              <th class='text-xs'>abogado_asignado</th>
+              <th class='text-xs'>tarea_asignada_abogado</th>
+              <th class='text-xs'>gestionada_abogado</th>
+              <th class='text-xs'>ultimo_abogado_gestion</th>
+              <th class='text-xs'>ultima_tarea_abogado</th>
+              <th class='text-xs'>observaciones_abogado</th>
+              <th class='text-xs'>fecha_captura_abogado</th>
+              <th class='text-xs'>activa_abogado</th>
+              <th class='text-xs'>call_center_asignado</th>
+              <th class='text-xs'>tarea_asignada_call_center</th>
+              <th class='text-xs'>gestionada_call_center</th>
+              <th class='text-xs'>ultimo_call_center_gestion</th>
+              <th class='text-xs'>ultima_tarea_call_center</th>
+              <th class='text-xs'>activa_call_center</th>
+              <th class='text-xs'>telefono_local</th>
+              <th class='text-xs'>telefono_celular</th>
+              <th class='text-xs'>telefono_radio</th>
+              <th class='text-xs'>telefono_local_usuario</th>
+              <th class='text-xs'>telefono_celular_usuario</th>
+              <th class='text-xs'>telefono_radio_usuario</th>
+              <th class='text-xs'>reductores_asignado</th>
+              <th class='text-xs'>tarea_asignada_reductores</th>
+              <th class='text-xs'>gestionada_reductores</th>
+              <th class='text-xs'>ultimo_reductor_gestion</th>
+              <th class='text-xs'>ultima_tarea_reductores</th>
+              <th class='text-xs'>activa_reductores</th>
+              <th class='text-xs'>ultimo_carta_invitacion_gestion</th>
+              <th class='text-xs'>ultima_tarea_carta_invitacion</th>
+              <th class='text-xs'>ultimo_sepomex_gestion</th>
+              <th class='text-xs'>ultima_tarea_sepomex</th>
+              <th class='text-xs'>ultimo_pregrabada_gestion</th>
+              <th class='text-xs'>ultima_tarea_pregrabada</th>
+              <th class='text-xs'>ultimo_inspeccion_gestion</th>
+              <th class='text-xs'>ultima_tarea_inspeccion</th>
+              <th class='text-xs'>sup_terreno_h</th>
+              <th class='text-xs'>sup_construccion_h</th>
+              <th class='text-xs'>valor_terreno_h</th>
+              <th class='text-xs'>valor_construccion_h</th>
+              <th class='text-xs'>valor_catastral_h</th>
+              <th class='text-xs'>sup_terreno_valuado</th>
+              <th class='text-xs'>sup_construccion_valuado</th>
+              <th class='text-xs'>valor_terreno_valuado</th>
+              <th class='text-xs'>valor_construccion_valuado</th>
+              <th class='text-xs'>valor_catastral_valuado</th>
+              <th class='text-xs'>casilla</th>
+            </tr>
+        </thead>
+        <tbody>";
+        while ($result = sqlsrv_fetch_array($exec)) {
+            echo "<tr>
+              <th class='text-xs'>".utf8_encode($result['cuenta'])."</th>
+              <th class='text-xs'>".utf8_encode($result['Clave_Catastral'])."</th>
+              <th class='text-xs'>".utf8_encode($result['ult_trimestre_pago'])."</th>
+              <th class='text-xs'>".utf8_encode($result['propietario'])."</th>
+              <th class='text-xs'>".utf8_encode($result['calle'])."</th>
+              <th class='text-xs'>".utf8_encode($result['num_ext'])."</th>
+              <th class='text-xs'>".utf8_encode($result['num_int'])."</th>
+              <th class='text-xs'>".utf8_encode($result['colonia'])."</th>
+              <th class='text-xs'>".utf8_encode($result['poblacion'])."</th>
+              <th class='text-xs'>".utf8_encode($result['cp'])."</th>
+              <th class='text-xs'>".utf8_encode($result['tipo_servicio'])."</th>
+              <th class='text-xs'>".utf8_encode($result['caracteristica_predio'])."</th>
+              <th class='text-xs'>".utf8_encode($result['giro'])."</th>
+              <th class='text-xs'>".utf8_encode($result['serie_medidor'])."</th>
+              <th class='text-xs'>".utf8_encode($result['estatus_de_adeudo'])."</th>
+              <th class='text-xs'>".utf8_encode($result['fecha_actualizacion']->format('d/m/Y'))."</th>
+              <th class='text-xs'>".utf8_encode($result['fecha_corte']->format('d/m/Y'))."</th>
+              <th class='text-xs'>".utf8_encode($result['rango'])."</th>
+              <th class='text-xs'>".utf8_encode($result['fecha_ultimo_pago']->format('d/m/Y'))."</th>
+              <th class='text-xs'>".utf8_encode($result['estatus'])."</th>
+              <th class='text-xs'>".utf8_encode($result['efectos'])."</th>
+              <th class='text-xs'>".utf8_encode($result['latitud'])."</th>
+              <th class='text-xs'>".utf8_encode($result['longitud'])."</th>
+              <th class='text-xs'>".utf8_encode($result['sectr'])."</th>
+              <th class='text-xs'>".utf8_encode($result['Meses_Adeudo'])."</th>
+              <th class='text-xs'>".utf8_encode($result['estatus_zona'])."</th>
+              <th class='text-xs'>".utf8_encode($result['ruta'])."</th>
+              <th class='text-xs'>".utf8_encode($result['secuencia'])."</th>
+              <th class='text-xs'>".utf8_encode($result['manzana'])."</th>
+              <th class='text-xs'>".utf8_encode($result['lote'])."</th>
+              <th class='text-xs'>".utf8_encode($result['entre_calle_1'])."</th>
+              <th class='text-xs'>".utf8_encode($result['entre_calle_2'])."</th>
+              <th class='text-xs'>".utf8_encode($result['Referencia'])."</th>
+              <th class='text-xs'>".utf8_encode($result['razon_social'])."</th>
+              <th class='text-xs'>".utf8_encode($result['calle_notificacion'])."</th>
+              <th class='text-xs'>".utf8_encode($result['num_ext_notificacion'])."</th>
+              <th class='text-xs'>".utf8_encode($result['colonia_notificacion'])."</th>
+              <th class='text-xs'>".utf8_encode($result['cp_notificacion'])."</th>
+              <th class='text-xs'>".utf8_encode($result['poblacion_notificacion'])."</th>
+              <th class='text-xs'>".utf8_encode($result['pagos'])."</th>
+              <th class='text-xs'>".utf8_encode($result['total_pagado'])."</th>
+              <th class='text-xs'>".utf8_encode($result['sepomex'])."</th>
+              <th class='text-xs'>".utf8_encode($result['gestor_asignado'])."</th>
+              <th class='text-xs'>".utf8_encode($result['tarea_asignada_gestor'])."</th>
+              <th class='text-xs'>".utf8_encode($result['gestionada_gestor'])."</th>
+              <th class='text-xs'>".utf8_encode($result['ultimo_gestor_gestion'])."</th>
+              <th class='text-xs'>".utf8_encode($result['ultima_tarea_gestor'])."</th>
+              <th class='text-xs'>".utf8_encode($result['observaciones_gestor'])."</th>
+              <th class='text-xs'>".utf8_encode($result['fecha_captura_gestor']->format('d/m/Y'))."</th>
+              <th class='text-xs'>".utf8_encode($result['activa_gestor'])."</th>
+              <th class='text-xs'>".utf8_encode($result['abogado_asignado'])."</th>
+              <th class='text-xs'>".utf8_encode($result['tarea_asignada_abogado'])."</th>
+              <th class='text-xs'>".utf8_encode($result['gestionada_abogado'])."</th>
+              <th class='text-xs'>".utf8_encode($result['ultimo_abogado_gestion'])."</th>
+              <th class='text-xs'>".utf8_encode($result['ultima_tarea_abogado'])."</th>
+              <th class='text-xs'>".utf8_encode($result['observaciones_abogado'])."</th>
+              <th class='text-xs'>".utf8_encode($result['fecha_captura_abogado']->format('d/m/Y'))."</th>
+              <th class='text-xs'>".utf8_encode($result['activa_abogado'])."</th>
+              <th class='text-xs'>".utf8_encode($result['call_center_asignado'])."</th>
+              <th class='text-xs'>".utf8_encode($result['tarea_asignada_call_center'])."</th>
+              <th class='text-xs'>".utf8_encode($result['gestionada_call_center'])."</th>
+              <th class='text-xs'>".utf8_encode($result['ultimo_call_center_gestion'])."</th>
+              <th class='text-xs'>".utf8_encode($result['ultima_tarea_call_center'])."</th>
+              <th class='text-xs'>".utf8_encode($result['activa_call_center'])."</th>
+              <th class='text-xs'>".utf8_encode($result['telefono_local'])."</th>
+              <th class='text-xs'>".utf8_encode($result['telefono_celular'])."</th>
+              <th class='text-xs'>".utf8_encode($result['telefono_radio'])."</th>
+              <th class='text-xs'>".utf8_encode($result['telefono_local_usuario'])."</th>
+              <th class='text-xs'>".utf8_encode($result['telefono_celular_usuario'])."</th>
+              <th class='text-xs'>".utf8_encode($result['telefono_radio_usuario'])."</th>
+              <th class='text-xs'>".utf8_encode($result['reductores_asignado'])."</th>
+              <th class='text-xs'>".utf8_encode($result['tarea_asignada_reductores'])."</th>
+              <th class='text-xs'>".utf8_encode($result['gestionada_reductores'])."</th>
+              <th class='text-xs'>".utf8_encode($result['ultimo_reductor_gestion'])."</th>
+              <th class='text-xs'>".utf8_encode($result['ultima_tarea_reductores'])."</th>
+              <th class='text-xs'>".utf8_encode($result['activa_reductores'])."</th>
+              <th class='text-xs'>".utf8_encode($result['ultimo_carta_invitacion_gestion'])."</th>
+              <th class='text-xs'>".utf8_encode($result['ultima_tarea_carta_invitacion'])."</th>
+              <th class='text-xs'>".utf8_encode($result['ultimo_sepomex_gestion'])."</th>
+              <th class='text-xs'>".utf8_encode($result['ultima_tarea_sepomex'])."</th>
+              <th class='text-xs'>".utf8_encode($result['ultimo_pregrabada_gestion'])."</th>
+              <th class='text-xs'>".utf8_encode($result['ultima_tarea_pregrabada'])."</th>
+              <th class='text-xs'>".utf8_encode($result['ultimo_inspeccion_gestion'])."</th>
+              <th class='text-xs'>".utf8_encode($result['ultima_tarea_inspeccion'])."</th>
+              <th class='text-xs'>".utf8_encode($result['sup_terreno_h'])."</th>
+              <th class='text-xs'>".utf8_encode($result['sup_construccion_h'])."</th>
+              <th class='text-xs'>".utf8_encode($result['valor_terreno_h'])."</th>
+              <th class='text-xs'>".utf8_encode($result['valor_construccion_h'])."</th>
+              <th class='text-xs'>".utf8_encode($result['valor_catastral_h'])."</th>
+              <th class='text-xs'>".utf8_encode($result['sup_terreno_valuado'])."</th>
+              <th class='text-xs'>".utf8_encode($result['sup_construccion_valuado'])."</th>
+              <th class='text-xs'>".utf8_encode($result['valor_terreno_valuado'])."</th>
+              <th class='text-xs'>".utf8_encode($result['valor_construccion_valuado'])."</th>
+              <th class='text-xs'>".utf8_encode($result['valor_catastral_valuado'])."</th>
+              <th class='text-xs'>".utf8_encode($result['casilla'])."</th>
+            </tr>";
+        }
+        echo " </tbody>
+        </table>";
+        
     }
 }
