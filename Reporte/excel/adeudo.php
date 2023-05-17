@@ -1,26 +1,23 @@
 <?php
 
 $BD = $_GET['base'];
-$fechaI = $_GET['fecha_inicial'];
-$fechaF = $_GET['fecha_final'];
+$fecha = $_GET['fecha'];
 
-require '../modules/pregrabadas.php';
+require '../modules/reporteAdeudo.php';
+ini_set('max_execution_time', 0);
 header('Cache-Control: max-age=60, must-revalidate');
 header("Pragma: public");
 header("Expires: 0");
 header("Content-type: application/x-msdownload");
-header("Content-Disposition: attachment; filename=pregrabadas.xls");
+header("Content-Disposition: attachment; filename=adeudo.xls");
 header("Pragma: no-cache");
 ?>
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
     <style>
         th,
         td {
@@ -41,22 +38,11 @@ header("Pragma: no-cache");
 
 <body>
     <?php
-     //Se condiciona si se recib la pagina 
-     if (isset($_GET['page'])) {
-        $pagina = $_GET['page'];
-        sp_ReportePregrabadasExcelPaginado(
-            $fechaI,
-            $fechaF,
-            $BD,
-            $pagina
-        );
-    } else {
-        storePregrabadas(
-            $BD,
-            $fechaI,
-            $fechaF
-        );
-    }
+    //Se condiciona si se recib la pagina 
+    sp_storeReporteAdeudo(
+        $BD,
+        $fecha,
+    );
     ?>
 </body>
 

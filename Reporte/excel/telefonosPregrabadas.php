@@ -3,13 +3,14 @@
 $BD = $_GET['base'];
 $fechaI = $_GET['fecha_inicial'];
 $fechaF = $_GET['fecha_final'];
+$tipo = $_GET['tipoTelefonosPregrabadas'];
 
-require '../modules/pregrabadas.php';
+require '../modules/TelefonosPregrabadas.php';
 header('Cache-Control: max-age=60, must-revalidate');
 header("Pragma: public");
 header("Expires: 0");
 header("Content-type: application/x-msdownload");
-header("Content-Disposition: attachment; filename=pregrabadas.xls");
+header("Content-Disposition: attachment; filename=telefonospregrabadas.xls");
 header("Pragma: no-cache");
 ?>
 
@@ -41,22 +42,10 @@ header("Pragma: no-cache");
 
 <body>
     <?php
-     //Se condiciona si se recib la pagina 
-     if (isset($_GET['page'])) {
-        $pagina = $_GET['page'];
-        sp_ReportePregrabadasExcelPaginado(
-            $fechaI,
-            $fechaF,
-            $BD,
-            $pagina
-        );
-    } else {
-        storePregrabadas(
-            $BD,
-            $fechaI,
-            $fechaF
-        );
-    }
+    sp_TelefonosPregrabadasExcel(
+        $BD,
+        $tipo
+    )
     ?>
 </body>
 
