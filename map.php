@@ -56,6 +56,14 @@ if (isset($_SESSION['user'])) {
       header('location:vencidas.php?id_plaza_servicioWeb=' . $datos['id_plaza_servicioWeb'] . '&nombre_plz=' . $datos['nombreplaza']);
     }
   }
+
+  // consultar los meses que mexicali agua puede descargar su reporte de llamadas
+  $cnx_mexicaliA = conexion('implementtaMexicaliA');
+  $sql_datos = "SELECT plaza.nombreplaza,proveniente.data,proveniente.id_plaza_servicioWeb FROM plaza
+  inner join proveniente on plaza.id_proveniente=proveniente.id_proveniente
+  where plaza.id_plaza='$id_plaza'";
+  $cnx_datos = sqlsrv_query($cnx, $sql_datos);
+  $datos = sqlsrv_fetch_array($cnx_datos);
 ?>
   <html lang="en">
 
@@ -186,6 +194,14 @@ if (isset($_SESSION['user'])) {
                       <a target="_blank" class="btn nav-link btn-sm list-group-item list-group-item-action list-group-item-light p-1" href="Reporte/reporte.php?plz=<?php echo $plz ?>"><i class="fa  fa-book fa-fw"></i> Reportes</a>
                     </div>
                   <?php  } ?>
+                  <!-- descargar llamadas mexicaliA -->
+                  <?php if ($plz == 34) { ?>
+                   <div class="card-body">
+                    
+                      <a target="_blank" class="btn nav-link btn-sm list-group-item list-group-item-action list-group-item-light p-1" data-toggle="modal" data-target="#modal-llamadas" href="#"><i class="fa fa-download"></i> Duración de llamadas</a>
+                   
+                  </div>
+                   <?php  } ?>
                 </div>
               </div>
             </div>
@@ -274,6 +290,58 @@ if (isset($_SESSION['user'])) {
           </form>
         </div>
       </div>
+       <!-- modal subir excel llamadas mexicali -->
+       <div id="modal-llamadas" class="modal" tabindex="-1" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog">
+                <form action="./llamadas/store_monitoreo.php" method="POST" onsubmit="javascript:loadInfo_llamadas();" autocomplete="off" enctype="multipart/form-data">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5>Cargar Excel duración de llamadas</h5>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="formFileSm" class="form-label">Reporte Monitoreo</label>
+                                <input class="form-control form-control-sm" name="Rmonitoreo" id="Rmonitoreo" type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="formFileSm" class="form-label">Monitoreo Isabel</label>
+                                <input class="form-control form-control-sm" name="monitoreoI" id="monitoreoI" type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" required>
+                            </div>
+                            <div class="row">
+                                <div class="row align-items-start form-row">
+                                    <div class="col-md-6">
+                                        <label for="cuenta" class="form-label mb-2">Mes a subir:*</label>
+                                        <select class="form-select form-select-sm" name="mes" aria-label=".form-select-sm example" required>
+                                            <option selected value=0>-- selecciona una opción --</option>
+                                            <option value=1>Enero</option>
+                                            <option value=2>Febrero</option>
+                                            <option value=3>Marzo</option>
+                                            <option value=4>Abril</option>
+                                            <option value=5>Mayo</option>
+                                            <option value=6>Junio</option>
+                                            <option value=7>Julio</option>
+                                            <option value=8>Agosto</option>
+                                            <option value=9>Septiembre</option>
+                                            <option value=10>Octubre</option>
+                                            <option value=11>Noviembre</option>
+                                            <option value=12>Diciembre</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="cuenta" class="form-label mb-2">Anio:*</label>
+                                        <input type="number" value="<?php echo date('Y') ?>" class="form-control form-control-sm" name="anio">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary btn-sm">Subir Archivo</button>
+                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
