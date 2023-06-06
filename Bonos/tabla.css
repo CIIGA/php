@@ -1,0 +1,24 @@
+
+th {
+  font-weight: normal;
+  font-size: 12px;
+}
+
+td {
+  min-width: 50px;
+  max-width: 100px;
+  font-weight: normal;
+  font-size: 12px;
+}
+.div-tabla {
+  overflow: scroll;
+  max-height: 800px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.div-tabla table {
+  width: 100%;
+  margin-left: 0%;
+  margin-right: 0%;
+}
