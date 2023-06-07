@@ -6,20 +6,31 @@ if (isset($_GET['plaza']) && isset($_GET['anio']) && isset($_GET['mes']) && isse
     $anio = $_GET['anio'];
     $mes = $_GET['mes'];
     $plaza = $_GET['plaza'];
+    $meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Nobiembre", "Diciembre"];
+    $nombre = 'ReporteBono_' . $plaza . '_' . $meses[$mes - 1] . '_' . $anio;
 
-    // '<script type="text/javascript">window.open("PDFDeterminacion/' . $id[0]->id . '")</script>';
-    // echo `<script type="text/javascript">window.open("Bonos/pdfBonos.php?plz=$id&base=$BD&plaza=$plaza&anio=$anio&mes=$mes)</script>`;
-    ?>
+?>
     <script>
-        window.open("pdfBonos.php?plz=<?php echo $id?>&base=<?php echo $BD?>&plaza=<?php echo $plaza?>&anio=<?php echo $anio?>&mes=<?php echo $mes ?>");
-        setTimeout(()=>{
-            window.open("excelBonos.php?plz=<?php echo $id?>&base=<?php echo $BD?>&plaza=<?php echo $plaza?>&anio=<?php echo $anio?>&mes=<?php echo $mes ?>");
+        window.open("pdfBonos.php?plz=<?php echo $id ?>&base=<?php echo $BD ?>&plaza=<?php echo $plaza ?>&anio=<?php echo $anio ?>&mes=<?php echo $mes ?>&nombre=<?php echo $nombre ?>");
+
+        setTimeout(() => {
+            window.open("excelBonos.php?plz=<?php echo $id ?>&base=<?php echo $BD ?>&plaza=<?php echo $plaza ?>&anio=<?php echo $anio ?>&mes=<?php echo $mes ?>&nombre=<?php echo $nombre ?>");
         }, 1000);
-
     </script>
-    <?php
-    // echo `<script type="text/javascript">window.open("Bonos/excelBonos.php?plz=$id&base=$BD&plaza=$plaza&anio=$anio&mes=$mes)</script>`;
-
-    // echo `<script type="text/javascript">window.open("Bonos/excelBonos.php?plz="+ingreso1+"&base="+ingreso2+"&plaza="+ingreso3+"&anio="+ingreso4+"&mes="+ingreso5)</script>`;
-    // echo header(`Location: pdfBonos.php?plz=$id&base=$BD&plaza=$plaza&anio=$anio&mes=$mes`);
+<?php
 }
+
+$zip = new ZipArchive();
+$zipname = $nombre . '.zip';
+if($zip->open($zipname, ZipArchive::CREATE)==true){
+    $zip->addFile($nombre.'.pdf');
+    $zip->addFile($nombre.'.xlsx');
+    $zip->close();
+    echo 'Se creo el archivo';
+}else{
+    echo "error al generar el .zip";
+}
+header('Content-Type: application/zip');
+header('Content-disposition: attachment; filename='.$zipname);
+// unlink($nombre.'.pdf');
+// unlink($nombre.'.xlsx');

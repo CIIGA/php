@@ -7,8 +7,8 @@ $BD = $_GET['base'];
 $mes = $_GET['mes'];
 $plaza = $_GET['plaza'];
 $plz = $_GET['plz'];
+$nombre = $_GET['nombre'];
 $meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Nobiembre", "Diciembre"];
-
 //Funcion para generar conexiones dinamicas
 function conexion($BD)
 {
@@ -24,7 +24,8 @@ function conexion($BD)
     }
 }
 
-function recaudado($BD, $anio, $mes){
+function recaudado($BD, $anio, $mes)
+{
     $cnx = conexion($BD);
     $sql = "sp_bono_gestor_monto $anio, $mes";
     $exec = sqlsrv_query($cnx,  $sql);
@@ -108,7 +109,7 @@ function recaudado($BD, $anio, $mes){
                 </td>
                 <td>
                     Recaudado : $<?php $recaudado = recaudado($BD, $anio, $mes);
-                                    echo number_format($recaudado,2); ?>
+                                    echo number_format($recaudado, 2); ?>
                 </td>
             </tr>
         </table>
@@ -166,9 +167,6 @@ function recaudado($BD, $anio, $mes){
 <?php
 //guardar tod0 el buher en una variable
 $html = ob_get_clean();
-
-//requerir dompdf
-// require_once '../../include/dompdf/autoload.inc.php';
 require_once "dompdf/autoload.inc.php";
 
 use Dompdf\Dompdf;
@@ -184,7 +182,13 @@ $dompdf->loadHtml($html);
 // horizontal
 $dompdf->setPaper('letter', 'landscape');
 $dompdf->render();
+$nombreFile = $nombre.'.pdf';
 // true para que habra el pdf
 // false para que se descargue
-$dompdf->stream("determinacion.pdf", array("Attachment" => false));
+// $dompdf->stream("determinacion.pdf", array("Attachment" => false));
+// $rutaGuardado = url($nombreFile);
+$output = $dompdf->output();
+
+file_put_contents("C:/wamp64/www/kpis/kpiestrategas/php/Bonos/".$nombreFile, $output);
 ?>
+<script languaje='javascript' type='text/javascript'>window.close();</script>
