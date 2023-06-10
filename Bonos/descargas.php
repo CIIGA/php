@@ -19,18 +19,29 @@ if (isset($_GET['plaza']) && isset($_GET['anio']) && isset($_GET['mes']) && isse
     </script>
 <?php
 }
+// if (file_exists($nombre . '.pdf') && file_exists($nombre . '.xlsx')) {
+    do {
+        echo 'Si entro';
+        $zip = new ZipArchive();
+        $zipname = $nombre . '.zip';
+        if ($zip->open($zipname, ZipArchive::CREATE) == true) {
+            $zip->addFile($nombre . '.pdf');
+            $zip->addFile($nombre . '.xlsx');
+            $zip->close();
+            echo 'Creando archivo...';
+        } else {
+            echo "error al generar el .zip";
+        }
+    } while (!file_exists($nombre . '.zip'));
+// }
 
-$zip = new ZipArchive();
-$zipname = $nombre . '.zip';
-if($zip->open($zipname, ZipArchive::CREATE)==true){
-    $zip->addFile($nombre.'.pdf');
-    $zip->addFile($nombre.'.xlsx');
-    $zip->close();
-    echo 'Se creo el archivo';
-}else{
-    echo "error al generar el .zip";
-}
-header('Content-Type: application/zip');
-header('Content-disposition: attachment; filename='.$zipname);
-// unlink($nombre.'.pdf');
-// unlink($nombre.'.xlsx');
+?>
+
+<?php if (file_exists($nombre . '.zip')){?>
+<script>
+    window.onload = function() {
+        let nameFile = '<?php echo $nombre . '.zip' ?>';
+        window.open(nameFile);
+    }
+</script>
+<?php }?>
