@@ -25,7 +25,7 @@
       <div class="sidebar-content">
         <div class="sidebar-brand">
           <!-- <a href="">Stratimex</a> -->
-          <img class="logo" width="150px" height="50px" src="icons/startimex_logo_Sombra.png" />
+          <img class="logo" width="210px" height="55px" src="icons/startimex_logo_Sombra.png" />
           <div id="close-sidebar">
             <i class="fas fa-times"></i>
           </div>
@@ -34,9 +34,9 @@
         <div class="sidebar-menu">
           <ul>
             <li class="header-menu">
-              <span>Datos del propietario</span>
-              <span class="data-propietario">Cuenta: 101-20-535-13-00-0000</span>
-              <span class="data-propietario">Propietario: RUIZ ESTRADA ZOYLA</span>
+              <span style="font-weight:normal;">Datos del propietario</span>
+              <span class="data-propietario" style="font-weight:normal;">Cuenta: 101-20-535-13-00-0000</span>
+              <span class="data-propietario" style="font-weight:normal;">Propietario: RUIZ ESTRADA ZOYLA</span>
             </li>
             <hr />
             <li>
@@ -101,7 +101,8 @@
     <div class="page-content">
       <div class="container-fluid">
         <div class="embed-responsive embed-responsive-16by9">
-          <iframe src="https://panoraven.com/es/embed/eqkA9Tqhkt" style="border: 0" allowfullscreen="" loading="lazy"></iframe>
+          <iframe src="https://panoraven.com/es/embed/FClMDHHFgb" style="border: 0" allowfullscreen="" loading="lazy"></iframe>
+<!--            <iframe width="90%" height="500px" allowFullScreen="true" allow="accelerometer; magnetometer; gyroscope" style="display:block; margin:20px auto; border:0 none; max-width:880px;border-radius:8px; box-shadow: 0 1px 1px rgba(0,0,0,0.11),0 2px 2px rgba(0,0,0,0.11),0 4px 4px rgba(0,0,0,0.11),0 6px 8px rgba(0,0,0,0.11),0 8px 16px rgba(0,0,0,0.11);" src="https://panoraven.com/es/embed/FClMDHHFgb"></iframe>-->
         </div>
       </div>
     </div>
@@ -119,9 +120,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body" id="map_canvas" >
-
-        </div>
+        <div class="modal-body" id="map_canvas" ></div>
       </div>
     </div>
   </div>
