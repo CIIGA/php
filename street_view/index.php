@@ -12,10 +12,7 @@
   <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css" />
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-
 </head>
-
 <body>
   <div class="page-wrapper chiller-theme toggled d-flex" id="wrapper">
     <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
@@ -109,7 +106,6 @@
     <!-- page-content" -->
   </div>
   <!-- page-wrapper -->
-
   <!-- Modal  Google Maps-->
   <div class="modal fade" id="googleModal" tabindex="-1" role="dialog" aria-labelledby="googleModal" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document" style="width: 100%; height: 100%">
@@ -132,8 +128,6 @@
   <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
   <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAcF4oi3SweowzVYo29ifjqXJsl1eE7C8M"></script>
   <script src="googleMap.js"></script>
-
   <!-- CDn de google maps -->
 </body>
-
 </html>
