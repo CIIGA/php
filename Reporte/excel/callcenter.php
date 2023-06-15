@@ -3,13 +3,13 @@
 $BD = $_GET['base'];
 $fechaI = $_GET['fecha_inicial'];
 $fechaF = $_GET['fecha_final'];
-
+$nombre='Callcenter_'.$BD.'_'.$fechaI.'_'.$fechaF;
 require '../modules/callCenter.php';
 header('Cache-Control: max-age=60, must-revalidate');
 header("Pragma: public");
 header("Expires: 0");
 header("Content-type: application/x-msdownload");
-header("Content-Disposition: attachment; filename=callcenter.xls");
+header("Content-Disposition: attachment; filename=$nombre.xls");
 header("Pragma: no-cache");
 ?>
 <!DOCTYPE html>
