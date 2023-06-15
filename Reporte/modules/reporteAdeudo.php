@@ -246,7 +246,7 @@ function sp_storeReporteAdeudo(
 			   <td class='text-sm'>".utf8_encode($result['Fomento'])."</td>
 			   <td class='text-sm'>".utf8_encode($result['Actualizacion'])."</td>
 			   <td class='text-sm'>".utf8_encode($result['Recargos'])."</td>
-			   <td class='text-sm'>".utf8_encode($result['FechaUltimoPago']->format('d/m/Y'))."</td>
+			   <td class='text-sm'>".utf8_encode($result['FechaUltimoPago'])."</td>
 			   <td class='text-sm'>".utf8_encode($result['FechaActualizacion']->format('d/m/Y'))."</td>
 			   <td class='text-sm'>".utf8_encode($result['FechaCorte']->format('d/m/Y'))."</td>
 			   <td class='text-sm'>".utf8_encode($result['ult_trimestre_pago'])."</td>

@@ -7,6 +7,14 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
     $plaza = plaza($id_plaza);
     $meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Nobiembre", "Diciembre"];
 
+    //Conexion para buscar las plazas disponibles 
+    $serverName = "51.222.44.135";
+    $connectionInfo = array('Database' => 'kpis', 'UID' => 'sa', 'PWD' => 'vrSxHH3TdC');
+    $cnr = sqlsrv_connect($serverName, $connectionInfo);
+    date_default_timezone_set('America/Mexico_City');
+    $sql = "select id_plaza,nombreplaza, estado FROM plaza where estado = 1";
+    $exec = sqlsrv_query($cnr, $sql);
+    $existsPlaza = sqlsrv_fetch_array($exec);
 ?>
     <!DOCTYPE html>
     <html>
@@ -25,6 +33,7 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
         <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <script src="Bonos/mesAjax.js"></script>
+        <script src="Bonos/anioAjax.js"></script>
         <?php require "include/nav.php"; ?>
     </head>
 
@@ -37,11 +46,21 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
                     <div class="mx-auto">
                         <input type="text" class="form-control" hidden id="id_plaza" value="<?php echo $id_plaza; ?>" name="plz" hidden>
                         <input type="text" class="form-control" hidden id="base" value="<?php echo $plaza['base']; ?>" name="base">
+                        <?php if ((isset($_SESSION['tipousuario']))) { ?>
+                            <div class="input-group mb-3">
+                                <select class='custom-select' id='existPlaza' name='existPlaza' required>
+                                    <option> Seleccione la plaza</option>
+                                    <?php do { ?>
+                                        <option value="<?php echo $existsPlaza['id_plaza'] ?>"><?php echo $existsPlaza['nombreplaza'] ?> </option>
+                                    <?php }while (($existsPlaza = sqlsrv_fetch_array($exec)));  ?>
+                                </select>
+                            </div>
+                            <?php }?>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <label class="input-group-text" for="inputGroupSelect01">Plaza</label>
                             </div>
-                            <input type="text" class="form-control" id="plaza" value="<?php echo $plaza['plaza']; ?>" name="plaza" readonly>
+                           <input type="text" class="form-control" id="plaza" value="<?php echo $plaza['plaza']; ?>" name="plaza" readonly>
                         </div>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
@@ -123,8 +142,8 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
                         </div>
                         <div class="col-md-6">
                             <h5>
-                            Recaudado: $<?php $recaudado=recaudado($BD, $anio, $mes); 
-                            echo number_format($recaudado,2);?>
+                                Recaudado: $<?php $recaudado = recaudado($BD, $anio, $mes);
+                                            echo number_format($recaudado, 2); ?>
                             </h5>
                         </div>
                     </div>

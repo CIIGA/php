@@ -1,7 +1,13 @@
 <?php
+
 //inicializamos el bufer para despues guardarlo en una variable
 ob_start();
 ini_set('max_execution_time', 0);
+require 'PhpSpreadsheet/vendor/autoload.php';
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 $anio = $_GET['anio'];
 $BD = $_GET['base'];
 $mes = $_GET['mes'];
@@ -34,14 +40,13 @@ function recaudado($BD, $anio, $mes)
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Determinación</title>
-    <!-- <link href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/deterTolucaA/public/estilos/pdf.css" rel="stylesheet"> -->
+    <title><?php echo $nombre ?></title>
 
 </head>
 <style>
@@ -182,13 +187,121 @@ $dompdf->loadHtml($html);
 // horizontal
 $dompdf->setPaper('letter', 'landscape');
 $dompdf->render();
-$nombreFile = $nombre.'.pdf';
+$nombreFile = $nombre . '.pdf';
 // true para que habra el pdf
 // false para que se descargue
 // $dompdf->stream("determinacion.pdf", array("Attachment" => false));
 // $rutaGuardado = url($nombreFile);
 $output = $dompdf->output();
 
-file_put_contents("C:/wamp64/www/kpis/kpiestrategas/php/Bonos/".$nombreFile, $output);
+file_put_contents("C:/wamp64/www/kpis/kpiestrategas/php/Bonos/" . $nombreFile, $output);
+
+
+
+$spreadsheet = new Spreadsheet();
+$spreadsheet->removeSheetByIndex(0);
+$hoja1 = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, "Resumen");
+$hoja2 = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, "Detallado");
+$spreadsheet->addSheet($hoja1, 0);
+$spreadsheet->addSheet($hoja2, 1);
+$spreadsheet->getDefaultStyle()->getFont()->setName('Arial');
+$spreadsheet->getDefaultStyle()->getFont()->setSize(12);
+// Definir los estilos de la tabla
+$tableStyle = [
+    'borders' => [
+        'allBorders' => [
+            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+        ],
+    ],
+];
+
+$hoja1->setCellValue("A1", 'Gestor')
+    ->setCellValue("B1", "Ingreso recaudado")
+    ->setCellValue("C1", "Puesto")
+    ->setCellValue("D1", "Numero de pagos")
+    ->setCellValue("E1", "Bono 0.6%")
+    ->setCellValue("F1", "Gestiones promedio")
+    ->setCellValue("G1", "Embargos")
+    ->setCellValue("H1", "Mes calculado")
+    ->setCellValue("I1", "Año calculado")
+    ->setCellValue("J1", "Sube 0.8")
+    ->setCellValue("K1", "Bono adicional 0.8%")
+    ->setCellValue("L1", "Bono efectivo");
+//Color de los tiutlos 
+$hoja1->getStyle('A1:L1')->applyFromArray(['fill' => ['fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID, 'startColor' => ['rgb' => 'EFEFEF']]]); // Color de fondo
+$cnx = conexion($BD);
+$sql = "sp_bono_gestor $anio , $mes";
+$exec = sqlsrv_query($cnx,  $sql);
+$i = 2;
+while ($result = sqlsrv_fetch_array($exec)) {
+    $hoja1->setCellValue("A{$i}", utf8_encode($result['gestor']))
+        ->setCellValue("B{$i}", utf8_encode($result['ingreso_recaudado']))
+        ->setCellValue("C{$i}", utf8_encode($result['puesto']))
+        ->setCellValue("D{$i}", utf8_encode($result['numero_de_pagos']))
+        ->setCellValue("E{$i}", utf8_encode($result['bono_1%']))
+        ->setCellValue("F{$i}", utf8_encode($result['gestiones_promedio']))
+        ->setCellValue("G{$i}", utf8_encode($result['embargos']))
+        ->setCellValue("H{$i}", utf8_encode($result['mes_calculado']))
+        ->setCellValue("I{$i}", utf8_encode($result[8]))
+        ->setCellValue("J{$i}", utf8_encode($result['sube_20%']))
+        ->setCellValue("K{$i}", utf8_encode($result['bono_adicional_20%']))
+        ->setCellValue("L{$i}", utf8_encode($result['bono_efectivo']));
+    $hoja1->getStyle("A{$i}:L{$i}")->applyFromArray($tableStyle);
+    foreach ($hoja1->getColumnIterator() as $column) {
+        $hoja1->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
+    }
+    $i++;
+}
+if ($result = sqlsrv_next_result($exec)) {
+    $hoja2->setCellValue("A1", 'Cuenta')
+        ->setCellValue("B1", "Nombre")
+        ->setCellValue("C1", "Fecha captura")
+        ->setCellValue("D1", "Puesto")
+        ->setCellValue("E1", "Fecha pago")
+        ->setCellValue("F1", "Monto pagado")
+        ->setCellValue("G1", "Monto bono 0.6%");
+    //Color de los tiutlos 
+    $hoja2->getStyle('A1:G1')->applyFromArray(['fill' => ['fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID, 'startColor' => ['rgb' => 'EFEFEF']]]); // Color de fondo
+
+    $j = 2;
+    while ($result = sqlsrv_fetch_array($exec)) {
+        $hoja2->setCellValue("A{$j}", utf8_encode($result['cuenta']))
+            ->setCellValue("B{$j}", utf8_encode($result['nombre']))
+            ->setCellValue("C{$j}", utf8_encode($result['fecha_captura']->format('d/m/Y')))
+            ->setCellValue("D{$j}", utf8_encode($result['puesto']))
+            ->setCellValue("E{$j}",    utf8_encode($result['fecha_pago']->format('d/m/Y')))
+            ->setCellValue("F{$j}",   utf8_encode($result['monto_pagado']))
+            ->setCellValue("G{$j}",   utf8_encode($result['monto_bono1%']));
+        $hoja2->getStyle("A{$j}:G{$j}")->applyFromArray($tableStyle);
+        foreach ($hoja2->getColumnIterator() as $column) {
+            $hoja2->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
+        }
+        $j++;
+    }
+}
+$writer = new Xlsx($spreadsheet);
+$nombreFile = $nombre . '.xlsx';
+$writer->save($nombreFile);
+
+
+
+$zip = new ZipArchive();
+$zipname = $nombre . '.zip';
+if ($zip->open($zipname, ZipArchive::CREATE) == true) {
+    $zip->addFile($nombre . '.pdf');
+    $zip->addFile($nombre . '.xlsx');
+    $zip->close();
+    echo 'Creando archivo...';
+} else {
+    echo "error al generar el .zip";
+}
+header('Content-Type: application/zip');
+header('Content-Disposition: attachment; filename="' . $zipname . '"');
+readfile($zipname);
+unlink($nombre . '.pdf');
+unlink($nombre . '.xlsx');
+unlink($nombre . '.zip');
 ?>
-<script languaje='javascript' type='text/javascript'>window.close();</script>
+<script languaje='javascript' type='text/javascript'>
+    window.close();
+</script>
