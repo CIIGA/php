@@ -194,7 +194,7 @@ $nombreFile = $nombre . '.pdf';
 // $rutaGuardado = url($nombreFile);
 $output = $dompdf->output();
 
-file_put_contents("C:/wamp64/www/kpis/kpiestrategas/php/Bonos/" . $nombreFile, $output);
+file_put_contents("D:/Plesk/Vhosts/gallant-driscoll.198-71-62-113.plesk.page/httpdocs/kpis/kpiestrategas/php/Bonos/" . $nombreFile, $output);
 
 
 
