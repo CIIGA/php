@@ -56,6 +56,13 @@ if (isset($_SESSION['user'])) {
       header('location:vencidas.php?id_plaza_servicioWeb=' . $datos['id_plaza_servicioWeb'] . '&nombre_plz=' . $datos['nombreplaza']);
     }
   }
+
+  // consultar los meses que mexicali agua puede descargar su reporte de llamadas
+  $cnx_mexicaliA = conexion('implementtaMexicaliA');
+  $sql_datos_duracion = "select distinct(Anio) as Anio from Duracionllamadas";
+  $cnx_datos_duracion = sqlsrv_query($cnx_mexicaliA, $sql_datos_duracion);
+
+
 ?>
   <html lang="en">
 
@@ -186,6 +193,14 @@ if (isset($_SESSION['user'])) {
                       <a target="_blank" class="btn nav-link btn-sm list-group-item list-group-item-action list-group-item-light p-1" href="Reporte/reporte.php?plz=<?php echo $plz ?>"><i class="fa  fa-book fa-fw"></i> Reportes</a>
                     </div>
                   <?php  } ?>
+                  <!-- descargar llamadas mexicaliA -->
+                  <?php if ($plz == 34) { ?>
+                    <div class="card-body">
+
+                      <a target="_blank" class="btn nav-link btn-sm list-group-item list-group-item-action list-group-item-light p-1" data-toggle="modal" data-target="#modal-llamadas" href="#"><i class="fa fa-download"></i> Duración de llamadas</a>
+
+                    </div>
+                  <?php  } ?>
                 </div>
               </div>
             </div>
@@ -274,6 +289,45 @@ if (isset($_SESSION['user'])) {
           </form>
         </div>
       </div>
+      <!-- modal descargar excel llamadas mexicali -->
+      <div id="modal-llamadas" class="modal" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+          <form action="./llamadas_MexicaliA/excel_Llamadas.php" method="POST" onsubmit="javascript:loadInfo_llamadas();" autocomplete="off" enctype="multipart/form-data">
+            
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5>Duración de llamadas</h5>
+              </div>
+              <div class="modal-body">
+                <h5 class="card-title">Selecciona el año y el mes a descargar</h5>
+                <div class="row">
+                  <div class="row align-items-start form-row">
+                    <div class="col-md-6">
+                      <label for="cuenta" class="form-label mb-2">Año:*</label>
+                      <select id="lista_anio" class="form-select form-select-sm" name="lista_anio" aria-label=".form-select-sm example" required>
+                        <?php
+                        while ($datos_duracion = sqlsrv_fetch_array($cnx_datos_duracion)) {
+                          echo '<option value="' . $datos_duracion["Anio"] . '">' . $datos_duracion["Anio"] . '</option>';
+                        }
+                        ?>
+                      </select>
+                    </div>
+                    <div class="col-md-6">
+                      <div id="div_mes">
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
+                <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-download"></i> Descargar Reporte</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -283,6 +337,31 @@ if (isset($_SESSION['user'])) {
     <script src="../js/popper.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.fileDownload/1.4.2/jquery.fileDownload.min.js"></script>
+
+    <!-- inicio script para tener los mese4s de la duracion de llamadas -->
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $('#lista_anio').val(1);
+        recargarLista();
+
+        $('#lista_anio').change(function() {
+          recargarLista();
+        });
+      })
+    </script>
+    <script type="text/javascript">
+      function recargarLista() {
+        $.ajax({
+          type: "POST",
+          url: "llamadas_MexicaliA/meses.php",
+          data: "anioselect=" + $('#lista_anio').val(),
+          success: function(r) {
+            $('#div_mes').html(r);
+          }
+        });
+      }
+    </script>
+    <!-- fin del script para tener los mese4s de la duracion de llamadas -->
     <script>
       var loadInfo = function() {
         Swal.fire({
