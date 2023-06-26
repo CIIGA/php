@@ -6,6 +6,11 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
     left join proveniente on proveniente.id_proveniente=plaza.id_proveniente";
     $plz = sqlsrv_query($cnx, $pl);
     $plaza = sqlsrv_fetch_array($plz);
+    //Primera plaza
+    $query1 = "SELECT top(1) * FROM plaza
+    left join proveniente on proveniente.id_proveniente=plaza.id_proveniente where estado = 1 order by id_plaza asc";
+    $qexec = sqlsrv_query($cnx, $query1);
+    $fristPlaza = sqlsrv_fetch_array($qexec);
 
     $pro = "SELECT * FROM proveniente";
     $prov = sqlsrv_query($cnx, $pro);
@@ -149,8 +154,26 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
                 </div>
             </form>
             <hr>
-            <div style="text-align:left;">
-                <a href="origen.php" class="btn btn-dark btn-sm"><i class="fas fa-database"></i> Nuevo origen de datos</a>
+            <div class="row ">
+                <div class="col-md-10">
+                    <a href="origen.php" class="btn btn-dark btn-sm"><i class="fas fa-database"></i> Nuevo origen de datos</a>
+                </div>
+                <div class="col-md-2">
+                    <a href="bonos.php?plz=<?php echo $fristPlaza['id_plaza'] ?>" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Bonos de plaza">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash-coin" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M11 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm5-4a5 5 0 1 1-10 0 5 5 0 0 1 10 0z" />
+                            <path d="M9.438 11.944c.047.596.518 1.06 1.363 1.116v.44h.375v-.443c.875-.061 1.386-.529 1.386-1.207 0-.618-.39-.936-1.09-1.1l-.296-.07v-1.2c.376.043.614.248.671.532h.658c-.047-.575-.54-1.024-1.329-1.073V8.5h-.375v.45c-.747.073-1.255.522-1.255 1.158 0 .562.378.92 1.007 1.066l.248.061v1.272c-.384-.058-.639-.27-.696-.563h-.668zm1.36-1.354c-.369-.085-.569-.26-.569-.522 0-.294.216-.514.572-.578v1.1h-.003zm.432.746c.449.104.655.272.655.569 0 .339-.257.571-.709.614v-1.195l.054.012z" />
+                            <path d="M1 0a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4.083c.058-.344.145-.678.258-1H3a2 2 0 0 0-2-2V3a2 2 0 0 0 2-2h10a2 2 0 0 0 2 2v3.528c.38.34.717.728 1 1.154V1a1 1 0 0 0-1-1H1z" />
+                            <path d="M9.998 5.083 10 5a2 2 0 1 0-3.132 1.65 5.982 5.982 0 0 1 3.13-1.567z" />
+                        </svg>
+                    </a>
+                    <a href="Reporte/reporte.php?plz=<?php echo $fristPlaza['id_plaza'] ?>" class="btn btn-dark" data-toggle="tooltip" data-placement="top" title="Reportes de plaza">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-bar-graph" viewBox="0 0 16 16">
+                            <path d="M4.5 12a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-1zm3 0a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1zm3 0a.5.5 0 0 1-.5-.5v-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-.5.5h-1z" />
+                            <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z" />
+                        </svg>
+                    </a>
+                </div>
             </div>
             <hr>
             <h3 style="text-shadow: 1px 1px 2px #717171;"><i class="fas fa-wrench"></i> Editar plazas</h3>
@@ -184,20 +207,7 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
 
                                     <!-- Boton de reportes -->
                                     <?php if ($plaza['estado'] == 1) { ?>
-                                        <a href="bonos.php?plz=<?php echo $plaza['id_plaza'] ?>" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Bonos de plaza">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash-coin" viewBox="0 0 16 16">
-                                                <path fill-rule="evenodd" d="M11 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm5-4a5 5 0 1 1-10 0 5 5 0 0 1 10 0z" />
-                                                <path d="M9.438 11.944c.047.596.518 1.06 1.363 1.116v.44h.375v-.443c.875-.061 1.386-.529 1.386-1.207 0-.618-.39-.936-1.09-1.1l-.296-.07v-1.2c.376.043.614.248.671.532h.658c-.047-.575-.54-1.024-1.329-1.073V8.5h-.375v.45c-.747.073-1.255.522-1.255 1.158 0 .562.378.92 1.007 1.066l.248.061v1.272c-.384-.058-.639-.27-.696-.563h-.668zm1.36-1.354c-.369-.085-.569-.26-.569-.522 0-.294.216-.514.572-.578v1.1h-.003zm.432.746c.449.104.655.272.655.569 0 .339-.257.571-.709.614v-1.195l.054.012z" />
-                                                <path d="M1 0a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4.083c.058-.344.145-.678.258-1H3a2 2 0 0 0-2-2V3a2 2 0 0 0 2-2h10a2 2 0 0 0 2 2v3.528c.38.34.717.728 1 1.154V1a1 1 0 0 0-1-1H1z" />
-                                                <path d="M9.998 5.083 10 5a2 2 0 1 0-3.132 1.65 5.982 5.982 0 0 1 3.13-1.567z" />
-                                            </svg>
-                                        </a>
-                                        <a href="Reporte/reporte.php?plz=<?php echo $plaza['id_plaza'] ?>" class="btn btn-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Reportes de plaza">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-bar-graph" viewBox="0 0 16 16">
-                                                <path d="M4.5 12a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-1zm3 0a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1zm3 0a.5.5 0 0 1-.5-.5v-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-.5.5h-1z" />
-                                                <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z" />
-                                            </svg>
-                                        </a>
+
                                     <?php } ?>
                                     <!-- Fin boton de reportes -->
                                     <a href="urlMap.php?plz=<?php echo $plaza['id_plaza'] ?>" class="btn btn-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Agregar URL de mapa"><i class="fas fa-chart-line"></i> KPIs</a>
