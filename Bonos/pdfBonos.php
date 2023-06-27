@@ -295,6 +295,7 @@ if ($zip->open($zipname, ZipArchive::CREATE) == true) {
 } else {
     echo "error al generar el .zip";
 }
+header('Set-Cookie: fileDownload=true; path=/');
 header('Content-Type: application/zip');
 header('Content-Disposition: attachment; filename="' . $zipname . '"');
 readfile($zipname);
@@ -302,6 +303,6 @@ unlink($nombre . '.pdf');
 unlink($nombre . '.xlsx');
 unlink($nombre . '.zip');
 ?>
-<script languaje='javascript' type='text/javascript'>
+<!-- <script languaje='javascript' type='text/javascript'>
     window.close();
-</script>
+</script> -->

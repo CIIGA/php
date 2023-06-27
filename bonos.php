@@ -34,6 +34,9 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <script src="Bonos/mesAjax.js"></script>
         <script src="Bonos/anioAjax.js"></script>
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-material-ui/material-ui.css" id="theme-styles">
+
         <?php require "include/nav.php"; ?>
     </head>
 
@@ -42,7 +45,7 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
             <div class="col-md-4 mx-auto">
                 <h2 class="text-center"> Calculo de bonos</h2>
                 <!-- Se manda al mismo archivo y por el metodo get -->
-                <form action="" method="">
+                <form action="" method="" onsubmit="javascript:loadInfo();"> 
                     <div class="mx-auto">
                         <input type="text" class="form-control" hidden id="id_plaza" value="<?php echo $id_plaza; ?>" name="plz" hidden>
                         <input type="text" class="form-control" hidden id="base" value="<?php echo $plaza['base']; ?>" name="base">
@@ -103,7 +106,7 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
                                 </div>
                             </div>
                             <div class="col-md-5">
-                                <button type="button" class="btn btn-success btn-warning" onclick="reenvio()">
+                                <button type="button" class="btn btn-success btn-warning toDownload" >
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-down" viewBox="0 0 16 16">
                                         <path fill-rule="evenodd" d="M3.5 10a.5.5 0 0 1-.5-.5v-8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 0 0 1h2A1.5 1.5 0 0 0 14 9.5v-8A1.5 1.5 0 0 0 12.5 0h-9A1.5 1.5 0 0 0 2 1.5v8A1.5 1.5 0 0 0 3.5 11h2a.5.5 0 0 0 0-1h-2z" />
                                         <path fill-rule="evenodd" d="M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708l3 3z" />
@@ -159,6 +162,7 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
     <script src="../js/popper.min.js"></script>
     <script src="../js/bootstrap.js"></script>
     <script src="Bonos/reenvio.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.fileDownload/1.4.2/jquery.fileDownload.min.js"></script>
 <?php
 } else {
     header('location: logout.php');
