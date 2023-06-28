@@ -7,7 +7,7 @@
       var loadInfo = function() {
         Swal.fire({
           title: 'Obteniendo Datos',
-          html: 'Espere un momento porfavor...',
+          html: 'Espere un momento por favor...',
           timer: 0,
           timerProgressBar: true,
           allowEscapeKey: false,

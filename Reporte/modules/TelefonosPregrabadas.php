@@ -213,6 +213,8 @@ function sp_TelefonosPregrabadasExcel(
         echo " </tbody>
             </table>
         </div>";
+    }else{
+        echo "<h4 class='text-center mt-2'>No hay información</h4>";
     }
     } else if ($tipo == 0) {
         $cnn = conexionTelefonosPregrabadas($BD);
@@ -240,6 +242,8 @@ function sp_TelefonosPregrabadasExcel(
             echo " </tbody>
                 </table>
             </div>";
+        }else{
+            echo "<h4 class='text-center mt-2'>No hay información</h4>";
         }
     }
         

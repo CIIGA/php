@@ -159,6 +159,8 @@ function sp_PagosBrutos(
         }
         echo '</ul>';
         echo "</nav>";
+    }else{
+        echo "<h4 class='text-center mt-2'>No hay información</h4>";
     }
 }
 
@@ -295,5 +297,7 @@ order by datepart(month,fechaPago),
      }
      echo '</ul>';
      echo "</nav>";
- }
+ }else{
+    echo "<h4 class='text-center mt-2'>No hay información</h4>";
+}
 }

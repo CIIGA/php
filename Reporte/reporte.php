@@ -37,6 +37,8 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-material-ui/material-ui.css" id="theme-styles">
         <?php require "include/nav.php"; ?>
         <style>
             .text-xs {
@@ -72,7 +74,7 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
             <h2>Reporte</h2>
             <div class="row">
                 <!-- Se manda al mismo archivo y por el metodo get -->
-                <form action="" method="" class="row">
+                <form action="" method="" class="row" onsubmit="javascript:loadInfo();">
                     <div class="col-md-6">
                         <input type="text" class="form-control" hidden id="id_plaza" value="<?php echo $id_plaza; ?>" name="plz" hidden>
                         <input type="text" class="form-control" hidden id="plaza" value="<?php echo $plaza['base']; ?>" name="base">
@@ -82,10 +84,10 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
                                     <option> Seleccione la plaza</option>
                                     <?php do { ?>
                                         <option value="<?php echo $existsPlaza['id_plaza'] ?>"><?php echo $existsPlaza['nombreplaza'] ?> </option>
-                                    <?php }while (($existsPlaza = sqlsrv_fetch_array($exec)));  ?>
+                                    <?php } while (($existsPlaza = sqlsrv_fetch_array($exec)));  ?>
                                 </select>
                             </div>
-                            <?php }?>
+                        <?php } ?>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <label class="input-group-text" for="inputGroupSelect01">Plaza</label>
@@ -97,12 +99,12 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
                                 <label class="input-group-text" for="inputGroupSelect01">Sector</label>
                             </div>
                             <select class="custom-select" id="sector" name="sector" required>
-                                <option value="1" <?php if (isset($_GET['sector'])&& ($_GET['sector'] == 1)) { ?> selected <?php } ?>>CallCenter</option>
-                                <option value="2" <?php if (isset($_GET['sector'])&& ($_GET['sector'] == 2)) { ?> selected <?php } ?>>Pregrabadas</option>
-                                <option value="3" <?php if (isset($_GET['sector'])&& ($_GET['sector'] == 3)) { ?> selected <?php } ?>>Pagos</option>
-                                <option value="4" <?php if (isset($_GET['sector'])&& ($_GET['sector'] == 4)) { ?> selected <?php } ?>>Estatus Padron</option>
-                                <option value="5" <?php if (isset($_GET['sector'])&& ($_GET['sector'] == 5)) { ?> selected <?php } ?>>Adeudo</option>
-                                <option value="6" <?php if (isset($_GET['sector'])&& ($_GET['sector'] == 6)) { ?> selected <?php } ?> onclick="addRadioButton()">Telefonos para Pregrabadas</option>
+                                <option value="1" <?php if (isset($_GET['sector']) && ($_GET['sector'] == 1)) { ?> selected <?php } ?>>CallCenter</option>
+                                <option value="2" <?php if (isset($_GET['sector']) && ($_GET['sector'] == 2)) { ?> selected <?php } ?>>Pregrabadas</option>
+                                <option value="3" <?php if (isset($_GET['sector']) && ($_GET['sector'] == 3)) { ?> selected <?php } ?>>Pagos</option>
+                                <option value="4" <?php if (isset($_GET['sector']) && ($_GET['sector'] == 4)) { ?> selected <?php } ?>>Estatus Padron</option>
+                                <option value="5" <?php if (isset($_GET['sector']) && ($_GET['sector'] == 5)) { ?> selected <?php } ?>>Adeudo</option>
+                                <option value="6" <?php if (isset($_GET['sector']) && ($_GET['sector'] == 6)) { ?> selected <?php } ?> onclick="addRadioButton()">Telefonos para Pregrabadas</option>
                             </select>
                         </div>
                         <div class="input-group mb-3">
@@ -170,7 +172,7 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
                                     //     </svg>
                                     //     Descargar Pagina
                                     //     </button>";
-                                    echo "<button type='button' class='btn btn-info btn-txt' name='excel' onclick='txtPregrabadas($id_plaza,`$BD`,`$fechaI`,`$fechaF`,$pagina)'>
+                                    echo "<button type='button' class='btn btn-info btn-txt toDownload' name='excel' onclick='txtPregrabadas($id_plaza,`$BD`,`$fechaI`,`$fechaF`,$pagina)'>
                                         <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-box-arrow-down' viewBox='0 0 16 16'>
                                             <path fill-rule='evenodd' d='M3.5 10a.5.5 0 0 1-.5-.5v-8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 0 0 1h2A1.5 1.5 0 0 0 14 9.5v-8A1.5 1.5 0 0 0 12.5 0h-9A1.5 1.5 0 0 0 2 1.5v8A1.5 1.5 0 0 0 3.5 11h2a.5.5 0 0 0 0-1h-2z' />
                                             <path fill-rule='evenodd' d='M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708l3 3z' />
@@ -193,7 +195,7 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
                                     $BD = $plaza['base'];
                                     $fechaI = $_GET['fecha_inicial'];
                                     $fechaF = $_GET['fecha_final'];
-                                    $sector=$_GET['sector'];
+                                    $sector = $_GET['sector'];
                                     if ($sector == 1) {
                                         echo ' <p class="card-text text-center bg-white">' . count_spCallCenter($BD, $fechaI, $fechaF) . '</p>';
                                     } else if ($sector == 2) {
@@ -411,6 +413,7 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
     <script src="../Reporte/js/excelDownload.js"></script>
     <script src="../Reporte/js/radioButton.js"></script>
     <script src="../Reporte/js/plazasAjax.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.fileDownload/1.4.2/jquery.fileDownload.min.js"></script>
 <?php
 } else {
     header('location: ../logout.php');
