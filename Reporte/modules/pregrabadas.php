@@ -238,6 +238,8 @@ function sp_ReportePregrabadas(
         }
         echo '</ul>';
         echo "</nav>";
+    }else{
+        echo "<h4 class='text-center mt-2'>No hay información</h4>";
     }
 }
 function storePregrabadas($BD, $fechaI, $fechaF)

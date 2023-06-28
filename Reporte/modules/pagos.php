@@ -78,7 +78,7 @@ function sp_PagosBrutos(
            $pago= utf8_encode($result['fecha_pago']->format('d/m/Y'));
             echo "<tr>
             <td class='text-xs'>
-                <button type='button' class='btn btn-success' onclick='txtPagosBrutos(`$BD`,`$pago`)'>
+                <button type='button' class='btn btn-success' onclick='excelPagosBrutos(`$BD`,`$pago`)'>
                 <img src='https://img.icons8.com/fluency/24/null/download.png'/>
                 </button>
             </td>
@@ -159,6 +159,8 @@ function sp_PagosBrutos(
         }
         echo '</ul>';
         echo "</nav>";
+    }else{
+        echo "<h4 class='text-center mt-2'>No hay información</h4>";
     }
 }
 
@@ -214,7 +216,7 @@ order by datepart(month,fechaPago),
         $pago= utf8_encode($result['fecha_pago']->format('d/m/Y'));
          echo "<tr>
          <td class='text-xs'>
-             <button type='button' class='btn btn-success' onclick='txtPagosNetos(`$BD`,`$pago`)'>
+             <button type='button' class='btn btn-success' onclick='excelPagosNetos(`$BD`,`$pago`)'>
              <img src='https://img.icons8.com/fluency/24/null/download.png'/>
              </button>
          </td>
@@ -295,5 +297,7 @@ order by datepart(month,fechaPago),
      }
      echo '</ul>';
      echo "</nav>";
- }
+ }else{
+    echo "<h4 class='text-center mt-2'>No hay información</h4>";
+}
 }

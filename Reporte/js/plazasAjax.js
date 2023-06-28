@@ -8,3 +8,19 @@ $(document).on('change', '#existPlaza', function () {
 		window.location.href = url.toString();
 	}
 });
+var loadInfo = function() {
+	Swal.fire({
+	  title: 'Obteniendo Datos',
+	  html: 'Espere un momento por favor...',
+	  timer: 0,
+	  timerProgressBar: true,
+	  allowEscapeKey: false,
+	  allowOutsideClick: false,
+	  didOpen: () => {
+		Swal.showLoading();
+	  },
+	  willClose: () => {
+		return false;
+	  }
+	}).then((result) => {});
+  }

@@ -65,6 +65,7 @@ if ((isset($_GET['base'])) && (isset($_GET['fecha_inicial'])) && (isset($_GET['f
     fclose($f);
     //El enlace a descargar del navegador es el mismo que se guarda en el servidor
     $enlace = $archivo;
+    header('Set-Cookie: fileDownload=true; path=/');
     header("Content-Disposition: attachment; filename=" . $enlace);
     header("Content-Type: application/octet-stream");
     header("Content-Length: " . filesize($enlace));

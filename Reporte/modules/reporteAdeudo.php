@@ -157,6 +157,8 @@ function sp_ReporteAdeudo(
         }
         echo '</ul>';
         echo "</nav>";
+    }else{
+        echo "<h4 class='text-center mt-2'>No hay información</h4>";
     }
 }
 
@@ -255,5 +257,7 @@ function sp_storeReporteAdeudo(
         echo " </tbody>
             </table>";
         
+    }else{
+        echo "<h4 class='text-center mt-2'>No hay información</h4>";
     }
 }
