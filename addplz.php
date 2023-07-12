@@ -8,7 +8,7 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
     $plaza = sqlsrv_fetch_array($plz);
     //Primera plaza
     $query1 = "SELECT top(1) * FROM plaza
-    left join proveniente on proveniente.id_proveniente=plaza.id_proveniente where estado = 1 order by id_plaza asc";
+    left join proveniente on proveniente.id_proveniente=plaza.id_proveniente where estado = 1 and proveniente.id_proveniente=plaza.id_proveniente order by id_plaza asc";
     $qexec = sqlsrv_query($cnx, $query1);
     $fristPlaza = sqlsrv_fetch_array($qexec);
 
