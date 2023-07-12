@@ -12,7 +12,7 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
     $connectionInfo = array('Database' => 'kpis', 'UID' => 'sa', 'PWD' => 'vrSxHH3TdC');
     $cnr = sqlsrv_connect($serverName, $connectionInfo);
     date_default_timezone_set('America/Mexico_City');
-    $sql = "select id_plaza,nombreplaza, estado FROM plaza where estado = 1";
+    $sql = "select pl.id_plaza as id_plaza,pl.nombreplaza as nombreplaza, pl.estado as estado FROM plaza as pl, proveniente as pr where estado = 1 and pr.id_proveniente=pl.id_proveniente";
     $exec = sqlsrv_query($cnr, $sql);
     $existsPlaza = sqlsrv_fetch_array($exec);
 ?>
@@ -51,7 +51,7 @@ if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
                         <input type="text" class="form-control" hidden id="base" value="<?php echo $plaza['base']; ?>" name="base">
                         <?php if ((isset($_SESSION['tipousuario']))) { ?>
                             <div class="input-group mb-3">
-                                <select class='custom-select' id='existPlaza' name='existPlaza' required>
+                                <select class='custom-select' id='existPlaza' name='existPlaza' >
                                     <option> Seleccione la plaza</option>
                                     <?php do { ?>
                                         <option value="<?php echo $existsPlaza['id_plaza'] ?>"><?php echo $existsPlaza['nombreplaza'] ?> </option>
