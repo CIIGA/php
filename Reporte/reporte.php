@@ -1,6 +1,6 @@
 <?php
 session_start();
-if ((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))) {
+if ((isset($_SESSION['user'])) or (isset($_SESSION['tipousuario']))) {
     //Se llama al modulo de callcenter
     require 'modules/callCenter.php';
     require 'modules/pregrabadas.php';
