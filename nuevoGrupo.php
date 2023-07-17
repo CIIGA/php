@@ -2,7 +2,7 @@
 session_start();
 if((isset($_SESSION['user'])) and (isset($_SESSION['tipousuario']))){
 require "../../acnxerdm/cnx.php";
-    $idplz=$_POST['plz'];
+    $idplz=$_GET['plz'];
     $pl="SELECT * FROM subregistro
     inner join plaza on plaza.id_plaza=subregistro.id_plaza
     where subregistro.id_plaza='$idplz'";
@@ -15,7 +15,7 @@ require "../../acnxerdm/cnx.php";
     $plazaa=sqlsrv_fetch_array($plza);
 //*********************************** INICIO INSERT PLZ *******************************************************
 if(isset($_POST['save'])){
-    $idplaza=$_POST['plz'];
+    $idplaza=$_GET['plz'];
     $nombre=$_POST['nombre'];
     $val="select * from subregistro
     where nombreSub='$nombre' and id_plaza='$idplaza'";
@@ -94,7 +94,7 @@ if(isset($_POST['update'])){
     <h1 style="text-shadow: 1px 1px 2px #717171;">Plataforma de KPIs</h1>
     <h4 style="text-shadow: 1px 1px 2px #717171;"><i class="fas fa-object-ungroup"></i> Agregar nuevo subgrupo de KPIs</h4>
     <h4 style="text-shadow: 1px 1px 2px #717171;">Plaza <?php echo utf8_encode($plazaa['nombreplaza']) ?></h4>
-<form action="" method="POST">
+<form action="" method="post">
 <div class="jumbotron">
     <div class="form-group" style="text-align:center;">
     <label for="exampleInputEmail1">Nombre del subgrupo: *</label>
@@ -134,7 +134,7 @@ if(isset($_POST['update'])){
     </tr>
   </tbody>
 <!-- *********************************MODAL PARA ACTUALIZAR UDATOS *************************************************** -->
-<form action="" method="POST">
+<form action="" method="post">
 <div class="modal fade" id="datos<?php echo $plaza['id_subregistro'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
