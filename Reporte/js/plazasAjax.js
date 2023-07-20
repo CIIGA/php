@@ -4,12 +4,21 @@ $(document).on('change', '#existPlaza', function () {
 		var url = new URL(window.location.href);
 		var params = new URLSearchParams(url.search);
 		// Elimina el parámetro que deseas
-		params.delete('excel');
 		params.set('plz', idPlaza);
+		params.delete('excel');
+		params.delete('fecha_final');
+		params.delete('fecha_inicial');
+		params.delete('sector');
+		params.delete('tabla');
+		params.delete('plaza');
+		params.delete('existPlaza');
+		params.delete('base');
 		url.search = params.toString();
 		window.location.href = url.toString();
 	}
 });
+
+
 var loadInfo = function () {
 	Swal.fire({
 		title: 'Obteniendo Datos',
