@@ -16,7 +16,8 @@ if ((isset($_SESSION['user'])) or (isset($_SESSION['tipousuario']))) {
     $connectionInfo = array('Database' => 'kpis', 'UID' => 'sa', 'PWD' => 'vrSxHH3TdC');
     $cnr = sqlsrv_connect($serverName, $connectionInfo);
     date_default_timezone_set('America/Mexico_City');
-    $sql = "select id_plaza,nombreplaza, estado FROM plaza where estado = 1";
+    $sql = "SELECT  * FROM plaza
+    left join proveniente on proveniente.id_proveniente=plaza.id_proveniente where estado = 1 and proveniente.id_proveniente=plaza.id_proveniente order by id_plaza asc";
     $exec = sqlsrv_query($cnr, $sql);
     $existsPlaza = sqlsrv_fetch_array($exec);
 ?>
