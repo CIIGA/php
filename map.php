@@ -159,6 +159,27 @@ if (isset($_SESSION['user'])) {
               </div>
             </div>
           <?php } while ($mapaNL = sqlsrv_fetch_array($mapNL)); ?>
+          <?php if ($plz == 28) { ?>
+          <div id="accordion">
+              <div class="card">
+                <div class="card-header" id="headingTwo">
+                  <h5 class="mb-0">
+                    <button class="btn collapsed" data-toggle="collapse" data-target="#collapsecontac" aria-expanded="false" aria-controls="collapseTwo">
+                      <h6 style="text-shadow: 0px 0px 2px #717171;"><i class="fas fa-chevron-right"></i> Reportes Contac</h6>
+                    </button>
+                  </h5>
+                </div>
+                <div id="collapsecontac" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                  <!-- descargar llamadas mexicaliA -->
+                    <div class="card-body">
+
+                      <a target="_blank" class="btn nav-link btn-sm list-group-item list-group-item-action list-group-item-light p-1" data-toggle="modal" data-target="#modal-llamadas" href="#"><i class="fa fa-download"></i> Duración de llamadas</a>
+
+                    </div>
+                </div>
+              </div>
+            </div>
+            <?php  } ?>
 
           <?php if ($estado['estado'] == 1) { ?>
             <div id="accordion">
@@ -193,14 +214,7 @@ if (isset($_SESSION['user'])) {
                       <a target="_blank" class="btn nav-link btn-sm list-group-item list-group-item-action list-group-item-light p-1" href="Reporte/reporte.php?plz=<?php echo $plz ?>"><i class="fa  fa-book fa-fw"></i> Reportes</a>
                     </div>
                   <?php  } ?>
-                  <!-- descargar llamadas mexicaliA -->
-                  <?php if ($plz == 34) { ?>
-                    <div class="card-body">
-
-                      <a target="_blank" class="btn nav-link btn-sm list-group-item list-group-item-action list-group-item-light p-1" data-toggle="modal" data-target="#modal-llamadas" href="#"><i class="fa fa-download"></i> Duración de llamadas</a>
-
-                    </div>
-                  <?php  } ?>
+                  
                 </div>
               </div>
             </div>
